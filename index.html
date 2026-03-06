@@ -531,87 +531,76 @@
     font-size: 22px;
     line-height: 1.5;
     color: var(--text);
-    margin-bottom: 36px;
+    margin-bottom: 24px;
     font-weight: 300;
     font-style: italic;
   }
 
-  /* ── SCALE (Likert) ── */
-  .scale-options {
+  /* ── CHOICE OPTIONS ── */
+  .choice-options {
     display: flex;
-    gap: 8px;
-    margin-top: 8px;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
   }
 
-  .scale-opt {
-    flex: 1;
-    min-height: 70px;
-    padding: 0 6px;
+  .choice-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
     background: var(--bg3);
     border: 1px solid rgba(255,255,255,0.07);
     border-radius: 3px;
+    padding: 14px 16px;
+    text-align: left;
     cursor: pointer;
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text2);
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.2s, color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 0;
   }
 
-  /* Animated fill rising from bottom */
-  .scale-opt::before {
+  .choice-opt::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(201,168,76,0.05), rgba(201,168,76,0.16));
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
-    z-index: -1;
-  }
-
-  /* Shimmer sweep on select */
-  .scale-opt::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 80%;
-    left: -80%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    background: linear-gradient(135deg, rgba(201,168,76,0.04), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.2s;
     pointer-events: none;
   }
 
-  .scale-opt:hover {
+  .choice-opt:hover {
     border-color: rgba(201,168,76,0.35);
+    background: rgba(201,168,76,0.04);
+  }
+
+  .choice-opt:hover::before { opacity: 1; }
+
+  .choice-opt.selected {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.09);
     color: var(--text);
   }
 
-  .scale-opt:hover::before { transform: scaleY(0.35); }
-
-  .scale-opt.selected {
-    border-color: var(--gold);
-    color: var(--gold2);
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    opacity: 0.65;
+    min-width: 16px;
+    padding-top: 3px;
+    flex-shrink: 0;
   }
 
-  .scale-opt.selected::before { transform: scaleY(1); }
-
-  .scale-opt.selected::after {
-    animation: scaleSweep 0.45s ease forwards;
-  }
-
-  @keyframes scaleSweep {
-    to { left: 110%; }
-  }
+  .choice-opt.selected .choice-letter { opacity: 1; }
 
   @media (max-width: 520px) {
-    .scale-opt { font-size: 9px; min-height: 56px; letter-spacing: 0.04em; }
+    .choice-opt { font-size: 15px; padding: 12px 14px; }
   }
 
   /* Navigation */
@@ -1393,8 +1382,8 @@ const STRINGS = {
     headerOrnament: "The Gamer Bestiary",
     h1: "What Beast Do You Play As?",
     subtitle: "A psychological framework for uncovering the creature that lurks behind your controller.",
-    introP1: 'Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 40 situational questions.',
-    introP2: "For each situation, answer how often it applies to you — from <em>Never</em> to <em>Always</em>. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes. There are no wrong answers.",
+    introP1: 'Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 36 situational scenarios.',
+    introP2: "For each scenario, choose the option that best describes your <em>actual</em> behavior — not the player you aspire to be. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes.",
     startBtn: "Begin the Assessment",
     resultLabel: "Your Gamer Archetype",
     sectionIdentity: "Core Identity",
@@ -1416,7 +1405,6 @@ const STRINGS = {
     sectionModalAxes: "Archetype Profile",
     restartBtn: "Take the Test Again",
     backBtn: "← Back",
-    scaleLabels: ["Never", "Rarely", "Sometimes", "Often", "Always"],
     questionOf: (cur, total) => `Question ${cur} of ${total}`,
     questionLabel: (n) => `Question ${n}`,
     spectrumLabels: {},
@@ -1426,8 +1414,8 @@ const STRINGS = {
     headerOrnament: "Бестиарий Геймера",
     h1: "Каким зверем ты играешь?",
     subtitle: "Психологический тест для определения существа, скрытого за твоим контроллером.",
-    introP1: 'Каждый геймер несёт в себе скрытый архетип — паттерн инстинктов и привычек, формирующий каждую сессию и каждый выбор. Это испытание раскроет твой <strong style="color:var(--gold)">Архетип Геймера</strong> из 12 существ — через 40 ситуативных вопросов.',
-    introP2: "На каждую ситуацию ответь, как часто она к тебе относится — от <em>Никогда</em> до <em>Всегда</em>. Подходит как для тех, кто играет по 8 часов, так и для тех, кто запускает игры на 5 минут с телефона. Неправильных ответов нет.",
+    introP1: 'Каждый геймер несёт в себе скрытый архетип — паттерн инстинктов и привычек, формирующий каждую сессию и каждый выбор. Это испытание раскроет твой <strong style="color:var(--gold)">Архетип Геймера</strong> из 12 существ — через 36 ситуативных сценариев.',
+    introP2: "В каждом сценарии выбери вариант, который лучше всего описывает твоё <em>реальное</em> поведение — а не того игрока, которым ты хотел бы быть. Подходит как для тех, кто играет по 8 часов, так и для тех, кто запускает игры на 5 минут с телефона.",
     startBtn: "Начать тест",
     resultLabel: "Твой архетип геймера",
     sectionIdentity: "Суть архетипа",
@@ -1449,7 +1437,6 @@ const STRINGS = {
     sectionModalAxes: "Профиль архетипа",
     restartBtn: "Пройти тест снова",
     backBtn: "← Назад",
-    scaleLabels: ["Никогда", "Редко", "Иногда", "Часто", "Всегда"],
     questionOf: (cur, total) => `Вопрос ${cur} из ${total}`,
     questionLabel: (n) => `Вопрос ${n}`,
     spectrumLabels: {
@@ -1658,49 +1645,6 @@ const ARCHETYPES_RU = {
   },
 };
 
-// Russian question translations
-const QUESTIONS_RU = [
-  "После проигрыша в напряжённом матче или смерти от босса ты сразу начинаешь следующий раунд, не делая перерыва.",
-  "Ты достаёшь телефон, чтобы поиграть во время поездки, ожидания в очереди или любого свободного момента.",
-  "Когда выходит новая игра, ты читаешь гайды, патч-ноуты или обсуждения в сообществе до или во время первой сессии.",
-  "Ты звал кого-то поиграть в первую очередь для того, чтобы было с кем разделить этот опыт.",
-  "Ты игнорируешь основной квест и сначала исследуешь каждый уголок карты, прежде чем следовать сюжету.",
-  "Ты читал описания предметов, записи в журнале или лор-подсказки, которые подавляющее большинство игроков пропускают.",
-  "Когда игра становится сложной, ты продолжаешь на текущей сложности, не понижая её.",
-  "Ты провёл час или больше за одной повторяющейся петлёй — фарм материалов, гринд уровней, крафт предметов — и это не казалось рутиной.",
-  "Между сессиями ты ловишь себя за теоркрафтом — продумываешь билды, планируешь стратегии или мысленно прорабатываешь игровые механики вне игры.",
-  "Ты замечаешь детали в игровом мире — изменённые диалоги NPC, фоновые картины, скрытые паттерны — мимо которых другие проходят не глядя.",
-  "Ты пытался сломать или пропустить часть игры — найти шорткат, глитч или непредусмотренный путь.",
-  "Ты чувствуешь беспокойство или неудовлетворённость от игровой сессии без чёткой цели — без прокачки, победы или ощутимого прогресса.",
-  "Ты чувствуешь себя заметно более вовлечённым в игру, когда рядом есть друг или группа людей.",
-  "Дойдя до титров, ты возвращался, чтобы выполнить побочный контент, найти коллектибелы или закрыть достижения.",
-  "Ты думал о сюжете, персонажах или мире игры, занимаясь чем-то совершенно другим.",
-  "Игровые сессии кажутся тебе удовлетворительными, только если ты видишь ощутимый прогресс — левел-ап, разблокировку, победу.",
-  "Ты предпочитаешь игры, в которых веселье заключается в том, чтобы перехитрить противника или систему, а не просто быстро реагировать.",
-  "Ты организовывал игровой вечер, планировал кооп-сессию или специально собирал людей вместе поиграть.",
-  "Ты создаёшь что-то в игре — базу, ферму, город, персонажа — без всякой цели, кроме того, как это выглядит.",
-  "Если ты узнаёшь, что в игре есть богатый лор, скрытая предыстория или многослойный мир — ты больше мотивирован продолжать.",
-  "Ты перепроходил уровень, подземелье или матч специально, чтобы сделать это быстрее, чище или эффективнее.",
-  "Ты задерживаешься в одной игре или серии неделями или месяцами, а не перескакиваешь между разными.",
-  "Соревновательный элемент игры — рейтинг, очки, превосходство над другими — часть того, что заставляет тебя возвращаться.",
-  "Ты тратишь время на оформление, кастомизацию или персонализацию персонажа, базы или игрового пространства — только для себя.",
-  "Играя с другими, ты естественно берёшь на себя роль координатора или поддержки, не ожидая просьбы.",
-  "Ты искал лор-вики, фанатские теории или комментарии разработчиков об игровом мире, который любишь, — вне самой игры.",
-  "Ты берёшь телефон и открываешь игру на несколько минут, не планируя и не намереваясь проводить долгую сессию.",
-  "После тяжёлого дня ты включаешь игру специально, чтобы успокоиться или расслабиться — не ради вызова.",
-  "Ты продолжал играть в сложную игру достаточно долго, чтобы заметить реальное улучшение своих навыков.",
-  "Ты планируешь билд, колоду или стратегию заранее, а не разбираешься в процессе игры.",
-  "Ты испытывал настоящее продолжительное раздражение — не просто разочарование — когда тиммейт халтурил в игре, которая тебе важна.",
-  "Победа кажется тебе пустой или неполной, если никто этого не видел или тебе не с кем поделиться.",
-  "Тебя посещает мысль «а что если попробовать совсем по-другому?» — и ты начинаешь заново, чтобы проверить идею.",
-  "Тебя привлекают игры, вознаграждающие терпение — медленный прогресс, строительство со временем, долгосрочные проекты.",
-  "Ты переключаешься между играми прямо во время сессии — закрываешь одну и открываешь другую — в зависимости от настроения, не доводя начатое до конца.",
-  "В сюжетных играх, которые ты проходишь впервые, ты пропускаешь или перематываешь катсцены и диалоги, чтобы вернуться к геймплею.",
-  "Играя с друзьями, тебе важно не только то, весело ли всем, но и то, насколько хорошо группа выступает.",
-  "Ты предпочтёшь играть в любимую игру в одиночестве, чем в посредственную — с другими людьми.",
-  "Ты отслеживаешь метрики прогресса или результатов — очки, статы, процент побед, серии — даже в играх, в которые играешь казуально.",
-  "Ты резко менял игровой жанр — например, со шутера на симулятор фермы — так что друзья были по-настоящему удивлены.",
-];
 
 function setLang(lang) {
   currentLang = lang;
@@ -2138,410 +2082,404 @@ const ARCHETYPES = {
 };
 
 // ═══════════════════════════════════════════════════════
-// QUESTIONS — situational statements scored on a 5-point scale
-// answers[0]=Never  [1]=Rarely  [2]=Sometimes  [3]=Often  [4]=Always
+// QUESTIONS — forced-choice scenarios, 4 options each
+// choices[0..3] each carry axis deltas; user picks exactly one
 // ═══════════════════════════════════════════════════════
-const SCALE_LABELS = ["Never", "Rarely", "Sometimes", "Often", "Always"];
-
 const QUESTIONS = [
+  // Q1 — Competition: loss reaction
   {
-    text: "After losing a close match or dying to a boss, you start another round immediately rather than taking a break.",
-    answers: [
-      { axes: { challenge: -0.5, dominance: -0.3 } },
-      { axes: { challenge: -0.2 } },
-      { axes: {} },
-      { axes: { challenge: 0.4, dominance: 0.2 } },
-      { axes: { challenge: 0.7, dominance: 0.4 } },
+    text: "A close ranked match just ended in a loss. What do you do?",
+    text_ru: "Напряжённый рейтинговый матч только что завершился поражением. Что ты делаешь?",
+    choices: [
+      { label: "Re-queue immediately — the only cure for a bad game is the next one", label_ru: "Встаю в очередь немедленно — единственное лекарство от плохой игры это следующая", axes: { dominance: 0.8, challenge: 0.5, pace: 0.5 }, archetypes: { falcon: 3, gecko: 2 } },
+      { label: "Review the key moments — understand the loss before playing again", label_ru: "Пересматриваю ключевые моменты — прежде чем играть снова, нужно понять поражение", axes: { systems: 0.7, dominance: 0.3, pace: -0.4 }, archetypes: { fox: 3, falcon: 1 } },
+      { label: "Close the game. It's done; no point dwelling", label_ru: "Закрываю игру. Всё кончено; незачем зацикливаться", axes: { dominance: -0.5, challenge: -0.3 }, archetypes: { bear: 2, bat: 1 } },
+      { label: "Message my squad — debrief together before deciding", label_ru: "Пишу команде — сначала разбираем вместе, потом решаем", axes: { social: 0.7, dominance: 0.2 }, archetypes: { wolf: 3, dolphin: 2 } },
     ]
   },
+  // Q2 ★ MIRROR of Q1 — Competition: sustained failure
   {
-    text: "You pull out your phone to play a game during a commute, a wait in line, or any idle moment in the day.",
-    answers: [
-      { axes: { pace: -0.4, challenge: 0.2 } },
-      { axes: { pace: -0.2 } },
-      { axes: {} },
-      { axes: { pace: 0.4, challenge: -0.2 } },
-      { axes: { pace: 0.7, challenge: -0.5 } },
+    text: "Your rank has dropped three tiers over the past week and nothing is clicking. After another bad session, you…",
+    text_ru: "За прошедшую неделю твой рейтинг упал на три дивизиона и ничего не получается. После очередной провальной сессии ты…",
+    choices: [
+      { label: "Keep going — rank variance is normal, the climb continues", label_ru: "Продолжаю играть — колебания рейтинга нормальны, подъём продолжается", axes: { dominance: 0.8, challenge: 0.6 }, archetypes: { falcon: 3, gecko: 3 } },
+      { label: "Log off without drama — not my night", label_ru: "Выхожу без лишних эмоций — сегодня просто не мой вечер", axes: { dominance: -0.2, challenge: -0.1 }, archetypes: { bear: 2, magpie: 1 } },
+      { label: "Rally my squad — get their read on what's happening", label_ru: "Пишу команде — хочу понять их взгляд на происходящее", axes: { social: 0.7, dominance: 0.2 }, archetypes: { wolf: 3, dolphin: 2 } },
+      { label: "Watch top-player replays obsessively to diagnose the problem", label_ru: "Навязчиво пересматриваю реплеи топ-игроков, чтобы найти проблему", axes: { systems: 0.7, dominance: 0.4, pace: -0.3 }, archetypes: { fox: 3, beaver: 2 } },
     ]
   },
+  // Q3 — Narrative: NPC eavesdrop
   {
-    text: "When a new game drops, you look up guides, patch notes, or community discussions before or during your first session.",
-    answers: [
-      { axes: { systems: -0.5 } },
-      { axes: { systems: -0.2 } },
-      { axes: {} },
-      { axes: { systems: 0.4 } },
-      { axes: { systems: 0.7, challenge: 0.2 } },
+    text: "You're walking through a new town in an RPG. Two NPCs in the corner are having a private conversation you can overhear.",
+    text_ru: "Ты идёшь через новый город в RPG. В углу двое NPC ведут приватный разговор, который можно подслушать.",
+    choices: [
+      { label: "Stop completely — every word, in case it's lore", label_ru: "Останавливаюсь полностью — каждое слово, вдруг это лор", axes: { systems: -0.6, pace: -0.6 }, archetypes: { owl: 3 } },
+      { label: "Keep moving — there's a quest marker calling", label_ru: "Иду дальше — меня ждёт маркер квеста", axes: { dominance: 0.3, pace: 0.5 }, archetypes: { falcon: 2, magpie: 1 } },
+      { label: "Reposition my character to check for hidden dialogue options", label_ru: "Перемещаю персонажа — проверяю, нет ли скрытых диалоговых опций", axes: { systems: 0.5, pace: -0.2 }, archetypes: { frog: 3, fox: 2 } },
+      { label: "Take a screenshot in case it's relevant, then continue", label_ru: "Делаю скриншот на всякий случай и продолжаю", axes: { systems: 0.2, pace: 0.2 }, archetypes: { fox: 2, bat: 1 } },
     ]
   },
+  // Q4 — Exploration: unmarked cave
   {
-    text: "You've invited someone to play a game primarily so you'd have someone to share the experience with.",
-    answers: [
-      { axes: { social: -0.6 } },
-      { axes: { social: -0.2 } },
-      { axes: {} },
-      { axes: { social: 0.5 } },
-      { axes: { social: 0.8 } },
+    text: "Open world. There's an unmarked cave on the hillside with no quest marker.",
+    text_ru: "Открытый мир. На склоне холма — непомеченная пещера без маркера квеста.",
+    choices: [
+      { label: "Immediately veer off — unmarked things are always the best things", label_ru: "Сразу сворачиваю туда — непомеченное всегда самое интересное", axes: { dominance: -0.6, pace: 0.4 }, archetypes: { bat: 3 } },
+      { label: "Note it mentally and finish the current objective first", label_ru: "Запоминаю и сначала заканчиваю текущее задание", axes: { dominance: 0.2, pace: -0.2 }, archetypes: { fox: 2, falcon: 1 } },
+      { label: "Look it up before deciding if it's worth the time", label_ru: "Гуглю прежде, чем решить, стоит ли тратить время", axes: { systems: 0.5, pace: -0.2 }, archetypes: { fox: 3 } },
+      { label: "Ignore it — unmarked usually means empty", label_ru: "Игнорирую — непомеченное обычно пусто", axes: { dominance: 0.4, pace: 0.4 }, archetypes: { falcon: 2, magpie: 1 } },
     ]
   },
+  // Q5 — Social: Friday night
   {
-    text: "You ignore the main quest or objective and explore every corner of the map before following the story.",
-    answers: [
-      { axes: { dominance: 0.3 } },
-      { axes: { dominance: 0.1 } },
-      { axes: {} },
-      { axes: { dominance: -0.4 } },
-      { axes: { dominance: -0.6 } },
+    text: "Friday night, gaming is on the menu. What's your most likely move?",
+    text_ru: "Пятничный вечер, впереди игры. Что ты, скорее всего, сделаешь?",
+    choices: [
+      { label: "Solo queue ranked — full focus, no coordination overhead", label_ru: "Рейтинговые игры соло — полная концентрация, никакой координации", axes: { dominance: 0.6, social: -0.5, pace: -0.2 }, archetypes: { falcon: 3 } },
+      { label: "Message the group chat — see who's online", label_ru: "Пишу в групповой чат — смотрю, кто онлайн", axes: { social: 0.8, dominance: -0.2 }, archetypes: { wolf: 3, dolphin: 2 } },
+      { label: "Boot a single-player game I've been sitting on", label_ru: "Запускаю одиночную игру, до которой давно не доходили руки", axes: { social: -0.3, challenge: 0.2, pace: -0.3 }, archetypes: { bear: 2, bat: 2, owl: 1 } },
+      { label: "Check a few things on mobile while watching something", label_ru: "Заглядываю в мобильную игру, пока смотрю что-нибудь фоном", axes: { pace: 0.6, social: -0.3, challenge: -0.5 }, archetypes: { magpie: 3 } },
     ]
   },
+  // Q6 ★ MIRROR of Q5 — Social: crew unavailable
   {
-    text: "You've read item descriptions, journal entries, or lore tooltips that the vast majority of players skip entirely.",
-    answers: [
-      { axes: { systems: 0.4 } },
-      { axes: { systems: 0.2 } },
-      { axes: {} },
-      { axes: { systems: -0.4 } },
-      { axes: { systems: -0.6 } },
+    text: "Same Friday — but your entire gaming crew is unavailable tonight.",
+    text_ru: "Та же пятница — но все, с кем ты обычно играешь, сегодня недоступны.",
+    choices: [
+      { label: "Solo queue anyway — the game exists independently of who I play with", label_ru: "Всё равно иду в соло-очередь — игра существует независимо от того, с кем играть", axes: { social: -0.2, dominance: 0.4 }, archetypes: { falcon: 3, gecko: 2 } },
+      { label: "Feel noticeably less motivated to game at all", label_ru: "Заметно меньше желания играть вообще", axes: { social: 0.8, dominance: -0.4 }, archetypes: { wolf: 3, dolphin: 2 } },
+      { label: "Find a different game that doesn't need company", label_ru: "Нахожу другую игру, которая не требует компании", axes: { social: -0.4, pace: 0.2 }, archetypes: { bear: 2, bat: 2 } },
+      { label: "Boot the game and look for randoms in matchmaking", label_ru: "Захожу в игру и ищу случайных игроков в матчмейкинге", axes: { social: 0.5 }, archetypes: { dolphin: 3, magpie: 1 } },
     ]
   },
+  // Q7 — Systems: post-tutorial drift
   {
-    text: "When a game gets hard, you push through on the current difficulty rather than adjusting it down.",
-    answers: [
-      { axes: { challenge: -0.5 } },
-      { axes: { challenge: -0.2 } },
-      { axes: {} },
-      { axes: { challenge: 0.5 } },
-      { axes: { challenge: 0.8 } },
+    text: "Three hours in. The tutorial just ended. Where do you naturally go?",
+    text_ru: "Прошло три часа. Туториал только что закончился. Куда ты идёшь дальше?",
+    choices: [
+      { label: "Theorycrafting my first real build before investing further", label_ru: "Начинаю теоркрафтить первый серьёзный билд, прежде чем вкладываться дальше", axes: { systems: 0.8, pace: -0.6 }, archetypes: { fox: 3, beaver: 3 } },
+      { label: "Wander the game's space — understand what's actually in it", label_ru: "Исследую пространство игры — хочу понять, что в ней вообще есть", axes: { systems: -0.3, dominance: -0.5, pace: 0.3 }, archetypes: { bat: 3 } },
+      { label: "Probe the mechanics for anything unintended", label_ru: "Прощупываю механики — ищу что-нибудь непредусмотренное", axes: { systems: 0.7, dominance: 0.2, pace: 0.4 }, archetypes: { frog: 3 } },
+      { label: "Get into the story properly — mechanics will come naturally", label_ru: "Погружаюсь в сюжет — механики придут сами", axes: { systems: -0.5, pace: -0.2 }, archetypes: { owl: 3, bear: 2 } },
     ]
   },
+  // Q8 — Speedrun: unintended solution
   {
-    text: "You've spent an hour or more on one repetitive loop — farming materials, grinding levels, crafting items — without it feeling like a chore.",
-    answers: [
-      { axes: { pace: 0.3 } },
-      { axes: { pace: 0.1 } },
-      { axes: {} },
-      { axes: { pace: -0.3, dominance: 0.2 } },
-      { axes: { pace: -0.5, dominance: 0.4 } },
+    text: "You notice a puzzle can be solved in under 30 seconds by doing something the developers clearly didn't intend.",
+    text_ru: "Ты замечаешь, что головоломку можно решить меньше чем за 30 секунд способом, который разработчики явно не предусматривали.",
+    choices: [
+      { label: "Use it and feel quietly proud — better than solving it 'correctly'", label_ru: "Использую и тихо горжусь — лучше, чем решить «правильно»", axes: { systems: 0.7, challenge: 0.3 }, archetypes: { frog: 3 } },
+      { label: "Test it out of curiosity, then solve it the intended way", label_ru: "Проверяю из любопытства, потом решаю как задумано", axes: { systems: 0.4, pace: -0.2 }, archetypes: { frog: 2, fox: 2 } },
+      { label: "Avoid it — want the design as the developers intended", label_ru: "Не использую — хочу пройти так, как задумали разработчики", axes: { systems: -0.6 }, archetypes: { owl: 3, bear: 1 } },
+      { label: "Amusing, but it doesn't change how I play", label_ru: "Забавно, но на мой стиль игры это не влияет", axes: { systems: 0.1 }, archetypes: { bat: 1 } },
     ]
   },
+  // Q9 — Difficulty: wall hit
   {
-    text: "Between sessions, you find yourself theorycrafting builds, planning strategies, or mentally working through game mechanics away from the screen.",
-    answers: [
-      { axes: { systems: -0.3 } },
-      { axes: { systems: -0.1 } },
-      { axes: {} },
-      { axes: { systems: 0.4, challenge: 0.2 } },
-      { axes: { systems: 0.6, challenge: 0.3 } },
+    text: "The game has hit a wall — a section that clearly requires a significant skill step-up.",
+    text_ru: "В игре встретилась стена — раздел, который явно требует серьёзного прыжка в мастерстве.",
+    choices: [
+      { label: "This is where it actually starts — I engage harder", label_ru: "Вот теперь игра по-настоящему начинается — включаюсь в полную силу", axes: { challenge: 0.9, dominance: 0.3 }, archetypes: { gecko: 3, falcon: 2 } },
+      { label: "Research optimal strategies before trying again", label_ru: "Изучаю оптимальные стратегии, прежде чем пробовать снова", axes: { systems: 0.7, challenge: 0.4 }, archetypes: { fox: 3, beaver: 2 } },
+      { label: "Power through at current difficulty — I'll get there eventually", label_ru: "Пробиваюсь на текущей сложности — рано или поздно получится", axes: { challenge: 0.6, pace: 0.2 }, archetypes: { gecko: 2, falcon: 1 } },
+      { label: "Lower the difficulty — the friction isn't why I'm here", label_ru: "Снижаю сложность — я здесь не ради трения", axes: { challenge: -0.6, dominance: -0.4 }, archetypes: { bear: 3 } },
     ]
   },
+  // Q10 ★ MIRROR of Q9 — Difficulty: 50 deaths
   {
-    text: "You notice details in a game world — a changed NPC dialogue, a background painting, a hidden symbol — that others walk straight past.",
-    answers: [
-      { axes: { systems: 0.3 } },
-      { axes: { systems: 0.1 } },
-      { axes: {} },
-      { axes: { systems: -0.4 } },
-      { axes: { systems: -0.6 } },
+    text: "You've died to the same optional boss 50 times. It's a challenge run — not required for the story. You…",
+    text_ru: "Ты умер от одного и того же необязательного босса 50 раз. Это испытательный прогон — не обязательный для сюжета. Ты…",
+    choices: [
+      { label: "Keep going without question — the 51st might be the one", label_ru: "Продолжаю без вопросов — может, 51-я попытка станет той самой", axes: { challenge: 0.9, dominance: 0.6 }, archetypes: { gecko: 3 } },
+      { label: "Come back after a mental reset", label_ru: "Возвращаюсь после того, как голова отдохнёт", axes: { challenge: 0.4, dominance: 0.2, pace: -0.3 }, archetypes: { fox: 2, bat: 1 } },
+      { label: "Look up a guide — 50 deaths earns the help", label_ru: "Смотрю гайд — 50 смертей заслуживают подсказки", axes: { systems: 0.4, challenge: 0.2 }, archetypes: { fox: 3 } },
+      { label: "Skip it — optional means optional", label_ru: "Пропускаю — необязательное значит необязательное", axes: { challenge: -0.6, dominance: -0.5 }, archetypes: { bear: 3, bat: 1 } },
     ]
   },
+  // Q11 — Progression: seasonal event
   {
-    text: "You've tried to break or skip a section of a game — finding a shortcut, a glitch, or an unintended path.",
-    answers: [
-      { axes: { systems: -0.3 } },
-      { axes: { systems: -0.1 } },
-      { axes: {} },
-      { axes: { systems: 0.4, challenge: 0.2 } },
-      { axes: { systems: 0.7, challenge: 0.4 } },
+    text: "A seasonal event just dropped with 200 limited cosmetics. You…",
+    text_ru: "Только что вышел сезонный ивент с 200 лимитированными косметическими предметами. Ты…",
+    choices: [
+      { label: "Calculate the most efficient daily collection path", label_ru: "Рассчитываю самый эффективный ежедневный путь для сбора всего", axes: { systems: 0.8, dominance: 0.4, pace: -0.5 }, archetypes: { beaver: 3, dragon: 2 } },
+      { label: "Grab what looks interesting, ignore the rest", label_ru: "Беру что выглядит интересно, остальное игнорирую", axes: { dominance: -0.2, pace: 0.3 }, archetypes: { bat: 2, magpie: 2 } },
+      { label: "Chase every item — missing something feels wrong", label_ru: "Гоняюсь за каждым предметом — пропустить что-то ощущается неправильным", axes: { dominance: 0.3, systems: 0.4, pace: 0.2 }, archetypes: { dragon: 3 } },
+      { label: "Continue what I was already doing — events don't change my agenda", label_ru: "Продолжаю делать то, что делал — ивенты не меняют мой план", axes: { dominance: 0.3, challenge: 0.2, pace: -0.2 }, archetypes: { falcon: 2, gecko: 2 } },
     ]
   },
+  // Q12 ★ MIRROR of Q11 — Progression: gear reset patch
   {
-    text: "You feel restless or unsatisfied with a gaming session that had no clear goal — no level-up, win, or measurable progress.",
-    answers: [
-      { axes: { challenge: -0.4, dominance: -0.2 } },
-      { axes: { challenge: -0.2, dominance: -0.1 } },
-      { axes: {} },
-      { axes: { challenge: 0.4, dominance: 0.3 } },
-      { axes: { challenge: 0.6, dominance: 0.4 } },
+    text: "A major patch just reset the gear treadmill you'd been grinding for 200 hours. Honestly…",
+    text_ru: "Крупный патч только что обнулил прокачку снаряжения, которую ты гриндил 200 часов. Честно говоря…",
+    choices: [
+      { label: "Annoyed — that time was real, even if it's a game", label_ru: "Раздражён — это время было реальным, даже если это игра", axes: { dominance: 0.4, systems: 0.5 }, archetypes: { dragon: 3 } },
+      { label: "Genuinely fine — I knew the system was always temporary", label_ru: "Искренне нормально — я знал, что система всегда была временной", axes: { challenge: 0.2, dominance: -0.2 }, archetypes: { fox: 2, gecko: 1 } },
+      { label: "Actually relieved — it was getting repetitive; a fresh start is welcome", label_ru: "Даже рад — всё становилось однообразным; свежий старт кстати", axes: { dominance: -0.3, challenge: -0.2 }, archetypes: { bat: 2, bear: 1 } },
+      { label: "Probably log off and possibly not return for a while", label_ru: "Скорее всего выйду и, возможно, не вернусь какое-то время", axes: { dominance: -0.4, pace: 0.2 }, archetypes: { dragon: 2 } },
     ]
   },
+  // Q13 — Aesthetic: decoration session
   {
-    text: "You feel noticeably more engaged in a game when a friend or group of people is playing alongside you.",
-    answers: [
-      { axes: { social: -0.6 } },
-      { axes: { social: -0.3 } },
-      { axes: {} },
-      { axes: { social: 0.5 } },
-      { axes: { social: 0.8 } },
+    text: "You've spent 2 hours customizing your in-game base with no gameplay purpose.",
+    text_ru: "Ты провёл 2 часа за кастомизацией базы в игре без какой-либо игровой цели.",
+    choices: [
+      { label: "This IS the gameplay — the aesthetic layer is the whole point", label_ru: "Это И ЕСТЬ геймплей — эстетическая составляющая и есть суть", axes: { dominance: -0.4, systems: -0.3 }, archetypes: { bear: 3 } },
+      { label: "I'd only do this if the visuals provide a functional advantage", label_ru: "Я бы делал это только если визуал даёт функциональное преимущество", axes: { systems: 0.6, dominance: 0.2 }, archetypes: { beaver: 3, fox: 2 } },
+      { label: "I'd feel vaguely guilty about not progressing", label_ru: "Я бы ощущал лёгкую вину за то, что не прогрессирую", axes: { dominance: 0.4, systems: 0.3, challenge: 0.2 }, archetypes: { falcon: 2, dragon: 2 } },
+      { label: "Even more fun if friends can see it — I'd show them immediately", label_ru: "Ещё веселее, если друзья могут это увидеть — сразу бы показал", axes: { social: 0.8, dominance: -0.2 }, archetypes: { dolphin: 3, wolf: 2 } },
     ]
   },
+  // Q14 — Session style: decompression
   {
-    text: "After reaching the credits, you go back to complete side content, collectibles, or achievements you missed.",
-    answers: [
-      { axes: { challenge: -0.3 } },
-      { axes: { challenge: -0.1 } },
-      { axes: {} },
-      { axes: { challenge: 0.4 } },
-      { axes: { challenge: 0.6 } },
+    text: "Rough week. Two free hours. You genuinely want to decompress. You…",
+    text_ru: "Тяжёлая неделя. Два свободных часа. Ты искренне хочешь расслабиться. Ты…",
+    choices: [
+      { label: "Load something cozy and low-stakes — not a night for challenges", label_ru: "Запускаю что-нибудь уютное и необременительное — сегодня не для испытаний", axes: { challenge: -0.7, dominance: -0.4 }, archetypes: { bear: 3 } },
+      { label: "Find the hardest thing available — cathartic difficulty IS the decompression", label_ru: "Нахожу что-нибудь максимально сложное — катарсическая сложность И ЕСТЬ расслабление", axes: { challenge: 0.7, dominance: 0.4 }, archetypes: { gecko: 3, falcon: 2 } },
+      { label: "Queue with friends — the game doesn't matter, the company does", label_ru: "Захожу с друзьями — игра не важна, важна компания", axes: { social: 0.8, challenge: -0.2 }, archetypes: { dolphin: 3, wolf: 3 } },
+      { label: "Bounce between a few games until something catches", label_ru: "Переключаюсь между несколькими играми, пока что-нибудь не зацепит", axes: { pace: 0.7, challenge: -0.3 }, archetypes: { magpie: 3 } },
     ]
   },
+  // Q15 — Lore: dense world-building
   {
-    text: "You find yourself thinking about a game's story, characters, or world while doing something completely unrelated.",
-    answers: [
-      { axes: { systems: 0.3 } },
-      { axes: { systems: 0.1 } },
-      { axes: {} },
-      { axes: { systems: -0.4 } },
-      { axes: { systems: -0.7 } },
+    text: "You're starting a game known for extremely dense lore and world-building.",
+    text_ru: "Ты начинаешь игру, известную крайне насыщенным лором и проработанным миром.",
+    choices: [
+      { label: "Read every piece of environmental detail before advancing", label_ru: "Читаю каждую деталь окружения, прежде чем двигаться дальше", axes: { systems: -0.6, pace: -0.8 }, archetypes: { owl: 3 } },
+      { label: "Follow the story naturally, wiki things if confused", label_ru: "Следую сюжету, заглядываю в вики при необходимости", axes: { systems: 0.2, pace: 0.2 }, archetypes: { bear: 2, bat: 1 } },
+      { label: "Skip the lore — I'm here for the mechanics", label_ru: "Пропускаю лор — я здесь ради механик", axes: { systems: 0.5, pace: 0.5 }, archetypes: { frog: 3, falcon: 2 } },
+      { label: "Watch a lore summary video first to make the ramp feel shorter", label_ru: "Сначала смотрю видео с кратким изложением лора, чтобы вход был легче", axes: { systems: -0.2, pace: 0.2 }, archetypes: { fox: 2 } },
     ]
   },
+  // Q16 — Narrative vs systems
   {
-    text: "Your game sessions feel satisfying only when you've made visible progress — leveled up, unlocked something, or won.",
-    answers: [
-      { axes: { dominance: -0.3 } },
-      { axes: { dominance: -0.1 } },
-      { axes: {} },
-      { axes: { dominance: 0.3, challenge: 0.2 } },
-      { axes: { dominance: 0.5, challenge: 0.4 } },
+    text: "A game's narrative is mediocre, but its mechanical systems are genuinely interesting.",
+    text_ru: "Нарратив игры посредственный, но механические системы по-настоящему интересны.",
+    choices: [
+      { label: "The story failing is a dealbreaker — I need to care about what's happening", label_ru: "Слабый сюжет — для меня стоп-фактор. Мне нужно переживать за происходящее", axes: { systems: -0.7 }, archetypes: { owl: 3 } },
+      { label: "Mechanics are the real game; narrative is decoration", label_ru: "Механики — это и есть настоящая игра; нарратив — декорация", axes: { systems: 0.7 }, archetypes: { frog: 3, falcon: 2 } },
+      { label: "A weak story dims the enjoyment but doesn't break it", label_ru: "Слабый сюжет снижает удовольствие, но не ломает его", axes: { systems: 0.2 }, archetypes: { bear: 2 } },
+      { label: "Depends entirely on what I came for in this specific game", label_ru: "Полностью зависит от того, чего я ожидал от этой конкретной игры", axes: { systems: 0.1 }, archetypes: { fox: 2 } },
     ]
   },
+  // Q17 — Speedrun mindset
   {
-    text: "You prefer a game where the fun comes from outsmarting an opponent or the system, not from reacting quickly.",
-    answers: [
-      { axes: { systems: -0.4, pace: 0.2 } },
-      { axes: { systems: -0.2 } },
-      { axes: {} },
-      { axes: { systems: 0.5, pace: -0.2 } },
-      { axes: { systems: 0.7, pace: -0.4 } },
+    text: "You just found out the game you're currently playing has a speedrun category.",
+    text_ru: "Ты только что узнал, что игра, в которую ты сейчас играешь, имеет категорию спидрана.",
+    choices: [
+      { label: "Watch a run out of genuine fascination — how did they find those lines?", label_ru: "Смотрю запись из искреннего любопытства — как они нашли эти маршруты?", axes: { systems: 0.6, challenge: 0.2 }, archetypes: { frog: 2, fox: 2 } },
+      { label: "Feel an urge to try some of the skips myself", label_ru: "Чувствую желание самому попробовать некоторые пропуски", axes: { systems: 0.7, challenge: 0.4, pace: 0.4 }, archetypes: { frog: 3, gecko: 1 } },
+      { label: "Not interested — I'm playing the game, not optimizing it", label_ru: "Не интересует — я играю в игру, а не оптимизирую её", axes: { systems: -0.5, pace: -0.3 }, archetypes: { owl: 2, bear: 2 } },
+      { label: "Appreciate that it exists without it changing how I play", label_ru: "Ценю, что это есть, но это не меняет моего стиля игры", axes: { systems: 0.1 }, archetypes: { bat: 1 } },
     ]
   },
+  // Q18 — Social: coordinator role
   {
-    text: "You've organized a game night, scheduled a co-op session, or actively rallied others to play together.",
-    answers: [
-      { axes: { social: -0.5 } },
-      { axes: { social: -0.2 } },
-      { axes: {} },
-      { axes: { social: 0.5 } },
-      { axes: { social: 0.8 } },
+    text: "A multiplayer session needs organizing — someone has to pick the game, schedule the time, and hold it together.",
+    text_ru: "Мультиплеерную сессию нужно организовать — кто-то должен выбрать игру, назначить время и всё скоординировать.",
+    choices: [
+      { label: "Step in naturally — I already know everyone's schedule and preferences", label_ru: "Берусь сам — я уже знаю расписание и предпочтения всех", axes: { social: 0.8, dominance: 0.3 }, archetypes: { wolf: 3 } },
+      { label: "Let someone else lead; show up enthusiastically", label_ru: "Пусть кто-то другой возьмёт на себя — я приду с энтузиазмом", axes: { social: 0.5, dominance: -0.3 }, archetypes: { dolphin: 3 } },
+      { label: "Organize it mainly so it actually happens; not fussy about details", label_ru: "Организую просто чтобы это состоялось — детали не принципиальны", axes: { social: 0.6, dominance: 0.1 }, archetypes: { wolf: 2, dolphin: 1 } },
+      { label: "Prefer no coordination overhead — just start, whoever joins joins", label_ru: "Предпочитаю без всякой координации — просто начинаю, кто придёт, тот придёт", axes: { social: -0.4, dominance: 0.2 }, archetypes: { falcon: 2, gecko: 1 } },
     ]
   },
+  // Q19 — Social: struggling teammate (positive framing)
   {
-    text: "You build or create something in a game — a base, a farm, a city, a character — with no goal beyond how it looks or feels.",
-    answers: [
-      { axes: { dominance: 0.2, challenge: 0.1 } },
-      { axes: { dominance: 0.1 } },
-      { axes: {} },
-      { axes: { dominance: -0.4, challenge: -0.2 } },
-      { axes: { dominance: -0.6, challenge: -0.3 } },
+    text: "A teammate in a team game is clearly struggling and dragging the group down.",
+    text_ru: "Один из тиммейтов в командной игре явно не справляется и тянет группу вниз.",
+    choices: [
+      { label: "Lead in covering for them — this is a team and we adapt", label_ru: "Беру на себя поддержку — это команда, мы адаптируемся", axes: { social: 0.7, dominance: 0.3 }, archetypes: { wolf: 3, dolphin: 2 } },
+      { label: "Quietly carry harder without mentioning it", label_ru: "Тихо тащу сильнее, ничего не говоря", axes: { dominance: 0.6, social: 0.1 }, archetypes: { falcon: 3 } },
+      { label: "Encourage them directly and offer help between rounds", label_ru: "Ободряю напрямую и предлагаю помощь между раундами", axes: { social: 0.8 }, archetypes: { dolphin: 3, wolf: 2 } },
+      { label: "Feel genuine frustration but contain it", label_ru: "Ощущаю настоящее раздражение, но сдерживаю его", axes: { dominance: 0.4, social: -0.2 }, archetypes: { falcon: 2 } },
     ]
   },
+  // Q20 ★ MIRROR of Q19 — Social: struggling teammate in ranked
   {
-    text: "Discovering that a game has rich lore, hidden backstory, or layered world-building makes you more motivated to keep playing.",
-    answers: [
-      { axes: { systems: 0.4 } },
-      { axes: { systems: 0.2 } },
-      { axes: {} },
-      { axes: { systems: -0.4 } },
-      { axes: { systems: -0.7 } },
+    text: "Same teammate, same session — but it's ranked and costing you meaningful rating.",
+    text_ru: "Тот же тиммейт, та же сессия — но это рейтинговый режим, и это стоит тебе реального рейтинга.",
+    choices: [
+      { label: "Continue supporting — team dynamic matters more than my rating", label_ru: "Продолжаю поддерживать — командная динамика важнее моего рейтинга", axes: { social: 0.8, dominance: -0.4 }, archetypes: { wolf: 3, dolphin: 2 } },
+      { label: "Start playing more individually to minimize the drag", label_ru: "Начинаю играть более индивидуально, чтобы минимизировать потери", axes: { dominance: 0.7, social: -0.5 }, archetypes: { falcon: 3 } },
+      { label: "Suggest a break and privately reconsider re-queuing with them", label_ru: "Предлагаю перерыв и про себя задумываюсь, стоит ли снова ставить с ними в очередь", axes: { dominance: 0.3, social: 0.2 }, archetypes: { fox: 2 } },
+      { label: "Leave after the current match, without drama", label_ru: "Ухожу после текущего матча, без лишних слов", axes: { dominance: 0.2, social: -0.3 }, archetypes: { falcon: 2, gecko: 1 } },
     ]
   },
+  // Q21 — Completion: after credits
   {
-    text: "You replay a level, dungeon, or match specifically to see if you can do it faster, cleaner, or more efficiently.",
-    answers: [
-      { axes: { challenge: -0.4 } },
-      { axes: { challenge: -0.2 } },
-      { axes: {} },
-      { axes: { challenge: 0.5, systems: 0.2 } },
-      { axes: { challenge: 0.8, systems: 0.3, dominance: 0.2 } },
+    text: "The credits have rolled on a single-player game you loved. You…",
+    text_ru: "В одиночной игре, которая тебе понравилась, пошли титры. Ты…",
+    choices: [
+      { label: "Keep playing — side quests, achievements, lore I missed", label_ru: "Продолжаю играть — побочные квесты, достижения, лор, который пропустил", axes: { systems: -0.3, dominance: 0.3, pace: -0.4 }, archetypes: { dragon: 3, bat: 2 } },
+      { label: "Immediately think about what's next", label_ru: "Сразу думаю о том, что дальше", axes: { pace: 0.5, dominance: 0.2 }, archetypes: { magpie: 3, bat: 1 } },
+      { label: "Sit with it a while — a good ending deserves space", label_ru: "Посижу с этим — хорошая концовка заслуживает паузы", axes: { pace: -0.5, systems: -0.4 }, archetypes: { owl: 3, bear: 3 } },
+      { label: "Start a new game+ or alternate route immediately", label_ru: "Сразу начинаю новую игру+ или альтернативное прохождение", axes: { challenge: 0.4, dominance: 0.2, systems: 0.3 }, archetypes: { gecko: 2, frog: 2 } },
     ]
   },
+  // Q22 — Attention: mid-session pull
   {
-    text: "You stick with the same game or series for weeks or months at a time rather than jumping between titles.",
-    answers: [
-      { axes: { pace: 0.6 } },
-      { axes: { pace: 0.3 } },
-      { axes: {} },
-      { axes: { pace: -0.3, challenge: 0.1 } },
-      { axes: { pace: -0.5, challenge: 0.2 } },
+    text: "Mid-session, a completely different game is calling your attention.",
+    text_ru: "В середине сессии тебя начинает тянуть к совершенно другой игре.",
+    choices: [
+      { label: "Finish the current session first — no point half-doing both", label_ru: "Сначала заканчиваю текущую сессию — нет смысла делать оба дела наполовину", axes: { dominance: 0.2, pace: -0.5, challenge: 0.2 }, archetypes: { gecko: 2, falcon: 2 } },
+      { label: "Switch immediately — probably won't go back to the first one tonight", label_ru: "Переключаюсь сразу — скорее всего, сегодня уже не вернусь к первой", axes: { pace: 0.7, dominance: -0.2 }, archetypes: { magpie: 3 } },
+      { label: "Finish the current objective, then consider switching", label_ru: "Заканчиваю текущую задачу, потом думаю о переключении", axes: { pace: 0.1 }, archetypes: { fox: 1 } },
+      { label: "Open both and alternate depending on the moment", label_ru: "Открываю обе и чередую в зависимости от настроения", axes: { pace: 0.6 }, archetypes: { magpie: 3 } },
     ]
   },
+  // Q23 — Patience: 10-hour onboarding
   {
-    text: "The competitive element of a game — ranking, scoring, outplaying others — is part of what motivates you to keep coming back.",
-    answers: [
-      { axes: { dominance: -0.6 } },
-      { axes: { dominance: -0.3 } },
-      { axes: {} },
-      { axes: { dominance: 0.5 } },
-      { axes: { dominance: 0.8 } },
+    text: "A game you're interested in is known for a 10-hour onboarding before it gets truly great.",
+    text_ru: "Игра, которая тебе интересна, известна тем, что по-настоящему раскрывается только после 10 часов онбординга.",
+    choices: [
+      { label: "Fine — depth is worth the ramp", label_ru: "Нормально — глубина стоит этих усилий", axes: { systems: 0.5, challenge: 0.4, pace: -0.5 }, archetypes: { gecko: 2, owl: 2, fox: 1 } },
+      { label: "Give it 2–3 hours and assess honestly", label_ru: "Дам ей 2–3 часа и честно оценю", axes: { pace: 0.2 }, archetypes: { fox: 2 } },
+      { label: "Probably not for me — life is short and first impressions matter", label_ru: "Скорее всего не для меня — жизнь коротка, и первое впечатление важно", axes: { pace: 0.5, challenge: -0.3 }, archetypes: { magpie: 2 } },
+      { label: "Read up on it first to make the ramp feel shorter", label_ru: "Сначала почитаю про неё, чтобы вход казался короче", axes: { systems: 0.5, pace: 0.1 }, archetypes: { fox: 3, owl: 1 } },
     ]
   },
+  // Q24 — Theory vs practice
   {
-    text: "You spend time decorating, customizing, or personalizing your character, base, or game space — just for your own satisfaction.",
-    answers: [
-      { axes: { dominance: 0.2 } },
-      { axes: {} },
-      { axes: {} },
-      { axes: { dominance: -0.3, challenge: -0.2 } },
-      { axes: { dominance: -0.5, challenge: -0.3 } },
+    text: "A build you spent significant time theorycrafting gets crushed badly on first attempt.",
+    text_ru: "Билд, над которым ты долго теоркрафтил, с треском провалился при первой попытке.",
+    choices: [
+      { label: "Reassess the theory — the loss is data", label_ru: "Пересматриваю теорию — поражение это данные", axes: { systems: 0.7, challenge: 0.3 }, archetypes: { fox: 3, falcon: 2 } },
+      { label: "Test it more before concluding — one match isn't enough", label_ru: "Тестирую ещё — одного матча недостаточно для выводов", axes: { systems: 0.5, challenge: 0.5, pace: -0.3 }, archetypes: { fox: 3, beaver: 2 } },
+      { label: "Feel the gap between theory and practice, pivot to something proven", label_ru: "Ощущаю разрыв между теорией и практикой, переключаюсь на что-то проверенное", axes: { dominance: 0.3, systems: 0.2 }, archetypes: { falcon: 2 } },
+      { label: "The crafting was the fun part — the outcome matters less than I expected", label_ru: "Процесс теоркрафтинга и был веселью — результат оказался менее важным, чем я думал", axes: { systems: 0.5, challenge: -0.2 }, archetypes: { beaver: 2, fox: 1 } },
     ]
   },
+  // Q25 — Exploration: 2 hours off the main path
   {
-    text: "When playing with others, you naturally shift into a coordinator or support role without being asked.",
-    answers: [
-      { axes: { social: -0.4 } },
-      { axes: { social: -0.2 } },
-      { axes: {} },
-      { axes: { social: 0.5 } },
-      { axes: { social: 0.8 } },
+    text: "You realize you've spent 2 hours in an open world without touching the main story.",
+    text_ru: "Ты осознаёшь, что провёл 2 часа в открытом мире, не продвинувшись по основному сюжету.",
+    choices: [
+      { label: "Successful session — the map was the point", label_ru: "Успешная сессия — карта и была целью", axes: { dominance: -0.5, pace: -0.3 }, archetypes: { bat: 3 } },
+      { label: "Feel a mild pull to get back on track", label_ru: "Ощущаю лёгкое желание вернуться к основному пути", axes: { dominance: 0.3 }, archetypes: { dragon: 1, falcon: 1 } },
+      { label: "This wouldn't happen — I typically follow quest markers", label_ru: "Такого бы не произошло — я обычно следую маркерам квестов", axes: { dominance: 0.5, pace: 0.3 }, archetypes: { falcon: 2, dragon: 1 } },
+      { label: "Check whether I missed anything important before moving on", label_ru: "Проверяю, не пропустил ли что-то важное, прежде чем двигаться дальше", axes: { systems: 0.4, dominance: 0.1 }, archetypes: { owl: 2, fox: 2 } },
     ]
   },
+  // Q26 — Social: mediocre game with friend
   {
-    text: "You've looked up lore wikis, fan theories, or developer commentary for a game world you love — outside of the game itself.",
-    answers: [
-      { axes: { systems: 0.3 } },
-      { axes: { systems: 0.1 } },
-      { axes: {} },
-      { axes: { systems: -0.5 } },
-      { axes: { systems: -0.7 } },
+    text: "A friend wants to play a game you find genuinely mediocre.",
+    text_ru: "Друг хочет сыграть в игру, которую ты считаешь откровенно посредственной.",
+    choices: [
+      { label: "Play anyway — the game is secondary to the time together", label_ru: "Играю в любом случае — игра вторична, главное время вместе", axes: { social: 0.8, challenge: -0.3 }, archetypes: { dolphin: 3, wolf: 2 } },
+      { label: "Suggest something better; keep suggesting until they agree", label_ru: "Предлагаю что-нибудь лучше; продолжаю предлагать, пока не согласится", axes: { dominance: 0.4, social: 0.2 }, archetypes: { wolf: 2, falcon: 2 } },
+      { label: "Play once, then pitch alternatives next time", label_ru: "Играю один раз, в следующий раз предложу альтернативу", axes: { social: 0.5, dominance: 0.2 }, archetypes: { fox: 2, wolf: 1 } },
+      { label: "Decline — I'd rather play something good alone", label_ru: "Отказываюсь — лучше сыграю в хорошую игру один", axes: { social: -0.5, challenge: 0.3 }, archetypes: { gecko: 2, falcon: 2 } },
     ]
   },
+  // Q27 — Systems: inefficient layout
   {
-    text: "You pick up your phone and open a game for just a few minutes, without planning or intending a longer session.",
-    answers: [
-      { axes: { pace: -0.4, challenge: 0.2 } },
-      { axes: { pace: -0.2 } },
-      { axes: {} },
-      { axes: { pace: 0.4, challenge: -0.2 } },
-      { axes: { pace: 0.7, challenge: -0.4 } },
+    text: "You're deep into a base-building game. Your current layout won't scale efficiently.",
+    text_ru: "Ты глубоко в игре по строительству баз. Твоя текущая планировка не масштабируется эффективно.",
+    choices: [
+      { label: "Rebuild from scratch — a flawed foundation only compounds", label_ru: "Перестраиваю с нуля — плохой фундамент только усугубляет проблему", axes: { systems: 0.8, pace: -0.6, dominance: 0.2 }, archetypes: { beaver: 3 } },
+      { label: "Patch issues as they arise — no need to demolish something that works", label_ru: "Устраняю проблемы по мере возникновения — незачем сносить то, что работает", axes: { systems: -0.3, pace: 0.3 }, archetypes: { bat: 2, bear: 2 } },
+      { label: "Finish the current goal, then do a planned redesign", label_ru: "Заканчиваю текущую задачу, потом делаю запланированный редизайн", axes: { systems: 0.5, dominance: 0.2, pace: -0.2 }, archetypes: { beaver: 2, fox: 2 } },
+      { label: "The inefficiency doesn't bother me as long as it functions", label_ru: "Неэффективность меня не беспокоит, пока всё работает", axes: { systems: -0.5 }, archetypes: { bear: 2, bat: 2 } },
     ]
   },
+  // Q28 — Co-op toggle
   {
-    text: "After a rough day, you turn on a game specifically to calm down or decompress — not for challenge or competition.",
-    answers: [
-      { axes: { dominance: 0.2 } },
-      { axes: { dominance: 0.1 } },
-      { axes: {} },
-      { axes: { challenge: -0.3, dominance: -0.2 } },
-      { axes: { challenge: -0.5, dominance: -0.4 } },
+    text: "A game you love just got co-op support added.",
+    text_ru: "В игру, которую ты любишь, только что добавили кооперативный режим.",
+    choices: [
+      { label: "Who can I convince to play this with me?", label_ru: "Кого я могу уговорить сыграть со мной?", axes: { social: 0.8 }, archetypes: { wolf: 3, dolphin: 3 } },
+      { label: "The solo experience was already complete — might try co-op eventually", label_ru: "Соло-опыт уже был полным — может, попробую кооп когда-нибудь", axes: { social: -0.2, challenge: 0.1 }, archetypes: { owl: 2, gecko: 1 } },
+      { label: "Interesting — co-op might unlock completely different strategies", label_ru: "Интересно — кооп может открыть совсем другие стратегии", axes: { social: 0.3, systems: 0.4 }, archetypes: { fox: 2, wolf: 1 } },
+      { label: "Changes nothing about how I'll play it", label_ru: "Это ничего не меняет в том, как я буду в это играть", axes: { social: -0.4 }, archetypes: { falcon: 2, gecko: 2 } },
     ]
   },
+  // Q29 — Mobile: idle moment
   {
-    text: "You've stuck with a hard game long enough to notice yourself meaningfully improving at it.",
-    answers: [
-      { axes: { challenge: -0.5 } },
-      { axes: { challenge: -0.2 } },
-      { axes: {} },
-      { axes: { challenge: 0.5 } },
-      { axes: { challenge: 0.8 } },
+    text: "You have 5 idle minutes — waiting room, elevator, short break.",
+    text_ru: "У тебя есть 5 свободных минут — очередь, лифт, короткий перерыв.",
+    choices: [
+      { label: "Phone out, game open immediately", label_ru: "Сразу достаю телефон и открываю игру", axes: { pace: 0.8, challenge: -0.4 }, archetypes: { magpie: 3, dragon: 1 } },
+      { label: "Check messages or social feeds instead", label_ru: "Лучше проверяю сообщения или ленту", axes: { pace: 0.3 }, archetypes: { magpie: 1 } },
+      { label: "Sit with the moment — phones don't need to fill every pause", label_ru: "Просто нахожусь в моменте — телефон не обязан заполнять каждую паузу", axes: { challenge: 0.2, pace: -0.5 }, archetypes: { owl: 2, gecko: 1 } },
+      { label: "If I already had a mobile game running, I check in; otherwise not worth starting", label_ru: "Если мобильная игра уже была открыта — зайду; иначе не стоит начинать", axes: { pace: 0.3 }, archetypes: { fox: 1 } },
     ]
   },
+  // Q30 — Mastery vs breadth
   {
-    text: "You plan your build, deck, or strategy in advance rather than figuring things out as you go.",
-    answers: [
-      { axes: { systems: -0.4 } },
-      { axes: { systems: -0.2 } },
-      { axes: {} },
-      { axes: { systems: 0.4, pace: -0.2 } },
-      { axes: { systems: 0.7, pace: -0.3 } },
+    text: "Game A has near-infinite depth across 3 mechanics. Game B has 50 mechanics but each is shallow.",
+    text_ru: "Игра A имеет почти бесконечную глубину в 3 механиках. Игра B имеет 50 механик, но каждая поверхностна.",
+    choices: [
+      { label: "Game A — mastering depth is the actual game", label_ru: "Игра A — освоение глубины и есть настоящая игра", axes: { challenge: 0.7, systems: 0.4, dominance: 0.3 }, archetypes: { gecko: 3, owl: 2 } },
+      { label: "Game B — variety keeps engagement high", label_ru: "Игра B — разнообразие поддерживает вовлечённость", axes: { pace: 0.5, challenge: -0.3 }, archetypes: { magpie: 3, dragon: 2 } },
+      { label: "Depends on my mood — sometimes depth, sometimes breadth", label_ru: "Зависит от настроения — иногда глубина, иногда ширина", axes: { challenge: 0.2 }, archetypes: { bat: 2 } },
+      { label: "Game A, but only if the 3 mechanics are genuinely interesting", label_ru: "Игра A, но только если эти 3 механики по-настоящему интересны", axes: { challenge: 0.5, systems: 0.5 }, archetypes: { fox: 3, gecko: 2 } },
     ]
   },
+  // Q31 ★ ADVERSARIAL — Mood: losses and real life
   {
-    text: "You've felt genuine, lasting frustration — not just disappointment — when a teammate played carelessly in a game you cared about.",
-    answers: [
-      { axes: { dominance: -0.3 } },
-      { axes: { dominance: -0.1 } },
-      { axes: {} },
-      { axes: { dominance: 0.4, social: 0.2 } },
-      { axes: { dominance: 0.6, social: 0.3 } },
+    text: "Honestly — not about gameplay. Does losing at games affect your real mood outside the session?",
+    text_ru: "Честно — не о геймплее. Влияют ли проигрыши в играх на твоё реальное настроение вне сессии?",
+    choices: [
+      { label: "Yes — not for long, but a bad session can colour the next hour", label_ru: "Да — ненадолго, но плохая сессия может окрасить следующий час", axes: { dominance: 0.5, challenge: 0.3 }, archetypes: { falcon: 3, gecko: 2 } },
+      { label: "Big competitive losses hit differently; casual losses don't", label_ru: "Крупные поражения в соревновательном режиме бьют иначе; казуальные — нет", axes: { dominance: 0.4, challenge: 0.2 }, archetypes: { falcon: 2, gecko: 1 } },
+      { label: "Rarely — the game and my mood stay pretty well separated", label_ru: "Редко — игра и моё настроение довольно хорошо разделены", axes: { dominance: -0.2, challenge: -0.1 }, archetypes: { bear: 2, bat: 1 } },
+      { label: "Genuinely no — I play for the experience, not the outcome", label_ru: "Нет, искренне — я играю ради процесса, а не результата", axes: { dominance: -0.5, challenge: -0.2 }, archetypes: { owl: 2, bear: 2, bat: 1 } },
     ]
   },
+  // Q32 — Sharing wins
   {
-    text: "A victory feels hollow or incomplete if nobody else witnessed it or if you can't tell someone about it.",
-    answers: [
-      { axes: { social: -0.5 } },
-      { axes: { social: -0.2 } },
-      { axes: {} },
-      { axes: { social: 0.5 } },
-      { axes: { social: 0.7 } },
+    text: "You just got a genuinely impressive result — a high rank, a clear personal best, a tricky achievement.",
+    text_ru: "Ты только что достиг действительно впечатляющего результата — высокий ранг, личный рекорд, сложное достижение.",
+    choices: [
+      { label: "Screenshot it and share — want others to see", label_ru: "Делаю скриншот и делюсь — хочу, чтобы другие увидели", axes: { social: 0.5, dominance: 0.5 }, archetypes: { wolf: 2, dolphin: 2, dragon: 1 } },
+      { label: "Note it privately — the accomplishment is mine, not the audience's", label_ru: "Отмечаю для себя — это моё достижение, а не для публики", axes: { social: -0.4, dominance: 0.4 }, archetypes: { gecko: 3, falcon: 2 } },
+      { label: "Tell one specific person who'd actually appreciate the context", label_ru: "Рассказываю одному конкретному человеку, который оценит контекст", axes: { social: 0.4, dominance: 0.3 }, archetypes: { fox: 2, wolf: 1 } },
+      { label: "Feel satisfied, move on — the next objective is already calling", label_ru: "Чувствую удовлетворение и иду дальше — уже зовёт следующая цель", axes: { dominance: 0.5, pace: 0.2 }, archetypes: { falcon: 3, dragon: 2 } },
     ]
   },
+  // Q33 — Emotional: major story death
   {
-    text: "You find yourself thinking 'what if I tried this completely differently?' and starting over to test the idea.",
-    answers: [
-      { axes: { systems: -0.3 } },
-      { axes: { systems: -0.1 } },
-      { axes: {} },
-      { axes: { systems: 0.4, challenge: 0.2 } },
-      { axes: { systems: 0.6, challenge: 0.4 } },
+    text: "A game's story just killed a character you've spent 40 hours with.",
+    text_ru: "Игра только что убила персонажа, с которым ты провёл 40 часов.",
+    choices: [
+      { label: "Genuinely moved — I sit with it for a moment before continuing", label_ru: "По-настоящему тронут — сижу с этим моментом, прежде чем продолжить", axes: { systems: -0.5, pace: -0.5 }, archetypes: { owl: 3, bear: 3 } },
+      { label: "Acknowledge it narratively but it doesn't break my flow", label_ru: "Принимаю нарративно, но это не нарушает моего ритма", axes: { systems: 0.2, pace: 0.2 }, archetypes: { bat: 1 } },
+      { label: "Already thinking about how the game mechanics will shift from here", label_ru: "Уже думаю, как изменятся механики игры дальше", axes: { systems: 0.5, pace: 0.2 }, archetypes: { frog: 3, fox: 2 } },
+      { label: "Kind of wish they'd warned me — not what I came for", label_ru: "Жаль, что не предупредили — я не за этим сюда пришёл", axes: { systems: 0.3, pace: 0.5 }, archetypes: { magpie: 1 } },
     ]
   },
+  // Q34 — Story vs mechanics priority
   {
-    text: "You're drawn to games that reward patience — slow progression, building over time, or long-term investment.",
-    answers: [
-      { axes: { pace: 0.4 } },
-      { axes: { pace: 0.2 } },
-      { axes: {} },
-      { axes: { pace: -0.3, challenge: 0.2 } },
-      { axes: { pace: -0.5, challenge: 0.3 } },
+    text: "A game with an amazing story is known to have shallow, repetitive mechanics.",
+    text_ru: "Игра с потрясающим сюжетом известна поверхностными, повторяющимися механиками.",
+    choices: [
+      { label: "Story is enough — mechanics just need to not get in the way", label_ru: "Сюжета достаточно — механики просто не должны мешать", axes: { systems: -0.7 }, archetypes: { owl: 3 } },
+      { label: "Pass — mechanics are the actual medium; story is supplementary", label_ru: "Пропускаю — механики это настоящий язык игры; сюжет вторичен", axes: { systems: 0.7, dominance: 0.2 }, archetypes: { frog: 3, falcon: 2 } },
+      { label: "A little repetition is fine for a great narrative", label_ru: "Немного повторения допустимо ради хорошего нарратива", axes: { systems: -0.2 }, archetypes: { bear: 2, owl: 1 } },
+      { label: "Would play but feel the friction from the mechanics throughout", label_ru: "Играл бы, но всё время ощущал бы трение от механик", axes: { systems: 0.3 }, archetypes: { fox: 2 } },
     ]
   },
+  // Q35 — Social energy: post-session
   {
-    text: "You switch games mid-session — closing one and opening another — based on whatever you feel like in the moment, rather than finishing what you started.",
-    answers: [
-      { axes: { pace: -0.5 } },
-      { axes: { pace: -0.2 } },
-      { axes: {} },
-      { axes: { pace: 0.3, systems: -0.1 } },
-      { axes: { pace: 0.5, systems: -0.2 } },
+    text: "After a 3-hour solo gaming session, you feel…",
+    text_ru: "После 3-часовой соло-сессии ты чувствуешь…",
+    choices: [
+      { label: "Restored — alone time with a good game is exactly what I needed", label_ru: "Восстановленным — время наедине с хорошей игрой именно то, что нужно", axes: { social: -0.5 }, archetypes: { bear: 3, owl: 2, gecko: 1 } },
+      { label: "Ready to connect — solo was fine but now I want to share the experience", label_ru: "Готовым к общению — соло было хорошо, но теперь хочу поделиться пережитым", axes: { social: 0.5 }, archetypes: { dolphin: 3, wolf: 2 } },
+      { label: "Depends entirely on what game and what the session was like", label_ru: "Полностью зависит от игры и того, как прошла сессия", axes: { social: 0.1 }, archetypes: { bat: 2 } },
+      { label: "The same as before — gaming doesn't particularly affect my social appetite", label_ru: "Так же, как до неё — игры особо не влияют на мою тягу к общению", axes: { social: -0.3 }, archetypes: { falcon: 2 } },
     ]
   },
+  // Q36 — Completionism: final grind
   {
-    text: "In story-driven games you're playing for the first time, you skip or fast-forward through cutscenes and dialogue to get back to the gameplay.",
-    answers: [
-      { axes: { systems: -0.5 } },
-      { axes: { systems: -0.2 } },
-      { axes: {} },
-      { axes: { systems: 0.5 } },
-      { axes: { systems: 0.8 } },
-    ]
-  },
-  {
-    text: "When gaming with friends, you care as much about how well the group performs as whether everyone is simply having fun.",
-    answers: [
-      { axes: { dominance: -0.3 } },
-      { axes: { dominance: -0.1 } },
-      { axes: {} },
-      { axes: { dominance: 0.3, challenge: 0.2 } },
-      { axes: { dominance: 0.5, challenge: 0.3 } },
-    ]
-  },
-  {
-    text: "You'd rather play a game you genuinely love alone than play something mediocre with other people.",
-    answers: [
-      { axes: { social: 0.5 } },
-      { axes: { social: 0.3 } },
-      { axes: {} },
-      { axes: { social: -0.4 } },
-      { axes: { social: -0.7 } },
-    ]
-  },
-  {
-    text: "You track your progress or performance metrics — scores, stats, win rates, streaks — even in games you play casually.",
-    answers: [
-      { axes: { dominance: -0.4 } },
-      { axes: { dominance: -0.2 } },
-      { axes: {} },
-      { axes: { dominance: 0.4, challenge: 0.2 } },
-      { axes: { dominance: 0.7, challenge: 0.3 } },
-    ]
-  },
-  {
-    text: "You've switched game genres so dramatically — e.g. from a shooter to a farming sim — that friends were genuinely surprised.",
-    answers: [
-      { axes: { pace: -0.5 } },
-      { axes: { pace: -0.2 } },
-      { axes: {} },
-      { axes: { pace: 0.5 } },
-      { axes: { pace: 0.8 } },
+    text: "You're 80% through a completionist checklist. The remaining 20% requires 40 more hours of grinding.",
+    text_ru: "Ты прошёл 80% чеклиста завершенца. Оставшиеся 20% требуют ещё 40 часов гринда.",
+    choices: [
+      { label: "100% is the point — start the grind", label_ru: "100% это и есть цель — начинаю гриндить", axes: { dominance: 0.5, systems: 0.4, pace: -0.4 }, archetypes: { dragon: 3, gecko: 2 } },
+      { label: "80% is more than enough — the game has been experienced", label_ru: "80% более чем достаточно — игра пройдена", axes: { dominance: -0.2, pace: 0.2 }, archetypes: { bat: 2, bear: 1 } },
+      { label: "Depends whether the grind itself is enjoyable or purely mechanical", label_ru: "Зависит от того, приносит ли гринд сам по себе удовольствие или он чисто механический", axes: { challenge: 0.3, systems: 0.2 }, archetypes: { gecko: 2, fox: 1 } },
+      { label: "Check first if there's any unique reward — then decide", label_ru: "Сначала проверяю, есть ли уникальная награда — потом решаю", axes: { systems: 0.5, dominance: 0.3 }, archetypes: { fox: 3, dragon: 1 } },
     ]
   },
 ];
@@ -2577,18 +2515,19 @@ function renderQuestion() {
   document.getElementById('progress-fill').style.width = `${(currentQ / total) * 100}%`;
   document.getElementById('q-number').textContent = s.questionLabel(currentQ + 1);
 
-  const questionText = currentLang === 'ru' ? QUESTIONS_RU[currentQ] : q.text;
-  document.getElementById('q-text').textContent = questionText;
+  const isRu = currentLang === 'ru';
+  document.getElementById('q-text').textContent = isRu ? q.text_ru : q.text;
 
-  const scaleLabels = s.scaleLabels;
+  const letters = ['A', 'B', 'C', 'D'];
   const container = document.getElementById('options-container');
-  container.innerHTML = `
-    <div class="scale-options">
-      ${scaleLabels.map((l, i) => `
-        <button class="scale-opt ${answers[currentQ] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">${l}</button>
-      `).join('')}
-    </div>
-  `;
+  container.innerHTML = `<div class="choice-options">
+    ${q.choices.map((c, i) => `
+      <button class="choice-opt${answers[currentQ] === i ? ' selected' : ''}" onclick="selectAnswer(${i})">
+        <span class="choice-letter">${letters[i]}</span>
+        <span>${isRu ? c.label_ru : c.label}</span>
+      </button>
+    `).join('')}
+  </div>`;
 
   document.getElementById('btn-prev').disabled = currentQ === 0;
   document.getElementById('btn-prev').textContent = s.backBtn;
@@ -2596,7 +2535,7 @@ function renderQuestion() {
 
 function selectAnswer(idx) {
   answers[currentQ] = idx;
-  document.querySelectorAll('.scale-opt').forEach((el, i) => {
+  document.querySelectorAll('.choice-opt').forEach((el, i) => {
     el.classList.toggle('selected', i === idx);
   });
   setTimeout(() => {
@@ -2750,11 +2689,11 @@ const PERSONALITY_BANDS = {
 // SCORING
 // ═══════════════════════════════════════════════════════
 function computeResult() {
-  // Accumulate raw axis scores from user answers
+  // Accumulate raw axis scores from user choices
   const raw = Object.fromEntries(AXES.map(a => [a, 0]));
   answers.forEach((ansIdx, qIdx) => {
     if (ansIdx === null) return;
-    Object.entries(QUESTIONS[qIdx].answers[ansIdx].axes).forEach(([ax, val]) => {
+    Object.entries(QUESTIONS[qIdx].choices[ansIdx].axes).forEach(([ax, val]) => {
       raw[ax] += val;
     });
   });
@@ -2766,7 +2705,7 @@ function computeResult() {
     if (ansIdx === null) return;
     const q = QUESTIONS[qIdx];
     AXES.forEach(ax => {
-      const vals = q.answers.map(a => a.axes[ax] ?? 0);
+      const vals = q.choices.map(c => c.axes[ax] ?? 0);
       lo[ax] += Math.min(...vals);
       hi[ax] += Math.max(...vals);
     });
@@ -2779,14 +2718,16 @@ function computeResult() {
     norm[ax] = range === 0 ? 0.5 : Math.max(0, Math.min(1, (raw[ax] - lo[ax]) / range));
   });
 
-  // Euclidean distance from user vector to each archetype vector
-  const distances = Object.entries(ARCHETYPE_VECTORS).map(([key, vec]) => {
-    const d2 = AXES.reduce((sum, ax) => sum + (norm[ax] - vec[ax]) ** 2, 0);
-    return [key, Math.sqrt(d2)];
+  // Direct archetype scoring — sum points from each chosen answer
+  const archetypeScores = Object.fromEntries(Object.keys(ARCHETYPE_VECTORS).map(k => [k, 0]));
+  answers.forEach((ansIdx, qIdx) => {
+    if (ansIdx === null) return;
+    const arch = QUESTIONS[qIdx].choices[ansIdx].archetypes || {};
+    Object.entries(arch).forEach(([k, v]) => { archetypeScores[k] = (archetypeScores[k] || 0) + v; });
   });
-  distances.sort((a, b) => a[1] - b[1]);
+  const sorted = Object.entries(archetypeScores).sort((a, b) => b[1] - a[1]);
 
-  showResult(distances[0][0], distances, norm);
+  showResult(sorted[0][0], sorted, norm);
 }
 
 function renderAxisBars(axisValues, archVec, isRu) {
@@ -2925,13 +2866,11 @@ function showResult(key, sorted, norm) {
     `<span class="clash-tag">${a}</span>`
   ).join('');
 
-  const minDist = sorted[0][1];
-  const maxDist = sorted[sorted.length - 1][1];
-  const distRange = (maxDist - minDist) || 1;
+  const maxScore = sorted[0][1] || 1;
   document.getElementById('score-breakdown').innerHTML = sorted.map(([k, v], idx) => {
     const a = ARCHETYPES[k];
     const aName = isRu ? ARCHETYPES_RU[k].name : a.name;
-    const pct = Math.round((1 - (v - minDist) / distRange) * 100);
+    const pct = Math.max(0, Math.round((v / maxScore) * 100));
     return `<div class="score-bar-wrap">
       <div class="score-bar-meta">
         <span class="sb-icon">${a.emoji}</span>
