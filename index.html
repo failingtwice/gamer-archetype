@@ -1668,10 +1668,10 @@ const QUESTIONS_RU = [
   "Ты читал описания предметов, записи в журнале или лор-подсказки, которые подавляющее большинство игроков пропускают.",
   "Когда игра становится сложной, ты продолжаешь на текущей сложности, не понижая её.",
   "Ты провёл час или больше за одной повторяющейся петлёй — фарм материалов, гринд уровней, крафт предметов — и это не казалось рутиной.",
-  "Ты объяснял механики игры, рекомендовал игру или помогал с тактикой без просьбы.",
+  "Между сессиями ты ловишь себя за теоркрафтом — продумываешь билды, планируешь стратегии или мысленно прорабатываешь игровые механики вне игры.",
   "Ты замечаешь детали в игровом мире — изменённые диалоги NPC, фоновые картины, скрытые паттерны — мимо которых другие проходят не глядя.",
   "Ты пытался сломать или пропустить часть игры — найти шорткат, глитч или непредусмотренный путь.",
-  "Игровая сессия затянулась намного дольше запланированного, потому что ты постоянно находил повод не останавливаться.",
+  "Ты чувствуешь беспокойство или неудовлетворённость от игровой сессии без чёткой цели — без прокачки, победы или ощутимого прогресса.",
   "Ты чувствуешь себя заметно более вовлечённым в игру, когда рядом есть друг или группа людей.",
   "Дойдя до титров, ты возвращался, чтобы выполнить побочный контент, найти коллектибелы или закрыть достижения.",
   "Ты думал о сюжете, персонажах или мире игры, занимаясь чем-то совершенно другим.",
@@ -1681,7 +1681,7 @@ const QUESTIONS_RU = [
   "Ты создаёшь что-то в игре — базу, ферму, город, персонажа — без всякой цели, кроме того, как это выглядит.",
   "Если ты узнаёшь, что в игре есть богатый лор, скрытая предыстория или многослойный мир — ты больше мотивирован продолжать.",
   "Ты перепроходил уровень, подземелье или матч специально, чтобы сделать это быстрее, чище или эффективнее.",
-  "Между игровыми сессиями ты переключаешься на совершенно другой жанр, а не возвращаешься к тому же типу.",
+  "Ты задерживаешься в одной игре или серии неделями или месяцами, а не перескакиваешь между разными.",
   "Соревновательный элемент игры — рейтинг, очки, превосходство над другими — часть того, что заставляет тебя возвращаться.",
   "Ты тратишь время на оформление, кастомизацию или персонализацию персонажа, базы или игрового пространства — только для себя.",
   "Играя с другими, ты естественно берёшь на себя роль координатора или поддержки, не ожидая просьбы.",
@@ -1695,8 +1695,8 @@ const QUESTIONS_RU = [
   "Тебя посещает мысль «а что если попробовать совсем по-другому?» — и ты начинаешь заново, чтобы проверить идею.",
   "Тебя привлекают игры, вознаграждающие терпение — медленный прогресс, строительство со временем, долгосрочные проекты.",
   "Ты переключаешься между играми прямо во время сессии — закрываешь одну и открываешь другую — в зависимости от настроения, не доводя начатое до конца.",
-  "В сюжетных играх ты пропускаешь или перематываешь катсцены и диалоги, чтобы быстрее вернуться к геймплею.",
-  "Когда у тебя есть чёткая цель, ты регулярно отвлекаешься, чтобы исследовать что-то в стороне, даже если это стоит тебе времени.",
+  "В сюжетных играх, которые ты проходишь впервые, ты пропускаешь или перематываешь катсцены и диалоги, чтобы вернуться к геймплею.",
+  "Играя с друзьями, тебе важно не только то, весело ли всем, но и то, насколько хорошо группа выступает.",
   "Ты предпочтёшь играть в любимую игру в одиночестве, чем в посредственную — с другими людьми.",
   "Ты отслеживаешь метрики прогресса или результатов — очки, статы, процент побед, серии — даже в играх, в которые играешь казуально.",
   "Ты резко менял игровой жанр — например, со шутера на симулятор фермы — так что друзья были по-настоящему удивлены.",
@@ -1765,7 +1765,7 @@ const ARCHETYPES = {
       { label: "Systems Focus", value: 80 },
       { label: "Challenge Seeking", value: 88 },
       { label: "Competitive Dominance", value: 97 },
-      { label: "Play Pace", value: 82 },
+      { label: "Play Pace", value: 30 },
     ],
     shadow: "A loss can ruin your day — or your week. You're prone to tilt, blame-shifting, and quietly resenting players who don't take the game as seriously. If you're not improving, you feel worthless. Be wary of rage-quitting relationships alongside matches.",
     personality: "You approach most things in life the way you approach games: with a scoreboard. You set measurable goals, track performance compulsively, and feel low-grade discomfort when progress can't be quantified. In competitive domains — sport, work, academics — you register your rank and feel it personally. People who genuinely don't care about the outcome quietly frustrate you, even in contexts where caring doesn't make sense.",
@@ -1901,7 +1901,7 @@ const ARCHETYPES = {
     ],
     shadow: "You're susceptible to the most predatory game monetization in existence — loot boxes, battle passes, gear treadmills. Games without meaningful progression loops bore you within hours. You may have 1,000 hours in a game you consider 'mediocre' simply because the numbers kept going up.",
     personality: "You are reward-driven at a deeper level than most people admit about themselves. Systems with clear progression — career tracks, skill certifications, personal bests — energize you in ways open-ended work does not. You likely track more metrics than you tell people: steps, streaks, finances. When a feedback loop closes, something satisfies. When it stalls, something itches — and you notice the itch before you notice the cause.",
-    affinity: ["The Wolf", "The Bat", "The Bear"],
+    affinity: ["The Wolf", "The Bear", "The Gecko"],
     clashes: ["The Bat", "The Frog"],
   },
   dolphin: {
@@ -1960,7 +1960,7 @@ const ARCHETYPES = {
     ],
     spectrums: [
       { label: "Social Drive", value: 27 },
-      { label: "Systems Focus", value: 52 },
+      { label: "Systems Focus", value: 80 },
       { label: "Challenge Seeking", value: 75 },
       { label: "Competitive Dominance", value: 38 },
       { label: "Play Pace", value: 8 },
@@ -2125,7 +2125,7 @@ const ARCHETYPES = {
     ],
     spectrums: [
       { label: "Social Drive", value: 55 },
-      { label: "Systems Focus", value: 60 },
+      { label: "Systems Focus", value: 35 },
       { label: "Challenge Seeking", value: 8 },
       { label: "Competitive Dominance", value: 38 },
       { label: "Play Pace", value: 88 },
@@ -2217,21 +2217,21 @@ const QUESTIONS = [
   {
     text: "You've spent an hour or more on one repetitive loop — farming materials, grinding levels, crafting items — without it feeling like a chore.",
     answers: [
-      { axes: { systems: -0.3 } },
-      { axes: { systems: -0.1 } },
+      { axes: { pace: 0.3 } },
+      { axes: { pace: 0.1 } },
       { axes: {} },
-      { axes: { systems: 0.3, challenge: 0.2 } },
-      { axes: { systems: 0.5, challenge: 0.4 } },
+      { axes: { pace: -0.3, dominance: 0.2 } },
+      { axes: { pace: -0.5, dominance: 0.4 } },
     ]
   },
   {
-    text: "You've explained game mechanics, recommended a title, or walked someone through strategy without them asking.",
+    text: "Between sessions, you find yourself theorycrafting builds, planning strategies, or mentally working through game mechanics away from the screen.",
     answers: [
-      { axes: { social: -0.4 } },
-      { axes: { social: -0.2 } },
+      { axes: { systems: -0.3 } },
+      { axes: { systems: -0.1 } },
       { axes: {} },
-      { axes: { social: 0.4, systems: 0.2 } },
-      { axes: { social: 0.6, systems: 0.3 } },
+      { axes: { systems: 0.4, challenge: 0.2 } },
+      { axes: { systems: 0.6, challenge: 0.3 } },
     ]
   },
   {
@@ -2255,13 +2255,13 @@ const QUESTIONS = [
     ]
   },
   {
-    text: "A game session runs much longer than you planned because you kept finding reasons not to stop.",
+    text: "You feel restless or unsatisfied with a gaming session that had no clear goal — no level-up, win, or measurable progress.",
     answers: [
-      { axes: { pace: 0.2 } },
-      { axes: { pace: 0.1 } },
+      { axes: { challenge: -0.4, dominance: -0.2 } },
+      { axes: { challenge: -0.2, dominance: -0.1 } },
       { axes: {} },
-      { axes: { challenge: 0.2, pace: -0.3 } },
-      { axes: { challenge: 0.3, pace: -0.5 } },
+      { axes: { challenge: 0.4, dominance: 0.3 } },
+      { axes: { challenge: 0.6, dominance: 0.4 } },
     ]
   },
   {
@@ -2355,13 +2355,13 @@ const QUESTIONS = [
     ]
   },
   {
-    text: "Between gaming sessions, you switch to a completely different game genre rather than returning to one type.",
+    text: "You stick with the same game or series for weeks or months at a time rather than jumping between titles.",
     answers: [
-      { axes: { pace: -0.5 } },
-      { axes: { pace: -0.2 } },
+      { axes: { pace: 0.6 } },
+      { axes: { pace: 0.3 } },
       { axes: {} },
-      { axes: { pace: 0.5 } },
-      { axes: { pace: 0.8 } },
+      { axes: { pace: -0.3, challenge: 0.1 } },
+      { axes: { pace: -0.5, challenge: 0.2 } },
     ]
   },
   {
@@ -2495,7 +2495,7 @@ const QUESTIONS = [
     ]
   },
   {
-    text: "In story-driven games, you skip or fast-forward through cutscenes and dialogue to get back to the gameplay.",
+    text: "In story-driven games you're playing for the first time, you skip or fast-forward through cutscenes and dialogue to get back to the gameplay.",
     answers: [
       { axes: { systems: -0.5 } },
       { axes: { systems: -0.2 } },
@@ -2505,13 +2505,13 @@ const QUESTIONS = [
     ]
   },
   {
-    text: "When you have a clear objective, you regularly detour to investigate something off-path that caught your eye, even if it costs you time.",
+    text: "When gaming with friends, you care as much about how well the group performs as whether everyone is simply having fun.",
     answers: [
-      { axes: { dominance: 0.3 } },
-      { axes: { dominance: 0.1 } },
-      { axes: {} },
       { axes: { dominance: -0.3 } },
-      { axes: { dominance: -0.5 } },
+      { axes: { dominance: -0.1 } },
+      { axes: {} },
+      { axes: { dominance: 0.3, challenge: 0.2 } },
+      { axes: { dominance: 0.5, challenge: 0.3 } },
     ]
   },
   {
@@ -2635,17 +2635,17 @@ const AXIS_CONFIG = [
 ];
 
 const ARCHETYPE_VECTORS = {
-  falcon:  { social: 0.35, systems: 0.80, challenge: 0.88, dominance: 0.97, pace: 0.82 },
+  falcon:  { social: 0.35, systems: 0.80, challenge: 0.88, dominance: 0.97, pace: 0.30 },
   wolf:    { social: 0.95, systems: 0.50, challenge: 0.70, dominance: 0.72, pace: 0.62 },
   owl:     { social: 0.30, systems: 0.05, challenge: 0.50, dominance: 0.15, pace: 0.18 },
   frog:    { social: 0.22, systems: 0.95, challenge: 0.85, dominance: 0.48, pace: 0.68 },
   dragon:  { social: 0.52, systems: 0.65, challenge: 0.72, dominance: 0.55, pace: 0.30 },
   dolphin: { social: 0.97, systems: 0.45, challenge: 0.28, dominance: 0.30, pace: 0.72 },
-  fox:     { social: 0.27, systems: 0.52, challenge: 0.75, dominance: 0.38, pace: 0.08 },
+  fox:     { social: 0.27, systems: 0.80, challenge: 0.75, dominance: 0.38, pace: 0.08 },
   gecko:   { social: 0.15, systems: 0.58, challenge: 0.97, dominance: 0.62, pace: 0.38 },
   bear:    { social: 0.52, systems: 0.35, challenge: 0.05, dominance: 0.25, pace: 0.22 },
   bat:     { social: 0.22, systems: 0.28, challenge: 0.42, dominance: 0.05, pace: 0.30 },
-  magpie:  { social: 0.55, systems: 0.60, challenge: 0.08, dominance: 0.38, pace: 0.88 },
+  magpie:  { social: 0.55, systems: 0.35, challenge: 0.08, dominance: 0.38, pace: 0.88 },
   beaver:  { social: 0.25, systems: 0.72, challenge: 0.42, dominance: 0.18, pace: 0.10 },
 };
 
