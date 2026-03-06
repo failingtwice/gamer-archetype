@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gamer Bestiary — Archetype Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090f;
+    --bg2: #0d1120;
+    --bg3: #131829;
+    --gold: #c9a84c;
+    --gold2: #e8c97a;
+    --amber: #f0a020;
+    --text: #d4c9b0;
+    --text2: #8a8070;
+    --accent: #3a7bd5;
+    --accent2: #6fa3f0;
+    --border: rgba(201, 168, 76, 0.2);
+    --border2: rgba(201, 168, 76, 0.08);
+    --red: #c0392b;
+    --green: #27ae60;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Star field background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(201,168,76,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 70%, rgba(201,168,76,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 40%, rgba(201,168,76,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 85%, rgba(201,168,76,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 20%, rgba(201,168,76,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 90%, rgba(201,168,76,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 55%, rgba(201,168,76,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 25%, rgba(201,168,76,0.35) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 65% 10%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 5% 45%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 95% 75%, rgba(255,255,255,0.2) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Vignette */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(7,9,15,0.85) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 60px 0 40px;
+    position: relative;
+  }
+
+  .header-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    opacity: 0.6;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .header-ornament::before,
+  .header-ornament::after {
+    content: '';
+    height: 1px;
+    width: 80px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .header-ornament::after { transform: scaleX(-1); }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 700;
+    color: var(--gold2);
+    text-shadow: 0 0 40px rgba(201,168,76,0.3);
+    letter-spacing: 0.05em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--text2);
+    font-style: italic;
+    font-size: 19px;
+    max-width: 520px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+
+  .seal {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+
+  .seal svg {
+    width: 100%;
+    height: 100%;
+    animation: rotateSeal 30s linear infinite;
+    opacity: 0.5;
+  }
+
+  @keyframes rotateSeal {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .seal-inner {
+    position: absolute;
+    inset: 15px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+
+  /* ── SCREEN TRANSITIONS ── */
+  .screen {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── INTRO ── */
+  .intro-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intro-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.03) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .intro-card p {
+    line-height: 1.7;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  .intro-card p:last-child { margin-bottom: 0; }
+
+  .archetype-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin: 28px 0;
+  }
+
+  .archetype-pill {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    padding: 8px 12px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text2);
+    transition: all 0.2s;
+  }
+
+  .archetype-pill span {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 3px;
+  }
+
+  .archetype-pill strong {
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── BUTTON ── */
+  .btn {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 36px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold2);
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    z-index: -1;
+  }
+
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { color: var(--bg); }
+  .btn:active { transform: scale(0.98); }
+
+  .btn-center { display: flex; justify-content: center; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text2);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    font-family: 'Cinzel', serif;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--amber));
+    transition: width 0.4s ease;
+    box-shadow: 0 0 8px rgba(201,168,76,0.4);
+  }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .question-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.4;
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.7;
+  }
+
+  .q-text {
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 30px;
+    font-weight: 300;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    background: var(--bg3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 3px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 17px;
+    color: var(--text2);
+    line-height: 1.45;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+  }
+
+  .option:hover {
+    border-color: rgba(201,168,76,0.3);
+    color: var(--text);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .option:hover::before { transform: scaleY(1); }
+
+  .option.selected {
+    border-color: var(--gold);
+    color: var(--gold2);
+    background: rgba(201,168,76,0.08);
+  }
+
+  .option.selected::before { transform: scaleY(1); }
+
+  .option-letter {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    opacity: 0.5;
+    margin-right: 10px;
+    text-transform: uppercase;
+  }
+
+  .option.selected .option-letter { opacity: 1; }
+
+  /* Navigation */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text2);
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: rgba(201,168,76,0.4);
+    color: var(--gold);
+  }
+
+  .btn-ghost:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ── RESULT SCREEN ── */
+  .result-hero {
+    text-align: center;
+    padding: 40px 0 32px;
+  }
+
+  .result-animal {
+    font-size: 90px;
+    line-height: 1;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 30px rgba(201,168,76,0.3));
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .result-label {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+
+  .result-name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(30px, 5vw, 48px);
+    font-weight: 700;
+    color: var(--gold2);
+    text-shadow: 0 0 30px rgba(201,168,76,0.25);
+    margin-bottom: 8px;
+  }
+
+  .result-tagline {
+    font-style: italic;
+    font-size: 20px;
+    color: var(--text2);
+    margin-bottom: 32px;
+  }
+
+  .result-body {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .result-body::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.4;
+  }
+
+  .result-section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .result-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .result-desc {
+    line-height: 1.75;
+    color: var(--text);
+    font-size: 18px;
+    margin-bottom: 28px;
+  }
+
+  .traits-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .trait-tag {
+    background: rgba(201,168,76,0.07);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 2px;
+    padding: 5px 12px;
+    font-size: 14px;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.05em;
+  }
+
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .game-card {
+    background: var(--bg3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 3px;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .game-card .game-genre {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 3px;
+  }
+
+  .spectrum-row {
+    margin-bottom: 14px;
+  }
+
+  .spectrum-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--text2);
+  }
+
+  .spectrum-label span:first-child { color: var(--text); }
+
+  .spectrum-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .spectrum-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--amber));
+    border-radius: 2px;
+    transition: width 1s ease 0.3s;
+    box-shadow: 0 0 8px rgba(201,168,76,0.3);
+  }
+
+  .shadow-section {
+    background: rgba(192, 57, 43, 0.06);
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    border-radius: 3px;
+    padding: 18px 20px;
+    margin-top: 8px;
+  }
+
+  .shadow-title {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: #e07060;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .shadow-section p {
+    font-size: 16px;
+    color: #c09080;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .affinity-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .affinity-tag {
+    background: rgba(58, 123, 213, 0.1);
+    border: 1px solid rgba(58, 123, 213, 0.3);
+    border-radius: 2px;
+    padding: 4px 10px;
+    font-size: 13px;
+    color: var(--accent2);
+  }
+
+  /* Score breakdown */
+  .score-breakdown {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .score-item {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .score-item .si-icon { font-size: 20px; }
+  .score-item .si-name { color: var(--text2); flex: 1; }
+  .score-item .si-score { color: var(--gold); font-family: 'Cinzel', serif; font-size: 13px; }
+
+  .restart-row {
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  /* Divider */
+  .ornamental-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0;
+    opacity: 0.3;
+  }
+
+  .ornamental-divider::before,
+  .ornamental-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .ornamental-divider span {
+    font-size: 18px;
+    color: var(--gold);
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .question-card, .intro-card, .result-body { padding: 24px 18px; }
+    .score-breakdown { grid-template-columns: 1fr; }
+    .archetype-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="seal">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="38" stroke="#c9a84c" stroke-width="0.5" stroke-dasharray="4 3"/>
+        <circle cx="40" cy="40" r="32" stroke="#c9a84c" stroke-width="0.5" stroke-dasharray="2 4"/>
+        <polygon points="40,4 46,30 72,30 52,47 59,73 40,57 21,73 28,47 8,30 34,30" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
+      </svg>
+      <div class="seal-inner">🐾</div>
+    </div>
+    <div class="header-ornament">The Gamer Bestiary</div>
+    <h1>What Beast Do You Play As?</h1>
+    <p class="subtitle">A psychological framework for uncovering the creature that lurks behind your controller.</p>
+  </header>
+
+  <!-- ───────── INTRO SCREEN ───────── -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-card">
+      <p>Every gamer carries within them a hidden archetype — a pattern of instincts, desires, and compulsions that shapes every session, every choice, every midnight-oil marathon. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> through a series of 20 psychological questions.</p>
+      <p>Be honest. There are no wrong answers, only true ones. The Bestiary does not judge — it only names what already lurks inside you.</p>
+    </div>
+
+    <div class="archetype-grid">
+      <div class="archetype-pill"><span>🦅</span><strong>The Falcon</strong></div>
+      <div class="archetype-pill"><span>🐺</span><strong>The Wolf</strong></div>
+      <div class="archetype-pill"><span>🦉</span><strong>The Owl</strong></div>
+      <div class="archetype-pill"><span>🐸</span><strong>The Frog</strong></div>
+      <div class="archetype-pill"><span>🐉</span><strong>The Dragon</strong></div>
+      <div class="archetype-pill"><span>🐬</span><strong>The Dolphin</strong></div>
+      <div class="archetype-pill"><span>🦊</span><strong>The Fox</strong></div>
+      <div class="archetype-pill"><span>🦎</span><strong>The Gecko</strong></div>
+      <div class="archetype-pill"><span>🐻</span><strong>The Bear</strong></div>
+      <div class="archetype-pill"><span>🦇</span><strong>The Bat</strong></div>
+      <div class="archetype-pill"><span>🦑</span><strong>The Kraken</strong></div>
+      <div class="archetype-pill"><span>🐆</span><strong>The Jaguar</strong></div>
+    </div>
+
+    <div class="btn-center">
+      <button class="btn" onclick="startTest()">Begin the Assessment</button>
+    </div>
+  </div>
+
+  <!-- ───────── QUIZ SCREEN ───────── -->
+  <div id="screen-quiz" class="screen">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="q-counter">Question 1 of 20</span>
+        <span id="q-pct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="question-card">
+      <div class="q-number" id="q-number">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options-container"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-ghost" id="btn-prev" onclick="prevQuestion()">← Back</button>
+      <button class="btn" id="btn-next" onclick="nextQuestion()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ───────── RESULT SCREEN ───────── -->
+  <div id="screen-result" class="screen">
+    <div class="result-hero">
+      <div class="result-animal" id="result-animal">🦅</div>
+      <div class="result-label">Your Gamer Archetype</div>
+      <div class="result-name" id="result-name">The Falcon</div>
+      <div class="result-tagline" id="result-tagline">"Eyes on the prize, talons on the leaderboard."</div>
+    </div>
+
+    <div class="result-body">
+      <div class="result-section-title">Core Identity</div>
+      <div class="result-desc" id="result-desc"></div>
+
+      <div class="result-section-title">Defining Traits</div>
+      <div class="traits-list" id="result-traits"></div>
+
+      <div class="result-section-title">Your Natural Habitat — Games to Seek</div>
+      <div class="games-grid" id="result-games"></div>
+
+      <div class="result-section-title">Psychological Spectrum</div>
+      <div id="result-spectrums"></div>
+
+      <div class="ornamental-divider"><span>✦</span></div>
+
+      <div class="result-section-title">Shadow Side</div>
+      <div class="shadow-section">
+        <div class="shadow-title">⚠ Beware</div>
+        <p id="result-shadow"></p>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="result-section-title">Plays Well With</div>
+        <div class="affinity-row" id="result-affinity"></div>
+      </div>
+    </div>
+
+    <div class="result-body" style="padding:28px 36px;">
+      <div class="result-section-title">Score Breakdown</div>
+      <p style="font-size:15px;color:var(--text2);margin-bottom:14px;">Your top archetype affinities, ranked by score.</p>
+      <div class="score-breakdown" id="score-breakdown"></div>
+    </div>
+
+    <div class="restart-row">
+      <button class="btn" onclick="restart()">Take the Test Again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ARCHETYPE DEFINITIONS
+// ═══════════════════════════════════════════════════════
+const ARCHETYPES = {
+  falcon: {
+    emoji: "🦅",
+    name: "The Falcon",
+    tagline: '"Eyes on the prize, talons on the leaderboard."',
+    desc: "The Falcon is a precision-driven competitor whose entire gaming identity is built around measurable performance. You don't play to explore or relax — you play to WIN, and you want proof of it. Ranked modes, ladder climbs, KDA ratios, and tournament brackets are your natural language. You study replays, optimize keybinds, and can recall your peak rank from three years ago to the decimal. The thrill isn't the match itself — it's the moment the numbers go up.",
+    traits: ["Fiercely competitive", "Data-driven", "Mechanically precise", "Rank-obsessed", "Disciplined practice"],
+    games: [
+      { name: "Valorant / CS2", genre: "Tactical FPS" },
+      { name: "League of Legends", genre: "MOBA" },
+      { name: "Rocket League", genre: "Competitive Sports" },
+      { name: "Street Fighter 6", genre: "Fighting Game" },
+      { name: "StarCraft II", genre: "RTS" },
+      { name: "Tekken 8", genre: "Fighting Game" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 98 },
+      { label: "Social Play", value: 35 },
+      { label: "Story Immersion", value: 15 },
+      { label: "Exploration Urge", value: 25 },
+    ],
+    shadow: "A loss can ruin your day — or your week. You're prone to tilt, blame-shifting, and quietly resenting players who don't take the game as seriously. If you're not improving, you feel worthless. Be wary of rage-quitting relationships alongside matches.",
+    affinity: ["The Wolf", "The Jaguar", "The Falcon"],
+  },
+  wolf: {
+    emoji: "🐺",
+    name: "The Wolf",
+    tagline: '"Alone I\'m dangerous. With my pack, I\'m unstoppable."',
+    desc: "The Wolf lives for coordinated, social play — not for solo glory, but for the electric synergy of a well-oiled squad. You remember every callout, every clutch rotation, every time a perfectly executed team strategy dismantled the enemy. You're the player who rallies teammates after a rough round, drafts the Discord server rules, and organizes practice sessions. Competition matters, but only when it's shared — a victory with your pack is worth ten solo trophies.",
+    traits: ["Team-first mentality", "Natural communicator", "Tactical thinker", "Loyal to squad", "Leadership instinct"],
+    games: [
+      { name: "Rainbow Six Siege", genre: "Tactical Co-op" },
+      { name: "Deep Rock Galactic", genre: "Co-op Shooter" },
+      { name: "Helldivers 2", genre: "Squad Action" },
+      { name: "World of Warcraft (Raids)", genre: "MMO" },
+      { name: "Overwatch 2", genre: "Team FPS" },
+      { name: "FFXIV (Savage Raids)", genre: "MMO" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 72 },
+      { label: "Social Play", value: 97 },
+      { label: "Story Immersion", value: 40 },
+      { label: "Exploration Urge", value: 30 },
+    ],
+    shadow: "Solo games feel hollow and pointless to you. Without your pack, you lose motivation fast. You can also become over-reliant on group validation — if the squad disbands or drifts apart, your gaming identity may crumble entirely.",
+    affinity: ["The Falcon", "The Dolphin", "The Dragon"],
+  },
+  owl: {
+    emoji: "🦉",
+    name: "The Owl",
+    tagline: '"The story isn\'t in the cutscenes. It\'s in every book, item description, and loading screen."',
+    desc: "The Owl is the lore devourer, the wiki architect, the player who pauses before entering a dungeon to read every piece of environmental storytelling on the walls. You're not just playing games — you're inhabiting entire worlds. You can recite the political history of fictional kingdoms. You write theories. You notice that NPC's dialogue changed after the third act. For you, a game's greatest achievement isn't its mechanics; it's the depth of its fictional reality.",
+    traits: ["Lore completionist", "Narrative immersion", "Observational depth", "Wiki contributor", "Slow and deliberate"],
+    games: [
+      { name: "Elden Ring", genre: "Action RPG" },
+      { name: "Disco Elysium", genre: "Narrative RPG" },
+      { name: "Planescape: Torment", genre: "Classic RPG" },
+      { name: "Pathologic 2", genre: "Survival Drama" },
+      { name: "Hollow Knight", genre: "Metroidvania" },
+      { name: "Morrowind", genre: "Open World RPG" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 12 },
+      { label: "Social Play", value: 30 },
+      { label: "Story Immersion", value: 99 },
+      { label: "Exploration Urge", value: 82 },
+    ],
+    shadow: "You avoid games with shallow narratives like the plague, even when they're genuinely fun. You can spend hours in menus reading lore instead of playing. Multiplayer feels vacuous. You may have a backlog you'll never finish because each game demands weeks of full immersion.",
+    affinity: ["The Bat", "The Bear", "The Raven-class Fox"],
+  },
+  frog: {
+    emoji: "🐸",
+    name: "The Frog",
+    tagline: '"The current Any% world record is 47 minutes and I will demolish it."',
+    desc: "The Frog doesn't play games — the Frog dissects them. Where others see a fantasy world, you see a physics engine with exploitable edge cases. Speedrunning, sequence-breaking, out-of-bounds glitches, unintended mechanics: these aren't bugs to you, they're the secret language the game speaks when no one's looking. You have a deep, almost perverse love for the hidden skeleton of games. Optimization is your art form.",
+    traits: ["Speedrunner DNA", "Glitch hunter", "Deeply analytical", "Anti-narrative (systems-first)", "Relentless optimizer"],
+    games: [
+      { name: "Super Mario Odyssey", genre: "Platformer Speedrun" },
+      { name: "Celeste", genre: "Precision Platformer" },
+      { name: "Dark Souls (Any%)", genre: "Action RPG Speedrun" },
+      { name: "Portal 2", genre: "Puzzle/Speedrun" },
+      { name: "Getting Over It", genre: "Precision Challenge" },
+      { name: "Trackmania", genre: "Racing Precision" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 80 },
+      { label: "Social Play", value: 20 },
+      { label: "Story Immersion", value: 8 },
+      { label: "Exploration Urge", value: 65 },
+    ],
+    shadow: "You can utterly drain the fun from a game by reducing it to a series of inputs to optimize. Friends who just want to enjoy a story playthrough find your instinct to skip dialogue and break cutscenes deeply frustrating. You may have spent 200 hours in games most people finish in 10.",
+    affinity: ["The Falcon", "The Gecko", "The Jaguar"],
+  },
+  dragon: {
+    emoji: "🐉",
+    name: "The Dragon",
+    tagline: '"Level 1 is an insult. I will be gods before this week is over."',
+    desc: "The Dragon craves power — not over other players, but over the game world itself. You exist for the moment your build becomes unstoppable, when enemies that were once terrifying become ash underfoot. You grind with religious devotion, not because you have to, but because every number going up is deeply, intrinsically satisfying. Gear score, skill trees, prestige levels, endless loop progression systems — these are your cathedrals. You want to become legend.",
+    traits: ["Power-progression obsessed", "Methodical grinder", "Build theorycrafting", "Prestige seeker", "Loop endurance"],
+    games: [
+      { name: "Path of Exile 2", genre: "ARPG" },
+      { name: "Destiny 2 (Endgame)", genre: "Looter Shooter" },
+      { name: "Diablo IV", genre: "ARPG" },
+      { name: "Monster Hunter: World", genre: "Action RPG" },
+      { name: "Warframe", genre: "Free-to-Play Looter" },
+      { name: "Final Fantasy XIV", genre: "MMO" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 55 },
+      { label: "Social Play", value: 45 },
+      { label: "Story Immersion", value: 42 },
+      { label: "Exploration Urge", value: 38 },
+    ],
+    shadow: "You're susceptible to the most predatory game monetization in existence — loot boxes, battle passes, gear treadmills. Games without meaningful progression loops bore you within hours. You may have 1,000 hours in a game you consider 'mediocre' simply because the numbers kept going up.",
+    affinity: ["The Wolf", "The Kraken", "The Jaguar"],
+  },
+  dolphin: {
+    emoji: "🐬",
+    name: "The Dolphin",
+    tagline: '"Best session ever. We played literally nothing special. But everyone was there."',
+    desc: "The Dolphin doesn't care if the game is good — they care if the people playing it are great. For you, games are a social venue, a way to maintain friendships and create shared memories. The actual game is almost incidental. You've had transcendent evenings playing terrible party games with the right people, and you've felt nothing playing 'masterpieces' alone. You're the one who organizes game nights, introduces people to new games, and remembers everyone's preferences.",
+    traits: ["Intrinsically social", "Party game maestro", "Mood-reader", "Friendship architect", "Adaptable to any genre"],
+    games: [
+      { name: "Jackbox Party Pack", genre: "Party Game" },
+      { name: "It Takes Two", genre: "Co-op Adventure" },
+      { name: "Overcooked! 2", genre: "Co-op Chaos" },
+      { name: "Among Us", genre: "Social Deduction" },
+      { name: "Nintendo Switch Sports", genre: "Party Sports" },
+      { name: "Phasmophobia", genre: "Social Horror" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 30 },
+      { label: "Social Play", value: 99 },
+      { label: "Story Immersion", value: 35 },
+      { label: "Exploration Urge", value: 40 },
+    ],
+    shadow: "Solo gaming can feel meaningless or even depressing for you. You may overextend yourself socially — always the organizer, always the hype person — while secretly wishing someone else would take the wheel. Your taste in games often bends toward what others want, leaving your own preferences unexplored.",
+    affinity: ["The Wolf", "The Bear", "The Dragon"],
+  },
+  fox: {
+    emoji: "🦊",
+    name: "The Fox",
+    tagline: '"I had the answer before you finished explaining the puzzle."',
+    desc: "The Fox is drawn to games like a key is drawn to a lock — they exist to solve things. Strategy, deduction, resource management, lateral thinking: these are not obstacles between you and the fun, they ARE the fun. You love the click of a plan coming together, the elegant solution to a seemingly impossible problem. You read the rules thoroughly before playing. You've probably found unintended solutions in games that broke the designer's intentions, and you were proud of it.",
+    traits: ["Puzzle-solving instinct", "Strategic depth seeker", "Resource manager", "Systems thinker", "Planful, deliberate"],
+    games: [
+      { name: "Slay the Spire", genre: "Deckbuilder Roguelike" },
+      { name: "Return of the Obra Dinn", genre: "Deduction Mystery" },
+      { name: "Into the Breach", genre: "Tactical Strategy" },
+      { name: "Baba Is You", genre: "Logic Puzzle" },
+      { name: "XCOM 2", genre: "Turn-Based Tactics" },
+      { name: "Outer Wilds", genre: "Exploration Mystery" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 45 },
+      { label: "Social Play", value: 25 },
+      { label: "Story Immersion", value: 55 },
+      { label: "Exploration Urge", value: 70 },
+    ],
+    shadow: "Pure action games with no strategic depth bore you quickly. You can over-think cooperative games, turning casual sessions into planning sessions that exhaust your teammates. Occasionally your need to 'solve' everything removes spontaneity and joy from the experience.",
+    affinity: ["The Owl", "The Frog", "The Bat"],
+  },
+  gecko: {
+    emoji: "🦎",
+    name: "The Gecko",
+    tagline: '"I\'ve done this boss 70 times. I\'m not frustrated. I\'m learning."',
+    desc: "The Gecko is defined by one thing above all: mastery. Not progression, not narrative, not social — pure, uncut mechanical mastery. You want games that demand everything from you, that punish sloppiness and reward precision. You're the player who learned every frame of a boss pattern, who practices movement tech in empty rooms, who could write an essay on the feel of a dodge roll. The harder the game, the more you love it.",
+    traits: ["Mastery-obsessed", "High pain tolerance", "Precision-first", "Patience of stone", "Anti-hand-holding"],
+    games: [
+      { name: "Sekiro: Shadows Die Twice", genre: "Action / Precision" },
+      { name: "Hollow Knight: Silksong", genre: "Precision Platformer" },
+      { name: "Hades II", genre: "Action Roguelike" },
+      { name: "Cuphead", genre: "Run & Gun" },
+      { name: "Elden Ring (Dlc bosses)", genre: "Soulslike" },
+      { name: "Dead Cells", genre: "Roguelike Metroidvania" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 68 },
+      { label: "Social Play", value: 15 },
+      { label: "Story Immersion", value: 35 },
+      { label: "Exploration Urge", value: 50 },
+    ],
+    shadow: "You have near-zero tolerance for games that feel 'too easy' and will often dismiss beloved games as shallow. You can come across as gatekeeping or elitist about difficulty. Casual gaming sessions with family or less-experienced players can feel torturous.",
+    affinity: ["The Frog", "The Falcon", "The Bat"],
+  },
+  bear: {
+    emoji: "🐻",
+    name: "The Bear",
+    tagline: '"I built an entire village today. Nobody died. It was perfect."',
+    desc: "The Bear doesn't game to prove anything. You play to be cozy, to sink into a gentle world that asks nothing of you but presence. Farming sims, city builders, life games, creative sandboxes — you have a deep need for the meditative loop: plant, grow, harvest, repeat. Games are your rest state. The most stressful thing you'll tolerate is a light time-pressure mechanic, and even that feels like a lot. Your game library is a museum of tranquility.",
+    traits: ["Cozy-first philosophy", "Creative sandbox lover", "Completionist (gently)", "Long-haul player", "Anti-competitive"],
+    games: [
+      { name: "Stardew Valley", genre: "Farming Sim" },
+      { name: "Animal Crossing: NH", genre: "Life Sim" },
+      { name: "Minecraft (Creative)", genre: "Sandbox" },
+      { name: "Cities: Skylines 2", genre: "City Builder" },
+      { name: "Spiritfarer", genre: "Cozy Indie" },
+      { name: "Coral Island", genre: "Farming RPG" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 5 },
+      { label: "Social Play", value: 50 },
+      { label: "Story Immersion", value: 60 },
+      { label: "Exploration Urge", value: 55 },
+    ],
+    shadow: "You can mistake comfort for depth, returning to the same cozy loops for years while avoiding experiences that might genuinely challenge or change you. Progress in your games is often measured in aesthetic satisfaction rather than growth, and the line between relaxation and avoidance can blur.",
+    affinity: ["The Dolphin", "The Owl", "The Fox"],
+  },
+  bat: {
+    emoji: "🦇",
+    name: "The Bat",
+    tagline: '"I don\'t follow the critical path. There is no critical path."',
+    desc: "The Bat is a free-form explorer — you navigate by echolocation, bouncing off the dark walls of game worlds to find what no one else noticed. You're not doing quests; you're surveying territory. You climb the mountain just to see what's behind it. You read every environmental clue. You ignore the main story until you've exhausted every inch of the map. Open worlds weren't made for you — you were made for them.",
+    traits: ["Compulsive map revealer", "Off-path wanderer", "Discoverer of secrets", "Environment reader", "Anti-rush"],
+    games: [
+      { name: "The Elder Scrolls V: Skyrim", genre: "Open World RPG" },
+      { name: "Red Dead Redemption 2", genre: "Open World" },
+      { name: "Outer Wilds", genre: "Exploration Mystery" },
+      { name: "Breath of the Wild", genre: "Open World Action" },
+      { name: "No Man's Sky", genre: "Space Exploration" },
+      { name: "Subnautica", genre: "Survival Exploration" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 8 },
+      { label: "Social Play", value: 20 },
+      { label: "Story Immersion", value: 65 },
+      { label: "Exploration Urge", value: 99 },
+    ],
+    shadow: "You can get lost — literally and figuratively — and never finish games. Your backlog is enormous. You sometimes never see endings because the journey was enough. Tightly structured linear games feel like corridors and make you anxious. You may spend 80 hours 'exploring' and finish 20% of the story.",
+    affinity: ["The Owl", "The Fox", "The Bear"],
+  },
+  kraken: {
+    emoji: "🦑",
+    name: "The Kraken",
+    tagline: '"I don\'t have a genre. I have a collection that defies categorization."',
+    desc: "The Kraken's tentacles reach everywhere. You are the genre chameleon, the omnivorous gamer who refuses to be boxed in. One week you're 80 hours deep in an ARPG. The next, a visual novel. Then a racing game. Then a city builder. Your tastes are vast, shifting, and impossible to predict. You don't have a favorite genre — you have phases. What unifies all your sessions is a search for something that feels genuinely different, a new sensation the medium hasn't given you yet.",
+    traits: ["Genre-fluid", "Novelty seeker", "Broad tastes", "Trend-agnostic", "Experience over mastery"],
+    games: [
+      { name: "Weird indie games (all of them)", genre: "Everything" },
+      { name: "Hades + Stardew + Elden Ring", genre: "Genre Omnivore" },
+      { name: "Death Stranding", genre: "Genre-defying" },
+      { name: "Disco Elysium + Monster Hunter", genre: "The whole shelf" },
+      { name: "Whatever is surprising", genre: "Current obsession" },
+      { name: "Inscryption", genre: "Meta/Experimental" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 42 },
+      { label: "Social Play", value: 48 },
+      { label: "Story Immersion", value: 65 },
+      { label: "Exploration Urge", value: 80 },
+    ],
+    shadow: "You abandon games the moment they feel routine, sometimes right before the payoff. Your FOMO is immense — the backlog grows faster than you can play. You may never achieve deep mastery of anything because novelty pulls you away before you reach it. You're the 'jack of all games, master of none.'",
+    affinity: ["The Bat", "The Owl", "The Fox"],
+  },
+  jaguar: {
+    emoji: "🐆",
+    name: "The Jaguar",
+    tagline: '"Check your stats. Check my stats. Now think about what that means."',
+    desc: "The Jaguar operates on a precise mixture of competitive fire and self-betterment. You're not just trying to beat others — you're trying to beat your own limits, to become a more complete player. You study the meta but adapt it to your own style. You care deeply about mechanical excellence AND strategic innovation. You record yourself, review your play, and have opinions on game balance that could fill a blog. You're the player other players ask how to improve.",
+    traits: ["Meta-aware", "Self-improvement drive", "Analytical mid-match", "Innovative within systems", "Balanced aggression"],
+    games: [
+      { name: "Dota 2", genre: "MOBA" },
+      { name: "Chess.com (rapid)", genre: "Abstract Strategy" },
+      { name: "Guilty Gear: Strive", genre: "Fighting" },
+      { name: "Apex Legends", genre: "Battle Royale" },
+      { name: "Dwarf Fortress", genre: "Deep Simulation" },
+      { name: "Age of Empires IV", genre: "RTS" },
+    ],
+    spectrums: [
+      { label: "Competitive Drive", value: 88 },
+      { label: "Social Play", value: 50 },
+      { label: "Story Immersion", value: 28 },
+      { label: "Exploration Urge", value: 45 },
+    ],
+    shadow: "Your constant self-analysis can paralyze you with perfectionism. You've probably quit games you loved because the community or meta felt unhealthy. You can alienate teammates by treating casual sessions like scrimmages. Balance review and play or you'll overthink yourself out of joy.",
+    affinity: ["The Falcon", "The Wolf", "The Gecko"],
+  },
+};
+
+// ═══════════════════════════════════════════════════════
+// QUESTIONS — each answer scores archetype points
+// Format: { text, answers: [{ text, scores: {archetype: pts} }] }
+// ═══════════════════════════════════════════════════════
+const QUESTIONS = [
+  {
+    text: "You sit down to game with no obligations tonight. What's the first thing you feel?",
+    answers: [
+      { text: "The itch to queue ranked and climb.", scores: { falcon: 3, jaguar: 2 } },
+      { text: "Relief — finally time to sink into a world and exist in it.", scores: { owl: 3, bear: 2 } },
+      { text: "The urge to call your friends and get everyone online.", scores: { wolf: 3, dolphin: 2 } },
+      { text: "Excitement about what strange new game to try tonight.", scores: { kraken: 3, bat: 2 } },
+    ]
+  },
+  {
+    text: "You've just started a new RPG. You immediately:",
+    answers: [
+      { text: "Open every container, read every scroll, and talk to every NPC before leaving the starting area.", scores: { owl: 3, bat: 2 } },
+      { text: "Look up the optimal starting build and plan your progression tree.", scores: { dragon: 3, jaguar: 2 } },
+      { text: "Play it naturally, guided by vibes and whatever feels exciting.", scores: { kraken: 2, bear: 2 } },
+      { text: "Test the movement mechanics to see if anything interesting breaks.", scores: { frog: 3, gecko: 2 } },
+    ]
+  },
+  {
+    text: "A challenging boss has killed you twelve times. You:",
+    answers: [
+      { text: "Feel yourself getting better with each attempt — this is exactly what you wanted.", scores: { gecko: 3, jaguar: 2 } },
+      { text: "Look up the pattern, optimize your approach, and hit the run.", scores: { frog: 3, falcon: 2 } },
+      { text: "Ask a friend to co-op it with you — more fun that way anyway.", scores: { wolf: 3, dolphin: 2 } },
+      { text: "Enable assists or lower difficulty — you're here for the story, not punishment.", scores: { owl: 2, bear: 2 } },
+    ]
+  },
+  {
+    text: "What does a 'perfect gaming session' look like to you?",
+    answers: [
+      { text: "Grinding a build until it's completely overpowered, then watching it melt everything.", scores: { dragon: 3, gecko: 1 } },
+      { text: "Discovering a secret area or piece of lore nobody else seems to know about.", scores: { bat: 3, owl: 2 } },
+      { text: "Climbing two full divisions in ranked with a clean performance.", scores: { falcon: 3, jaguar: 2 } },
+      { text: "Laughing until you cry at something absurd with your group.", scores: { dolphin: 3, wolf: 2 } },
+    ]
+  },
+  {
+    text: "Your honest relationship with the game's story/lore:",
+    answers: [
+      { text: "I absorb every fragment. I theorize. I post about it.", scores: { owl: 3, bat: 2 } },
+      { text: "It matters if it's good, but I skip bad dialogue without guilt.", scores: { kraken: 2, jaguar: 1 } },
+      { text: "Honestly I skip most of it to get back to the gameplay loop.", scores: { dragon: 2, frog: 2, gecko: 2 } },
+      { text: "Story IS the gameplay. A game without narrative is just a screensaver.", scores: { owl: 3, bear: 2 } },
+    ]
+  },
+  {
+    text: "A new multiplayer game drops. You:",
+    answers: [
+      { text: "Fire it up solo, treat it like a puzzle, and find the dominant strategy before anyone else.", scores: { fox: 3, frog: 2 } },
+      { text: "Immediately organize your squad to play it together.", scores: { wolf: 3, dolphin: 3 } },
+      { text: "Dive in competitively, determined to rank up before the meta is solved.", scores: { falcon: 3, jaguar: 2 } },
+      { text: "Watch some gameplay to decide if it has enough depth to bother with.", scores: { gecko: 2, owl: 2 } },
+    ]
+  },
+  {
+    text: "What kind of progression system excites you most?",
+    answers: [
+      { text: "Gear with meaningful stats that compound into a powerful build.", scores: { dragon: 3, jaguar: 2 } },
+      { text: "Skill-based mastery — getting better, not getting bigger numbers.", scores: { gecko: 3, falcon: 2 } },
+      { text: "Unlocking lore, codex entries, and narrative progression.", scores: { owl: 3, bat: 2 } },
+      { text: "Cosmetic and world-building — improving my space/character aesthetically.", scores: { bear: 3, dolphin: 2 } },
+    ]
+  },
+  {
+    text: "You're given a 30-hour sandbox open world game. You:",
+    answers: [
+      { text: "Reveal every inch of the map before touching the critical path.", scores: { bat: 3, owl: 2 } },
+      { text: "Rush the main story and come back for side content if it's compelling.", scores: { falcon: 2, frog: 2 } },
+      { text: "Build a base/settlement and ignore quests entirely.", scores: { bear: 3, dragon: 2 } },
+      { text: "Find every exploit and see how fast you can see the credits.", scores: { frog: 3, gecko: 2 } },
+    ]
+  },
+  {
+    text: "Your friends describe your gaming persona as:",
+    answers: [
+      { text: '"The one who always knows what to play next and makes it happen."', scores: { dolphin: 3, wolf: 2 } },
+      { text: '"The one who has an insane amount of hours and somehow still knows obscure secrets."', scores: { owl: 3, bat: 2 } },
+      { text: '"The one who\'s terrifyingly good and slightly scary to play against."', scores: { falcon: 3, jaguar: 3 } },
+      { text: '"The one who takes forever because they\'re exploring some random cave for two hours."', scores: { bat: 3, bear: 2 } },
+    ]
+  },
+  {
+    text: "Losing in a competitive match makes you feel:",
+    answers: [
+      { text: "Fired up. I analyze what went wrong and immediately queue again.", scores: { falcon: 3, jaguar: 3 } },
+      { text: "Curious — what did they do that I didn't? Can I reverse-engineer it?", scores: { fox: 3, jaguar: 2 } },
+      { text: "Disappointed, but mostly because it affected the group vibe.", scores: { wolf: 3, dolphin: 2 } },
+      { text: "Relieved to go back to single-player. This is why I avoid competitive.", scores: { bear: 2, owl: 2 } },
+    ]
+  },
+  {
+    text: "Which statement resonates most deeply?",
+    answers: [
+      { text: '"A game without challenge is a screensaver."', scores: { gecko: 3, falcon: 2 } },
+      { text: '"A game without wonder is just a task list."', scores: { bat: 3, owl: 2 } },
+      { text: '"A game without people is just a very expensive way to be alone."', scores: { dolphin: 3, wolf: 2 } },
+      { text: '"A game without systems is a movie with worse cinematography."', scores: { fox: 3, frog: 2 } },
+    ]
+  },
+  {
+    text: "You've played 10 hours of a beloved game and it's still not clicking. You:",
+    answers: [
+      { text: "Push through. It'll click. I've seen the community — they're clearly getting something I'm not yet.", scores: { gecko: 3, owl: 2 } },
+      { text: "Pivot immediately to something new. Life is short and the backlog is long.", scores: { kraken: 3, dolphin: 2 } },
+      { text: "Try a different approach — maybe I've been playing it wrong strategically.", scores: { fox: 3, jaguar: 2 } },
+      { text: "Ask friends if it's worth continuing. Their consensus matters.", scores: { wolf: 2, dolphin: 2 } },
+    ]
+  },
+  {
+    text: "The gaming accomplishment you're most proud of:",
+    answers: [
+      { text: "Reaching peak rank / a world record time / top ladder position.", scores: { falcon: 3, jaguar: 2 } },
+      { text: "100% completion — every achievement, every secret, every ending.", scores: { owl: 3, gecko: 2, dragon: 2 } },
+      { text: "Building something in-game that other people genuinely appreciated.", scores: { bear: 3, dolphin: 2 } },
+      { text: "Finishing a game that genuinely changed how I see the world.", scores: { owl: 3, kraken: 2 } },
+    ]
+  },
+  {
+    text: "Your ideal co-op dynamic:",
+    answers: [
+      { text: "Clear roles, clear communication, zero wasted actions. We win this.", scores: { wolf: 3, falcon: 2 } },
+      { text: "Chaos and improv — the fun is in the unexpected moments.", scores: { dolphin: 3, kraken: 2 } },
+      { text: "I explain the mechanics; they follow. Respectfully.", scores: { fox: 3, jaguar: 2 } },
+      { text: "You explore that wing, I'll explore this one. Compare notes after.", scores: { bat: 3, owl: 2 } },
+    ]
+  },
+  {
+    text: "Which in-game notification makes your heart race?",
+    answers: [
+      { text: "NEW RANK ACHIEVED", scores: { falcon: 3, jaguar: 2 } },
+      { text: "SECRET AREA DISCOVERED", scores: { bat: 3, owl: 2 } },
+      { text: "LEGENDARY DROP ACQUIRED", scores: { dragon: 3 } },
+      { text: "PERSONAL BEST TIME", scores: { frog: 3, gecko: 2 } },
+    ]
+  },
+  {
+    text: "On a gaming night alone, you tend to:",
+    answers: [
+      { text: "Play whatever genre you haven't tried in a while.", scores: { kraken: 3, bat: 2 } },
+      { text: "Return to a comfort game that you know deeply and love.", scores: { bear: 3, dragon: 2 } },
+      { text: "Practice something specific — a technique, a boss, a build.", scores: { gecko: 3, falcon: 2 } },
+      { text: "Start a new narrative game and commit to experiencing it fully.", scores: { owl: 3, fox: 2 } },
+    ]
+  },
+  {
+    text: "The worst thing a game can do:",
+    answers: [
+      { text: "Have unbalanced, unfair competitive design.", scores: { falcon: 3, jaguar: 2 } },
+      { text: "Have no lore, no depth, no world to get lost in.", scores: { owl: 3, bat: 2 } },
+      { text: "Not let me play with friends or be played only online.", scores: { dolphin: 3, wolf: 3 } },
+      { text: "Artificially pad time instead of offering real depth.", scores: { frog: 3, gecko: 2 } },
+    ]
+  },
+  {
+    text: "Your relationship with game difficulty settings:",
+    answers: [
+      { text: "Always hardest available. If there's a higher custom option, I'm using it.", scores: { gecko: 3, falcon: 2 } },
+      { text: "Normal, but I'll turn it up if the game starts to feel routine.", scores: { jaguar: 2, wolf: 2 } },
+      { text: "Whatever lets me experience the story without stress.", scores: { bear: 3, owl: 2 } },
+      { text: "Difficulty is just a variable in the optimization equation.", scores: { frog: 3, fox: 2 } },
+    ]
+  },
+  {
+    text: "When you think about gaming, your emotional relationship is:",
+    answers: [
+      { text: "Passion with a tinge of obsession. I think about it when I'm not playing.", scores: { dragon: 2, gecko: 2, falcon: 2 } },
+      { text: "Pure joy and comfort — it's my happy place, my reset button.", scores: { bear: 3, dolphin: 2 } },
+      { text: "Intellectual fascination — games are systems that demand to be understood.", scores: { fox: 3, frog: 2 } },
+      { text: "A sense of wonder that certain games still manage to surprise me.", scores: { kraken: 3, bat: 2, owl: 2 } },
+    ]
+  },
+  {
+    text: "You find an old copy of a classic game you've never played. You feel:",
+    answers: [
+      { text: "Curious whether it still holds up mechanically — let's test it.", scores: { gecko: 2, frog: 2 } },
+      { text: "Excited to experience a piece of gaming history and absorb its world.", scores: { owl: 3, bat: 2 } },
+      { text: "Like you've found treasure — another genre or experience you haven't tasted.", scores: { kraken: 3, bear: 2 } },
+      { text: "Mild interest — you'll play it if a friend wants to try it together.", scores: { dolphin: 2, wolf: 2 } },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let currentQ = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let scores = {};
+
+function initScores() {
+  scores = {};
+  Object.keys(ARCHETYPES).forEach(k => scores[k] = 0);
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startTest() {
+  initScores();
+  currentQ = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+
+  document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${total}`;
+  document.getElementById('q-pct').textContent = `${Math.round((currentQ / total) * 100)}%`;
+  document.getElementById('progress-fill').style.width = `${(currentQ / total) * 100}%`;
+  document.getElementById('q-number').textContent = `Question ${currentQ + 1}`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const container = document.getElementById('options-container');
+  const letters = ['A', 'B', 'C', 'D'];
+  container.innerHTML = q.answers.map((a, i) => `
+    <button class="option ${answers[currentQ] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">
+      <span class="option-letter">${letters[i]}.</span>${a.text}
+    </button>
+  `).join('');
+
+  document.getElementById('btn-prev').disabled = currentQ === 0;
+  document.getElementById('btn-next').textContent = currentQ === total - 1 ? 'See My Archetype →' : 'Continue →';
+}
+
+function selectAnswer(idx) {
+  answers[currentQ] = idx;
+  document.querySelectorAll('.option').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === null) {
+    document.getElementById('question-card').style.animation = 'none';
+    document.getElementById('question-card').style.borderColor = 'rgba(192,57,43,0.5)';
+    setTimeout(() => {
+      document.getElementById('question-card').style.borderColor = '';
+    }, 600);
+    return;
+  }
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    computeResult();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// SCORING
+// ═══════════════════════════════════════════════════════
+function computeResult() {
+  initScores();
+  answers.forEach((ansIdx, qIdx) => {
+    if (ansIdx === null) return;
+    const scoreMap = QUESTIONS[qIdx].answers[ansIdx].scores;
+    Object.entries(scoreMap).forEach(([arch, pts]) => {
+      scores[arch] = (scores[arch] || 0) + pts;
+    });
+  });
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const winner = sorted[0][0];
+  showResult(winner, sorted);
+}
+
+function showResult(key, sorted) {
+  const arch = ARCHETYPES[key];
+
+  document.getElementById('result-animal').textContent = arch.emoji;
+  document.getElementById('result-name').textContent = arch.name;
+  document.getElementById('result-tagline').textContent = arch.tagline;
+  document.getElementById('result-desc').textContent = arch.desc;
+
+  document.getElementById('result-traits').innerHTML = arch.traits.map(t =>
+    `<span class="trait-tag">${t}</span>`
+  ).join('');
+
+  document.getElementById('result-games').innerHTML = arch.games.map(g =>
+    `<div class="game-card"><strong>${g.name}</strong><div class="game-genre">${g.genre}</div></div>`
+  ).join('');
+
+  document.getElementById('result-spectrums').innerHTML = arch.spectrums.map(s => `
+    <div class="spectrum-row">
+      <div class="spectrum-label">
+        <span>${s.label}</span>
+        <span>${s.value}%</span>
+      </div>
+      <div class="spectrum-bar">
+        <div class="spectrum-fill" style="width:${s.value}%"></div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('result-shadow').textContent = arch.shadow;
+
+  document.getElementById('result-affinity').innerHTML = arch.affinity.map(a =>
+    `<span class="affinity-tag">${a}</span>`
+  ).join('');
+
+  const maxScore = sorted[0][1] || 1;
+  document.getElementById('score-breakdown').innerHTML = sorted.slice(0, 6).map(([k, v]) => {
+    const a = ARCHETYPES[k];
+    const pct = Math.round((v / maxScore) * 100);
+    return `<div class="score-item">
+      <span class="si-icon">${a.emoji}</span>
+      <span class="si-name">${a.name}</span>
+      <span class="si-score">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  showScreen('screen-result');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  showScreen('screen-intro');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
