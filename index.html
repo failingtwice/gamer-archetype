@@ -208,6 +208,14 @@
     font-size: 14px;
     color: var(--text2);
     transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .archetype-pill:hover {
+    border-color: rgba(201,168,76,0.45);
+    background: rgba(201,168,76,0.06);
+    transform: translateY(-1px);
   }
 
   .archetype-pill span {
@@ -221,6 +229,210 @@
     font-family: 'Cinzel', serif;
     font-size: 12px;
     letter-spacing: 0.05em;
+  }
+
+  .archetype-pill::after {
+    content: '›';
+    position: absolute;
+    bottom: 4px;
+    right: 6px;
+    font-size: 11px;
+    color: var(--text2);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .archetype-pill:hover::after { opacity: 0.5; }
+
+  /* ── ARCHETYPE MODAL ── */
+  .arch-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 9, 15, 0.85);
+    z-index: 200;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px 40px;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    backdrop-filter: blur(4px);
+  }
+
+  .arch-modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .arch-modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    width: 100%;
+    max-width: 640px;
+    position: relative;
+    transform: translateY(16px);
+    transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+    overflow: hidden;
+  }
+
+  .arch-modal-overlay.open .arch-modal {
+    transform: translateY(0);
+  }
+
+  .arch-modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+  }
+
+  .arch-modal-close {
+    position: absolute;
+    top: 14px; right: 16px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text2);
+    width: 30px; height: 30px;
+    border-radius: 2px;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 1;
+  }
+
+  .arch-modal-close:hover {
+    border-color: rgba(201,168,76,0.4);
+    color: var(--gold);
+  }
+
+  .arch-modal-hero {
+    text-align: center;
+    padding: 40px 36px 28px;
+    background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, transparent 100%);
+  }
+
+  .arch-modal-emoji {
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 20px rgba(201,168,76,0.25));
+  }
+
+  .arch-modal-rarity {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid rgba(240,160,32,0.3);
+    border-radius: 2px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+  }
+
+  .arch-modal-name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--gold2);
+    margin-bottom: 6px;
+  }
+
+  .arch-modal-tagline {
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .arch-modal-body {
+    padding: 0 36px 36px;
+  }
+
+  .arch-modal-section {
+    margin-top: 24px;
+  }
+
+  .arch-modal-section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .arch-modal-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .arch-modal-desc {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .arch-modal-tell {
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-left: 3px solid var(--gold);
+    border-radius: 3px;
+    padding: 12px 16px;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .arch-modal-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .arch-modal-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+
+  .arch-modal-shadow {
+    background: rgba(192, 57, 43, 0.06);
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    border-radius: 3px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: #c09080;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .arch-modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  @media (max-width: 500px) {
+    .arch-modal-hero { padding: 32px 20px 20px; }
+    .arch-modal-body { padding: 0 20px 28px; }
   }
 
   /* ── BUTTON ── */
@@ -839,18 +1051,18 @@
     </div>
 
     <div class="archetype-grid">
-      <div class="archetype-pill"><span>🦅</span><strong>The Falcon</strong></div>
-      <div class="archetype-pill"><span>🐺</span><strong>The Wolf</strong></div>
-      <div class="archetype-pill"><span>🦉</span><strong>The Owl</strong></div>
-      <div class="archetype-pill"><span>🐸</span><strong>The Frog</strong></div>
-      <div class="archetype-pill"><span>🐉</span><strong>The Dragon</strong></div>
-      <div class="archetype-pill"><span>🐬</span><strong>The Dolphin</strong></div>
-      <div class="archetype-pill"><span>🦊</span><strong>The Fox</strong></div>
-      <div class="archetype-pill"><span>🦎</span><strong>The Gecko</strong></div>
-      <div class="archetype-pill"><span>🐻</span><strong>The Bear</strong></div>
-      <div class="archetype-pill"><span>🦇</span><strong>The Bat</strong></div>
-      <div class="archetype-pill"><span>🦑</span><strong>The Kraken</strong></div>
-      <div class="archetype-pill"><span>🐦</span><strong>The Magpie</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('falcon')"><span>🦅</span><strong>The Falcon</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('wolf')"><span>🐺</span><strong>The Wolf</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('owl')"><span>🦉</span><strong>The Owl</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('frog')"><span>🐸</span><strong>The Frog</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('dragon')"><span>🐉</span><strong>The Dragon</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('dolphin')"><span>🐬</span><strong>The Dolphin</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('fox')"><span>🦊</span><strong>The Fox</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('gecko')"><span>🦎</span><strong>The Gecko</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('bear')"><span>🐻</span><strong>The Bear</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('bat')"><span>🦇</span><strong>The Bat</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('kraken')"><span>🦑</span><strong>The Kraken</strong></div>
+      <div class="archetype-pill" onclick="openArchetype('magpie')"><span>🐦</span><strong>The Magpie</strong></div>
     </div>
 
     <div class="btn-center">
@@ -943,6 +1155,51 @@
     </div>
   </div>
 
+</div>
+
+<!-- ───────── ARCHETYPE MODAL ───────── -->
+<div class="arch-modal-overlay" id="arch-modal-overlay" onclick="handleModalOverlayClick(event)">
+  <div class="arch-modal" id="arch-modal">
+    <button class="arch-modal-close" onclick="closeArchetype()">✕</button>
+    <div class="arch-modal-hero">
+      <div class="arch-modal-emoji" id="am-emoji"></div>
+      <div class="arch-modal-rarity" id="am-rarity"></div>
+      <div class="arch-modal-name" id="am-name"></div>
+      <div class="arch-modal-tagline" id="am-tagline"></div>
+    </div>
+    <div class="arch-modal-body">
+      <div class="arch-modal-section">
+        <div class="arch-modal-section-title" id="am-t-identity"></div>
+        <div class="arch-modal-desc" id="am-desc"></div>
+      </div>
+      <div class="arch-modal-section">
+        <div class="arch-modal-section-title" id="am-t-tell"></div>
+        <div class="arch-modal-tell" id="am-tell"></div>
+      </div>
+      <div class="arch-modal-section">
+        <div class="arch-modal-section-title" id="am-t-traits"></div>
+        <div class="arch-modal-traits" id="am-traits"></div>
+      </div>
+      <div class="arch-modal-section">
+        <div class="arch-modal-section-title" id="am-t-games"></div>
+        <div class="arch-modal-games" id="am-games"></div>
+      </div>
+      <div class="arch-modal-section">
+        <div class="arch-modal-section-title" id="am-t-shadow"></div>
+        <div class="arch-modal-shadow" id="am-shadow"></div>
+      </div>
+      <div class="arch-modal-section" style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:160px;">
+          <div class="arch-modal-section-title" id="am-t-affinity"></div>
+          <div class="arch-modal-tags" id="am-affinity"></div>
+        </div>
+        <div style="flex:1; min-width:160px;">
+          <div class="arch-modal-section-title" id="am-t-clashes"></div>
+          <div class="arch-modal-tags" id="am-clashes"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -2238,6 +2495,66 @@ function restart() {
   showScreen('screen-intro');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// ═══════════════════════════════════════════════════════
+// ARCHETYPE MODAL
+// ═══════════════════════════════════════════════════════
+function openArchetype(key) {
+  const arch = ARCHETYPES[key];
+  const isRu = currentLang === 'ru';
+  const ru = ARCHETYPES_RU[key];
+  const s = STRINGS[currentLang];
+
+  document.getElementById('am-emoji').textContent = arch.emoji;
+  document.getElementById('am-rarity').textContent = isRu ? ru.rarity : arch.rarity;
+  document.getElementById('am-name').textContent = isRu ? ru.name : arch.name;
+  document.getElementById('am-tagline').textContent = isRu ? ru.tagline : arch.tagline;
+  document.getElementById('am-desc').textContent = isRu ? ru.desc : arch.desc;
+  document.getElementById('am-tell').textContent = isRu ? ru.tell : arch.tell;
+
+  document.getElementById('am-t-identity').textContent = s.sectionIdentity;
+  document.getElementById('am-t-tell').textContent = s.sectionTell;
+  document.getElementById('am-t-traits').textContent = s.sectionTraits;
+  document.getElementById('am-t-games').textContent = s.sectionGames;
+  document.getElementById('am-t-shadow').textContent = s.sectionShadow;
+  document.getElementById('am-t-affinity').textContent = s.sectionAffinity;
+  document.getElementById('am-t-clashes').textContent = s.sectionClashes;
+
+  document.getElementById('am-traits').innerHTML = arch.traits.map(t =>
+    `<span class="trait-tag">${t}</span>`
+  ).join('');
+
+  document.getElementById('am-games').innerHTML = arch.games.map(g =>
+    `<div class="game-card"><strong>${g.name}</strong><div class="game-genre">${g.genre}</div></div>`
+  ).join('');
+
+  document.getElementById('am-shadow').textContent = isRu ? ru.shadow : arch.shadow;
+
+  const affinity = isRu ? ru.affinity : arch.affinity;
+  const clashes = isRu ? ru.clashes : arch.clashes;
+  document.getElementById('am-affinity').innerHTML = affinity.map(a =>
+    `<span class="affinity-tag">${a}</span>`
+  ).join('');
+  document.getElementById('am-clashes').innerHTML = clashes.map(a =>
+    `<span class="clash-tag">${a}</span>`
+  ).join('');
+
+  document.getElementById('arch-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeArchetype() {
+  document.getElementById('arch-modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleModalOverlayClick(e) {
+  if (e.target === document.getElementById('arch-modal-overlay')) closeArchetype();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeArchetype();
+});
 
 // Apply default language on load
 applyStrings();
