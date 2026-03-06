@@ -319,69 +319,88 @@
     font-size: 22px;
     line-height: 1.5;
     color: var(--text);
-    margin-bottom: 30px;
+    margin-bottom: 36px;
     font-weight: 300;
+    font-style: italic;
   }
 
-  .options {
+  /* ── SCALE (Likert) ── */
+  .scale-options {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    margin-top: 8px;
   }
 
-  .option {
+  .scale-opt {
+    flex: 1;
+    min-height: 70px;
+    padding: 0 6px;
     background: var(--bg3);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.07);
     border-radius: 3px;
-    padding: 14px 18px;
     cursor: pointer;
-    transition: all 0.2s;
-    font-size: 17px;
-    color: var(--text2);
-    line-height: 1.45;
-    text-align: left;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .option::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--gold);
-    transform: scaleY(0);
-    transition: transform 0.2s;
-  }
-
-  .option:hover {
-    border-color: rgba(201,168,76,0.3);
-    color: var(--text);
-    background: rgba(201,168,76,0.05);
-  }
-
-  .option:hover::before { transform: scaleY(1); }
-
-  .option.selected {
-    border-color: var(--gold);
-    color: var(--gold2);
-    background: rgba(201,168,76,0.08);
-  }
-
-  .option.selected::before { transform: scaleY(1); }
-
-  .option-letter {
-    display: inline-block;
     font-family: 'Cinzel', serif;
     font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--gold);
-    opacity: 0.5;
-    margin-right: 10px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    color: var(--text2);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
   }
 
-  .option.selected .option-letter { opacity: 1; }
+  /* Animated fill rising from bottom */
+  .scale-opt::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(201,168,76,0.05), rgba(201,168,76,0.16));
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+    z-index: -1;
+  }
+
+  /* Shimmer sweep on select */
+  .scale-opt::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80%;
+    left: -80%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    pointer-events: none;
+  }
+
+  .scale-opt:hover {
+    border-color: rgba(201,168,76,0.35);
+    color: var(--text);
+  }
+
+  .scale-opt:hover::before { transform: scaleY(0.35); }
+
+  .scale-opt.selected {
+    border-color: var(--gold);
+    color: var(--gold2);
+  }
+
+  .scale-opt.selected::before { transform: scaleY(1); }
+
+  .scale-opt.selected::after {
+    animation: scaleSweep 0.45s ease forwards;
+  }
+
+  @keyframes scaleSweep {
+    to { left: 110%; }
+  }
+
+  @media (max-width: 520px) {
+    .scale-opt { font-size: 9px; min-height: 56px; letter-spacing: 0.04em; }
+  }
 
   /* Navigation */
   .nav-row {
@@ -613,28 +632,112 @@
     color: var(--accent2);
   }
 
-  /* Score breakdown */
-  .score-breakdown {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+  /* Rarity badge */
+  .result-rarity {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid rgba(240,160,32,0.35);
+    background: rgba(240,160,32,0.06);
+    border-radius: 2px;
+    padding: 4px 12px;
+    margin-bottom: 28px;
+  }
+
+  /* Tell card */
+  .tell-card {
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-left: 3px solid var(--gold);
+    border-radius: 3px;
+    padding: 16px 20px;
+    margin-top: 8px;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Only-you list */
+  .only-list {
+    list-style: none;
     margin-top: 8px;
   }
 
-  .score-item {
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    border-radius: 3px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
+  .only-list li {
+    position: relative;
+    padding: 10px 0 10px 26px;
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border2);
   }
 
-  .score-item .si-icon { font-size: 20px; }
-  .score-item .si-name { color: var(--text2); flex: 1; }
-  .score-item .si-score { color: var(--gold); font-family: 'Cinzel', serif; font-size: 13px; }
+  .only-list li:last-child { border-bottom: none; }
+
+  .only-list li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 8px;
+    top: 14px;
+  }
+
+  /* Clash tag */
+  .clash-tag {
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.28);
+    border-radius: 2px;
+    padding: 4px 10px;
+    font-size: 13px;
+    color: #e07060;
+  }
+
+  /* Enhanced score bars */
+  .score-bar-wrap {
+    margin-bottom: 12px;
+  }
+
+  .score-bar-meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .score-bar-meta .sb-icon { font-size: 18px; }
+  .score-bar-meta .sb-name { color: var(--text2); flex: 1; }
+  .score-bar-meta .sb-pct { color: var(--gold); font-family: 'Cinzel', serif; font-size: 12px; }
+
+  .score-bar-track {
+    height: 5px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--amber));
+    border-radius: 2px;
+    transition: width 1s ease 0.3s;
+    box-shadow: 0 0 6px rgba(201,168,76,0.3);
+  }
+
+  .score-bar-fill.winner {
+    background: linear-gradient(90deg, var(--amber), #ffcc44);
+    box-shadow: 0 0 10px rgba(240,160,32,0.5);
+  }
+
+  /* Score breakdown (legacy, kept for structure) */
+  .score-breakdown {
+    margin-top: 8px;
+  }
 
   .restart-row {
     text-align: center;
@@ -663,15 +766,55 @@
     color: var(--gold);
   }
 
+  /* Language toggle */
+  .lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 2px;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .lang-btn.active {
+    background: rgba(201,168,76,0.12);
+    color: var(--gold);
+  }
+
+  .lang-btn:hover:not(.active) {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+
   /* Responsive */
   @media (max-width: 600px) {
     .question-card, .intro-card, .result-body { padding: 24px 18px; }
-    .score-breakdown { grid-template-columns: 1fr; }
     .archetype-grid { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
 </head>
 <body>
+<div class="lang-toggle">
+  <button class="lang-btn" onclick="setLang('en')" id="lang-en">EN</button>
+  <button class="lang-btn active" onclick="setLang('ru')" id="lang-ru">RU</button>
+</div>
+
 <div class="container">
 
   <header>
@@ -691,8 +834,8 @@
   <!-- ───────── INTRO SCREEN ───────── -->
   <div id="screen-intro" class="screen active">
     <div class="intro-card">
-      <p>Every gamer carries within them a hidden archetype — a pattern of instincts, desires, and compulsions that shapes every session, every choice, every midnight-oil marathon. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> through a series of 20 psychological questions.</p>
-      <p>Be honest. There are no wrong answers, only true ones. The Bestiary does not judge — it only names what already lurks inside you.</p>
+      <p>Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 40 situational questions.</p>
+      <p>For each situation, answer how often it applies to you — from <em>Never</em> to <em>Always</em>. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes. There are no wrong answers.</p>
     </div>
 
     <div class="archetype-grid">
@@ -707,7 +850,7 @@
       <div class="archetype-pill"><span>🐻</span><strong>The Bear</strong></div>
       <div class="archetype-pill"><span>🦇</span><strong>The Bat</strong></div>
       <div class="archetype-pill"><span>🦑</span><strong>The Kraken</strong></div>
-      <div class="archetype-pill"><span>🐆</span><strong>The Jaguar</strong></div>
+      <div class="archetype-pill"><span>🐦</span><strong>The Magpie</strong></div>
     </div>
 
     <div class="btn-center">
@@ -735,7 +878,6 @@
 
     <div class="nav-row">
       <button class="btn-ghost" id="btn-prev" onclick="prevQuestion()">← Back</button>
-      <button class="btn" id="btn-next" onclick="nextQuestion()">Continue →</button>
     </div>
   </div>
 
@@ -743,17 +885,26 @@
   <div id="screen-result" class="screen">
     <div class="result-hero">
       <div class="result-animal" id="result-animal">🦅</div>
-      <div class="result-label">Your Gamer Archetype</div>
+      <div class="result-label" id="result-label">Your Gamer Archetype</div>
       <div class="result-name" id="result-name">The Falcon</div>
       <div class="result-tagline" id="result-tagline">"Eyes on the prize, talons on the leaderboard."</div>
+      <div class="result-rarity" id="result-rarity">8% of players</div>
     </div>
 
     <div class="result-body">
       <div class="result-section-title">Core Identity</div>
       <div class="result-desc" id="result-desc"></div>
 
-      <div class="result-section-title">Defining Traits</div>
+      <div class="result-section-title">The Tell</div>
+      <div class="tell-card" id="result-tell"></div>
+
+      <div class="result-section-title" style="margin-top:28px;">Defining Traits</div>
       <div class="traits-list" id="result-traits"></div>
+
+      <div class="result-section-title">Only You Would...</div>
+      <ul class="only-list" id="result-only"></ul>
+
+      <div class="ornamental-divider"><span>✦</span></div>
 
       <div class="result-section-title">Your Natural Habitat — Games to Seek</div>
       <div class="games-grid" id="result-games"></div>
@@ -769,15 +920,21 @@
         <p id="result-shadow"></p>
       </div>
 
-      <div style="margin-top:24px;">
-        <div class="result-section-title">Plays Well With</div>
-        <div class="affinity-row" id="result-affinity"></div>
+      <div style="margin-top:24px; display:flex; gap:28px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:180px;">
+          <div class="result-section-title">Plays Well With</div>
+          <div class="affinity-row" id="result-affinity"></div>
+        </div>
+        <div style="flex:1; min-width:180px;">
+          <div class="result-section-title">Friction With</div>
+          <div class="affinity-row" id="result-clashes"></div>
+        </div>
       </div>
     </div>
 
     <div class="result-body" style="padding:28px 36px;">
-      <div class="result-section-title">Score Breakdown</div>
-      <p style="font-size:15px;color:var(--text2);margin-bottom:14px;">Your top archetype affinities, ranked by score.</p>
+      <div class="result-section-title">Your Archetype Breakdown</div>
+      <p style="font-size:15px;color:var(--text2);margin-bottom:18px;">How strongly each creature showed up in your answers.</p>
       <div class="score-breakdown" id="score-breakdown"></div>
     </div>
 
@@ -790,6 +947,329 @@
 
 <script>
 // ═══════════════════════════════════════════════════════
+// LANGUAGE / INTERNATIONALISATION
+// ═══════════════════════════════════════════════════════
+let currentLang = 'ru';
+
+const STRINGS = {
+  en: {
+    siteTitle: "The Gamer Bestiary — Archetype Test",
+    headerOrnament: "The Gamer Bestiary",
+    h1: "What Beast Do You Play As?",
+    subtitle: "A psychological framework for uncovering the creature that lurks behind your controller.",
+    introP1: 'Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 40 situational questions.',
+    introP2: "For each situation, answer how often it applies to you — from <em>Never</em> to <em>Always</em>. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes. There are no wrong answers.",
+    startBtn: "Begin the Assessment",
+    resultLabel: "Your Gamer Archetype",
+    sectionIdentity: "Core Identity",
+    sectionTell: "The Tell",
+    sectionTraits: "Defining Traits",
+    sectionOnly: "Only You Would...",
+    sectionGames: "Your Natural Habitat — Games to Seek",
+    sectionSpectrum: "Psychological Spectrum",
+    sectionShadow: "Shadow Side",
+    shadowWarning: "⚠ Beware",
+    sectionAffinity: "Plays Well With",
+    sectionClashes: "Friction With",
+    sectionBreakdown: "Your Archetype Breakdown",
+    breakdownSub: "How strongly each creature showed up in your answers.",
+    restartBtn: "Take the Test Again",
+    backBtn: "← Back",
+    scaleLabels: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+    questionOf: (cur, total) => `Question ${cur} of ${total}`,
+    questionLabel: (n) => `Question ${n}`,
+  },
+  ru: {
+    siteTitle: "Бестиарий Геймера — Тест Архетипа",
+    headerOrnament: "Бестиарий Геймера",
+    h1: "Каким зверем ты играешь?",
+    subtitle: "Психологический тест для определения существа, скрытого за твоим контроллером.",
+    introP1: 'Каждый геймер несёт в себе скрытый архетип — паттерн инстинктов и привычек, формирующий каждую сессию и каждый выбор. Это испытание раскроет твой <strong style="color:var(--gold)">Архетип Геймера</strong> из 12 существ — через 40 ситуативных вопросов.',
+    introP2: "На каждую ситуацию ответь, как часто она к тебе относится — от <em>Никогда</em> до <em>Всегда</em>. Подходит как для тех, кто играет по 8 часов, так и для тех, кто запускает игры на 5 минут с телефона. Неправильных ответов нет.",
+    startBtn: "Начать тест",
+    resultLabel: "Твой архетип геймера",
+    sectionIdentity: "Суть архетипа",
+    sectionTell: "Характерный признак",
+    sectionTraits: "Ключевые черты",
+    sectionOnly: "Только ты способен на...",
+    sectionGames: "Твоя естественная среда — игры для тебя",
+    sectionSpectrum: "Психологический спектр",
+    sectionShadow: "Тёмная сторона",
+    shadowWarning: "⚠ Осторожно",
+    sectionAffinity: "Хорошо сочетается с",
+    sectionClashes: "Трение с",
+    sectionBreakdown: "Распределение по архетипам",
+    breakdownSub: "Насколько сильно каждое существо проявилось в твоих ответах.",
+    restartBtn: "Пройти тест снова",
+    backBtn: "← Назад",
+    scaleLabels: ["Никогда", "Редко", "Иногда", "Часто", "Всегда"],
+    questionOf: (cur, total) => `Вопрос ${cur} из ${total}`,
+    questionLabel: (n) => `Вопрос ${n}`,
+  },
+};
+
+// Russian archetype translations
+const ARCHETYPES_RU = {
+  falcon: {
+    name: "Сокол",
+    tagline: '"Взгляд на приз, когти — на таблицу лидеров."',
+    rarity: "8% игроков",
+    desc: "Сокол — точный соревновательный игрок, чья игровая идентичность построена на измеримых результатах. Ты играешь не ради исследования или отдыха — ты играешь, чтобы ПОБЕДИТЬ, и хочешь доказательств. Рейтинговые матчи, подъём по лестнице, соотношение K/D, турнирные сетки — это твой родной язык. Ты изучаешь повторы, оптимизируешь раскладку клавиш и помнишь свой пиковый рейтинг трёхлетней давности до десятых долей. Кайф не в самом матче — а в момент, когда числа идут вверх.",
+    tell: "Они проверяют свой рейтинг или KDA перед тем, как закрыть игру — каждый раз без исключения.",
+    onlyYouWould: [
+      "Встать в рейтинговую очередь в 2 ночи специально для того, чтобы отыграться после неудачного вечера",
+      "Знать свой процент побед до десятых, но при этом говорить, что «особо не следишь за статой»",
+      "Испытывать настоящее и продолжительное раздражение, когда тиммейт игнорирует твой явно оптимальный вызов",
+    ],
+    shadow: "Поражение может испортить тебе день — или целую неделю. Ты склонен к тильту, перекладыванию вины и тихой неприязни к игрокам, которые не относятся к игре так же серьёзно. Если ты не прогрессируешь — ты чувствуешь себя ничтожеством.",
+    affinity: ["Волк", "Геккон", "Лягушка"],
+    clashes: ["Медведь", "Дельфин"],
+  },
+  wolf: {
+    name: "Волк",
+    tagline: '"Один я опасен. Со стаей — непобедим."',
+    rarity: "11% игроков",
+    desc: "Волк живёт ради слаженной командной игры — не ради личной славы, а ради электрического синергизма с хорошей командой. Ты помнишь каждый callout, каждое клатчное движение, каждый момент, когда идеально сработавшая командная стратегия сломила противника. Ты собираешь тиммейтов после тяжёлого раунда, пишешь правила Discord-сервера и организуешь тренировочные сессии. Соревнование важно, но только когда оно общее.",
+    tell: "Их группа друзей уже имеет название, одинаковые иконки профилей, и хотя бы раз составленный тренировочный план.",
+    onlyYouWould: [
+      "Сидеть до 3 ночи не потому, что игра крутая, а потому что все ещё онлайн",
+      "Воспринять как личную обиду, когда тиммейт выходит из сессии без предупреждения",
+      "Собрать шестерых людей в кооп, который рассчитан максимум на двоих",
+    ],
+    shadow: "Одиночные игры кажутся тебе пустыми и бессмысленными. Без стаи ты быстро теряешь мотивацию. Ты можешь стать слишком зависимым от групповой валидации — если команда распадётся, твоя игровая идентичность может рухнуть вместе с ней.",
+    affinity: ["Сокол", "Дельфин", "Дракон"],
+    clashes: ["Геккон", "Лягушка"],
+  },
+  owl: {
+    name: "Сова",
+    tagline: '"История не в катсценах. Она — в каждой книге, описании предмета и экране загрузки."',
+    rarity: "9% игроков",
+    desc: "Сова — пожиратель лора, архитектор вики, игрок, который останавливается перед входом в подземелье, чтобы прочитать каждый элемент нарратива на стенах. Ты не просто играешь — ты населяешь целые миры. Ты можешь рассказать политическую историю вымышленных королевств. Ты пишешь теории. Замечаешь изменения в диалогах NPC после третьего акта.",
+    tell: "Они останавливаются посреди игры, чтобы прочитать надпись на надгробии, которая не несёт никакой игровой ценности.",
+    onlyYouWould: [
+      "Отказываться пропускать катсцены даже при втором прохождении игры, которую знаешь наизусть",
+      "Прочитать весь бестиарий в игре до встречи хоть с одним существом из него",
+      "Иметь обоснованные мнения по деталям лора, которые тонко противоречат намерениям разработчиков",
+    ],
+    shadow: "Ты избегаешь игры с поверхностным нарративом как чуму, даже если они по-настоящему веселы. Ты можешь часами сидеть в меню, читая лор, вместо того чтобы играть. Мультиплеер кажется тебе пустым. У тебя огромный беклог, который ты никогда не пройдёшь, потому что каждая игра требует недель полного погружения.",
+    affinity: ["Летучая мышь", "Медведь", "Лис"],
+    clashes: ["Лягушка", "Сорока"],
+  },
+  frog: {
+    name: "Лягушка",
+    tagline: '"Текущий рекорд Any% — 47 минут, и я его сотру."',
+    rarity: "5% игроков",
+    desc: "Лягушка не играет в игры — Лягушка их препарирует. Там, где другие видят фэнтезийный мир, ты видишь физический движок с эксплуатируемыми краевыми случаями. Спидраны, пропуск последовательностей, глитчи, непредусмотренная механика — это не баги, а тайный язык, на котором игра говорит, когда никто не смотрит.",
+    tell: "Они знают пофреймово точное окно ввода для пропуска, экономящего ровно 8 секунд.",
+    onlyYouWould: [
+      "Испытать настоящий восторг — не разочарование — в момент обнаружения игрового глитча",
+      "Пропускать все катсцены без колебаний и не испытывать по этому поводу абсолютно ничего",
+      "Провести 50 часов, проходя игру способами, которые разработчики не предусматривали, а затем просто двигаться дальше",
+    ],
+    shadow: "Ты можешь полностью лишить игру веселья, сводя её к серии входных данных для оптимизации. Друзья, которые хотят просто насладиться сюжетным прохождением, находят твой инстинкт пропускать диалоги крайне раздражающим.",
+    affinity: ["Сокол", "Геккон", "Лис"],
+    clashes: ["Сова", "Дельфин"],
+  },
+  dragon: {
+    name: "Дракон",
+    tagline: '"Первый уровень — это оскорбление. К концу недели я стану богом."',
+    rarity: "14% игроков",
+    desc: "Дракон жаждет силы — не над другими игроками, а над игровым миром. Ты существуешь ради момента, когда твой билд становится непобедимым, когда враги, некогда пугавшие тебя, превращаются в пепел. Ты гриндишь с религиозным усердием не потому, что вынужден, а потому что каждое растущее число приносит глубокое удовлетворение.",
+    tell: "Они до сих пор играют в игру, которую сами же назвали «так себе» — потому что конвейер снаряжения ещё не закончился.",
+    onlyYouWould: [
+      "Набить 1000 часов в игре, которую считаешь средненькой — просто потому что числа продолжали расти",
+      "Почувствовать реальную потерю, когда игра патчем убирает валюту или систему прогресса, которую ты гриндил",
+      "Знать наизусть точный процент выпадения предметов, которые фармишь уже несколько недель",
+    ],
+    shadow: "Ты уязвим для самой хищнической монетизации в играх — лутбоксы, боевые пропуска, бесконечные конвейеры снаряжения. Игры без осмысленных петель прогресса надоедают тебе за считанные часы.",
+    affinity: ["Волк", "Кракен", "Медведь"],
+    clashes: ["Летучая мышь", "Лягушка"],
+  },
+  dolphin: {
+    name: "Дельфин",
+    tagline: '"Лучшая сессия в жизни. Мы играли буквально ни во что особенное. Но все были там."',
+    rarity: "13% игроков",
+    desc: "Дельфину неважно, хороша ли игра — важно, крутые ли люди, которые в неё играют. Для тебя игры — это социальная площадка, способ поддерживать дружбу и создавать общие воспоминания. Ты устраиваешь игровые вечера, знакомишь людей с новыми играми и помнишь предпочтения каждого.",
+    tell: "Они помнят самый смешной момент прошлого игрового вечера ярче, чем любую концовку одиночной игры.",
+    onlyYouWould: [
+      "Купить игру, в которую никогда не будешь играть в одиночку, только потому что друзья хотят поиграть вместе",
+      "Получить больше удовольствия от посредственной игры с людьми, чем от шедевра в одиночестве",
+      "Планировать игровую сессию вокруг того, кто может прийти, а не вокруг того, во что играть",
+    ],
+    shadow: "Одиночные игры могут казаться тебе бессмысленными или даже угнетающими. Ты можешь перегружать себя социально — всегда организатор, всегда источник энергии — тайно желая, чтобы кто-то другой взял на себя инициативу.",
+    affinity: ["Волк", "Медведь", "Сорока"],
+    clashes: ["Геккон", "Лягушка"],
+  },
+  fox: {
+    name: "Лис",
+    tagline: '"У меня был ответ ещё до того, как ты закончил объяснять загадку."',
+    rarity: "7% игроков",
+    desc: "Лис тянется к играм как ключ к замку — они существуют, чтобы решать задачи. Стратегия, дедукция, управление ресурсами, нестандартное мышление — это не препятствия на пути к веселью, это и есть веселье. Ты любишь щелчок плана, который сходится идеально.",
+    tell: "Они ставят на паузу кооперативную игру, чтобы объяснить оптимальный маршрут — пока все остальные уже пытаются играть.",
+    onlyYouWould: [
+      "Решить загадку без подсказок и тихо гордиться этим несколько дней",
+      "Добровольно создать таблицу для игровой экономики крафта, потому что так быстрее, чем искать в вики",
+      "Перепроходить начало стратегии снова и снова, только чтобы протестировать разные начальные ходы",
+    ],
+    shadow: "Чисто экшн-игры без стратегической глубины быстро тебе надоедают. Ты можешь слишком усердно анализировать кооперативные игры, превращая расслабленные сессии в напряжённые сеансы планирования.",
+    affinity: ["Сова", "Лягушка", "Летучая мышь"],
+    clashes: ["Сорока", "Дельфин"],
+  },
+  gecko: {
+    name: "Геккон",
+    tagline: '"Я сделал этого босса 70 раз. Я не раздражён. Я учусь."',
+    rarity: "6% игроков",
+    desc: "Геккон определяется одним: мастерством. Не прогрессом, не нарративом, не социальностью — чистым, неразбавленным механическим мастерством. Ты хочешь игры, которые требуют от тебя всего, наказывают за небрежность и вознаграждают точность. Ты выучил каждый фрейм паттерна босса, практикуешь технику движения в пустых комнатах.",
+    tell: "Они тренируются в пустой комнате — без врагов, без задач — 20 минут, прежде чем снова попробовать босса.",
+    onlyYouWould: [
+      "Выключить музыку и снизить разрешение специально для минимизации задержки ввода в одиночной игре",
+      "Почувствовать скуку от игры после трёх попыток, если она ни разу не потребовала полной концентрации",
+      "С искренней убеждённостью назвать босса «честным» после 60 смертей от его рук",
+    ],
+    shadow: "У тебя почти нулевая толерантность к играм, которые кажутся «слишком лёгкими», и ты часто отвергаешь любимые всеми игры как поверхностные. Ты можешь выглядеть снобом в вопросах сложности. Казуальные игровые сессии с менее опытными игроками могут казаться тебе мучительными.",
+    affinity: ["Лягушка", "Сокол", "Летучая мышь"],
+    clashes: ["Сорока", "Дельфин"],
+  },
+  bear: {
+    name: "Медведь",
+    tagline: '"Я сегодня построил целую деревню. Никто не умер. Это было идеально."',
+    rarity: "16% игроков",
+    desc: "Медведю нечего доказывать. Ты играешь, чтобы быть уютно, погрузиться в мягкий мир, который ничего от тебя не требует, кроме присутствия. Симуляторы фермы, градостроители, лайф-симы, творческие песочницы — у тебя глубокая потребность в медитативной петле: посади, вырасти, собери, повтори.",
+    tell: "Они уже четыре часа украшают игровой дом мебелью, которую не увидит ни один другой игрок.",
+    onlyYouWould: [
+      "Начать уютную игру заново, просто чтобы снова пережить спокойные начальные часы",
+      "Отказаться от мультиплеерного приглашения, потому что в игре нужно срочно заняться фермой",
+      "Иметь специально подобранный плейлист, идеально соответствующий настроению текущего симулятора фермы",
+    ],
+    shadow: "Ты можешь путать комфорт с глубиной, возвращаясь к тем же уютным петлям годами, избегая переживаний, которые могли бы тебя по-настоящему изменить. Линия между расслаблением и избеганием может размываться незаметно.",
+    affinity: ["Дельфин", "Сова", "Лис"],
+    clashes: ["Сокол", "Геккон"],
+  },
+  bat: {
+    name: "Летучая мышь",
+    tagline: '"Я не следую критическому пути. Критического пути не существует."',
+    rarity: "7% игроков",
+    desc: "Летучая мышь — исследователь без маршрута. Ты ориентируешься эхолокацией, отражаясь от тёмных стен игровых миров, находя то, что никто другой не заметил. Ты не выполняешь задания — ты исследуешь территорию. Залезаешь на гору просто чтобы увидеть, что за ней.",
+    tell: "Они прошли 30% основного сюжета за 60 часов — и считают, что это неплохой прогресс.",
+    onlyYouWould: [
+      "Забраться на гору в игре без какой-либо цели — только чтобы увидеть вид с вершины",
+      "Испытывать лёгкую, но настоящую тревогу в играх с невидимыми стенами или загрузочными коридорами",
+      "Намеренно заблудиться в новой локации, чтобы пережить удовольствие от нахождения обратного пути",
+    ],
+    shadow: "Ты можешь потеряться — буквально и фигурально — и так и не закончить игры. Твой беклог огромен. Ты иногда не добираешься до концовок, потому что путешествие тебе было достаточно. Строго структурированные линейные игры ощущаются как коридоры.",
+    affinity: ["Сова", "Лис", "Медведь"],
+    clashes: ["Сокол", "Дракон"],
+  },
+  kraken: {
+    name: "Кракен",
+    tagline: '"У меня нет жанра. У меня есть коллекция, которая не поддаётся классификации."',
+    rarity: "10% игроков",
+    desc: "Щупальца Кракена тянутся повсюду. Ты — хамелеон жанров, всеядный геймер, который отказывается вписываться в рамки. На этой неделе ты 80 часов в ARPG. Следующей — визуальная новелла. Потом гонки. Потом градостроитель. Твои вкусы обширны, переменчивы и непредсказуемы.",
+    tell: "В их библиотеке игр есть жанры, которые никто и никогда не ожидал бы увидеть на одной полке.",
+    onlyYouWould: [
+      "Перейти с уютного симулятора фермы прямо на хардкорный рогалик в один вечер — и кайфануть от обоих",
+      "Войти в трёхнедельную глубокую одержимость целым жанром, который никогда раньше не трогал, а потом полностью уйти",
+      "Отказываться называть любимую игру, потому что список меняется каждые несколько недель",
+    ],
+    shadow: "Ты бросаешь игры в момент, когда они начинают казаться рутиной — иногда прямо перед кульминацией. FOMO огромное — беклог растёт быстрее, чем ты успеваешь играть. Новизна утягивает тебя прочь раньше, чем ты достигаешь глубокого мастерства.",
+    affinity: ["Летучая мышь", "Сова", "Лис"],
+    clashes: ["Геккон", "Сокол"],
+  },
+  magpie: {
+    name: "Сорока",
+    tagline: '"Три минуты в очереди — это вполне нормальная игровая сессия."',
+    rarity: "15% игроков",
+    desc: "Сороке не нужен игровой rig, гарнитура или три часа в календаре. Ты играешь где угодно — в постели, в автобусе, во время рекламы, между встречами. Игры — спутник повседневной жизни, а не побег от неё. Тебя тянет к тому, что быстро вознаграждает, приятно нажимать и не наказывает за остановку.",
+    tell: "У них 200+ часов в мобильных играх, которые они никогда не назвали бы своим хобби.",
+    onlyYouWould: [
+      "Проходить один и тот же трёхминутный игровой цикл 40 раз за день — урывками в дороге и перерывах",
+      "Бросить игру в момент, когда она требует более 5 минут непрерывного, сосредоточенного внимания",
+      "Иметь по-настоящему впечатляющую серию в ежедневной головоломке, которая началась «просто убить 2 минуты»",
+    ],
+    shadow: "Ты редко погружаешься достаточно глубоко, чтобы добраться до самого вознаграждающего контента. Ты начал десятки игр и закончил немногие. Игры, созданные для компульсивного микровзаимодействия, нашли в твоих привычках охотного партнёра.",
+    affinity: ["Медведь", "Дельфин", "Кракен"],
+    clashes: ["Сова", "Геккон"],
+  },
+};
+
+// Russian question translations
+const QUESTIONS_RU = [
+  "После проигрыша в напряжённом матче или смерти от босса ты сразу начинаешь следующий раунд, не делая перерыва.",
+  "Ты достаёшь телефон, чтобы поиграть во время поездки, ожидания в очереди или любого свободного момента.",
+  "Когда выходит новая игра, ты читаешь гайды, патч-ноуты или обсуждения в сообществе до или во время первой сессии.",
+  "Ты звал кого-то поиграть в первую очередь для того, чтобы было с кем разделить этот опыт.",
+  "Ты игнорируешь основной квест и сначала исследуешь каждый уголок карты, прежде чем следовать сюжету.",
+  "Ты читал описания предметов, записи в журнале или лор-подсказки, которые подавляющее большинство игроков пропускают.",
+  "Когда игра становится сложной, ты продолжаешь на текущей сложности, не понижая её.",
+  "Ты провёл час или больше за одной повторяющейся петлёй — фарм материалов, гринд уровней, крафт предметов — и это не казалось рутиной.",
+  "Ты объяснял механики игры, рекомендовал игру или помогал с тактикой без просьбы.",
+  "Ты замечаешь детали в игровом мире — изменённые диалоги NPC, фоновые картины, скрытые паттерны — мимо которых другие проходят не глядя.",
+  "Ты пытался сломать или пропустить часть игры — найти шорткат, глитч или непредусмотренный путь.",
+  "Игровая сессия затянулась намного дольше запланированного, потому что ты постоянно находил повод не останавливаться.",
+  "Ты чувствуешь себя заметно более вовлечённым в игру, когда рядом есть друг или группа людей.",
+  "Дойдя до титров, ты возвращался, чтобы выполнить побочный контент, найти коллектибелы или закрыть достижения.",
+  "Ты думал о сюжете, персонажах или мире игры, занимаясь чем-то совершенно другим.",
+  "Игровые сессии кажутся тебе удовлетворительными, только если ты видишь ощутимый прогресс — левел-ап, разблокировку, победу.",
+  "Ты предпочитаешь игры, в которых веселье заключается в том, чтобы перехитрить противника или систему, а не просто быстро реагировать.",
+  "Ты организовывал игровой вечер, планировал кооп-сессию или специально собирал людей вместе поиграть.",
+  "Ты создаёшь что-то в игре — базу, ферму, город, персонажа — без всякой цели, кроме того, как это выглядит.",
+  "Если ты узнаёшь, что в игре есть богатый лор, скрытая предыстория или многослойный мир — ты больше мотивирован продолжать.",
+  "Ты перепроходил уровень, подземелье или матч специально, чтобы сделать это быстрее, чище или эффективнее.",
+  "Между игровыми сессиями ты переключаешься на совершенно другой жанр, а не возвращаешься к тому же типу.",
+  "Соревновательный элемент игры — рейтинг, очки, превосходство над другими — часть того, что заставляет тебя возвращаться.",
+  "Ты тратишь время на оформление, кастомизацию или персонализацию персонажа, базы или игрового пространства — только для себя.",
+  "Играя с другими, ты естественно берёшь на себя роль координатора или поддержки, не ожидая просьбы.",
+  "Ты искал лор-вики, фанатские теории или комментарии разработчиков об игровом мире, который любишь, — вне самой игры.",
+  "Ты берёшь телефон и открываешь игру на несколько минут, не планируя и не намереваясь проводить долгую сессию.",
+  "После тяжёлого дня ты включаешь игру специально, чтобы успокоиться или расслабиться — не ради вызова.",
+  "Ты продолжал играть в сложную игру достаточно долго, чтобы заметить реальное улучшение своих навыков.",
+  "Ты планируешь билд, колоду или стратегию заранее, а не разбираешься в процессе игры.",
+  "Ты испытывал настоящее продолжительное раздражение — не просто разочарование — когда тиммейт халтурил в игре, которая тебе важна.",
+  "Победа кажется тебе пустой или неполной, если никто этого не видел или тебе не с кем поделиться.",
+  "Тебя посещает мысль «а что если попробовать совсем по-другому?» — и ты начинаешь заново, чтобы проверить идею.",
+  "Тебя привлекают игры, вознаграждающие терпение — медленный прогресс, строительство со временем, долгосрочные проекты.",
+  "Ты смотришь стримы, видео или обзоры игр даже тогда, когда не планируешь в них играть.",
+  "Коллекционирование — предметы, скины, достижения, карточки — приносит тебе реальное удовольствие, даже если ты никогда этим не пользуешься.",
+  "Ты натыкался на что-то в игре, что тебя удивило — секретную локацию, пасхалку, шутку разработчиков — вовсе не ища этого.",
+  "Ты предпочтёшь играть в любимую игру в одиночестве, чем в посредственную — с другими людьми.",
+  "Ты отслеживаешь метрики прогресса или результатов — очки, статы, процент побед, серии — даже в играх, в которые играешь казуально.",
+  "Ты резко менял игровой жанр — например, со шутера на симулятор фермы — так что друзья были по-настоящему удивлены.",
+];
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
+  applyStrings();
+}
+
+const ARCHETYPE_PILLS_RU = [
+  "Сокол", "Волк", "Сова", "Лягушка", "Дракон", "Дельфин",
+  "Лис", "Геккон", "Медведь", "Летучая мышь", "Кракен", "Сорока",
+];
+
+function applyStrings() {
+  const s = STRINGS[currentLang];
+  const isRu = currentLang === 'ru';
+
+  document.title = s.siteTitle;
+  document.querySelector('.header-ornament').textContent = s.headerOrnament;
+  document.querySelector('h1').textContent = s.h1;
+  document.querySelector('.subtitle').textContent = s.subtitle;
+  const introParagraphs = document.querySelectorAll('.intro-card p');
+  if (introParagraphs[0]) introParagraphs[0].innerHTML = s.introP1;
+  if (introParagraphs[1]) introParagraphs[1].innerHTML = s.introP2;
+  document.querySelector('[onclick="startTest()"]').textContent = s.startBtn;
+  document.querySelector('[onclick="restart()"]').textContent = s.restartBtn;
+  document.getElementById('btn-prev').textContent = s.backBtn;
+
+  // Update archetype pills on intro screen
+  document.querySelectorAll('.archetype-pill strong').forEach((el, i) => {
+    el.textContent = isRu ? ARCHETYPE_PILLS_RU[i] : `The ${['Falcon','Wolf','Owl','Frog','Dragon','Dolphin','Fox','Gecko','Bear','Bat','Kraken','Magpie'][i]}`;
+  });
+}
+
+// ═══════════════════════════════════════════════════════
 // ARCHETYPE DEFINITIONS
 // ═══════════════════════════════════════════════════════
 const ARCHETYPES = {
@@ -797,8 +1277,15 @@ const ARCHETYPES = {
     emoji: "🦅",
     name: "The Falcon",
     tagline: '"Eyes on the prize, talons on the leaderboard."',
+    rarity: "8% of players",
     desc: "The Falcon is a precision-driven competitor whose entire gaming identity is built around measurable performance. You don't play to explore or relax — you play to WIN, and you want proof of it. Ranked modes, ladder climbs, KDA ratios, and tournament brackets are your natural language. You study replays, optimize keybinds, and can recall your peak rank from three years ago to the decimal. The thrill isn't the match itself — it's the moment the numbers go up.",
+    tell: "They check their rank or KDA before closing the game — every single time.",
     traits: ["Fiercely competitive", "Data-driven", "Mechanically precise", "Rank-obsessed", "Disciplined practice"],
+    onlyYouWould: [
+      "Queue for ranked at 2am specifically to recover from a bad loss earlier that evening",
+      "Know your win rate to one decimal place but still insist you 'don't really care about stats'",
+      "Feel genuine, lasting frustration when a teammate ignores your clearly optimal play call",
+    ],
     games: [
       { name: "Valorant / CS2", genre: "Tactical FPS" },
       { name: "League of Legends", genre: "MOBA" },
@@ -814,14 +1301,22 @@ const ARCHETYPES = {
       { label: "Exploration Urge", value: 25 },
     ],
     shadow: "A loss can ruin your day — or your week. You're prone to tilt, blame-shifting, and quietly resenting players who don't take the game as seriously. If you're not improving, you feel worthless. Be wary of rage-quitting relationships alongside matches.",
-    affinity: ["The Wolf", "The Jaguar", "The Falcon"],
+    affinity: ["The Wolf", "The Gecko", "The Frog"],
+    clashes: ["The Bear", "The Dolphin"],
   },
   wolf: {
     emoji: "🐺",
     name: "The Wolf",
     tagline: '"Alone I\'m dangerous. With my pack, I\'m unstoppable."',
+    rarity: "11% of players",
     desc: "The Wolf lives for coordinated, social play — not for solo glory, but for the electric synergy of a well-oiled squad. You remember every callout, every clutch rotation, every time a perfectly executed team strategy dismantled the enemy. You're the player who rallies teammates after a rough round, drafts the Discord server rules, and organizes practice sessions. Competition matters, but only when it's shared — a victory with your pack is worth ten solo trophies.",
+    tell: "They've named their friend group's squad, have matching profile icons, and have drafted a practice schedule at least once.",
     traits: ["Team-first mentality", "Natural communicator", "Tactical thinker", "Loyal to squad", "Leadership instinct"],
+    onlyYouWould: [
+      "Stay up until 3am not because the game is good, but because everyone is still online",
+      "Feel personally hurt when a teammate quits a session without warning",
+      "Organize a 6-person co-op run for a game that was designed for 2",
+    ],
     games: [
       { name: "Rainbow Six Siege", genre: "Tactical Co-op" },
       { name: "Deep Rock Galactic", genre: "Co-op Shooter" },
@@ -838,13 +1333,21 @@ const ARCHETYPES = {
     ],
     shadow: "Solo games feel hollow and pointless to you. Without your pack, you lose motivation fast. You can also become over-reliant on group validation — if the squad disbands or drifts apart, your gaming identity may crumble entirely.",
     affinity: ["The Falcon", "The Dolphin", "The Dragon"],
+    clashes: ["The Gecko", "The Frog"],
   },
   owl: {
     emoji: "🦉",
     name: "The Owl",
     tagline: '"The story isn\'t in the cutscenes. It\'s in every book, item description, and loading screen."',
-    desc: "The Owl is the lore devourer, the wiki architect, the player who pauses before entering a dungeon to read every piece of environmental storytelling on the walls. You're not just playing games — you're inhabiting entire worlds. You can recite the political history of fictional kingdoms. You write theories. You notice that NPC's dialogue changed after the third act. For you, a game's greatest achievement isn't its mechanics; it's the depth of its fictional reality.",
+    rarity: "9% of players",
+    desc: "The Owl is the lore devourer, the wiki architect, the player who pauses before entering a dungeon to read every piece of environmental storytelling on the walls. You're not just playing games — you're inhabiting entire worlds. You can recite the political history of fictional kingdoms. You write theories. You notice when an NPC's dialogue changed after the third act. For you, a game's greatest achievement isn't its mechanics; it's the depth of its fictional reality.",
+    tell: "They pause mid-game to read a tombstone inscription that serves absolutely no gameplay purpose.",
     traits: ["Lore completionist", "Narrative immersion", "Observational depth", "Wiki contributor", "Slow and deliberate"],
+    onlyYouWould: [
+      "Refuse to skip a single cutscene, even on a second playthrough of a game you know by heart",
+      "Read the entire in-game bestiary before encountering a single enemy it describes",
+      "Have well-reasoned opinions on lore details that subtly contradict what the developers intended",
+    ],
     games: [
       { name: "Elden Ring", genre: "Action RPG" },
       { name: "Disco Elysium", genre: "Narrative RPG" },
@@ -860,14 +1363,22 @@ const ARCHETYPES = {
       { label: "Exploration Urge", value: 82 },
     ],
     shadow: "You avoid games with shallow narratives like the plague, even when they're genuinely fun. You can spend hours in menus reading lore instead of playing. Multiplayer feels vacuous. You may have a backlog you'll never finish because each game demands weeks of full immersion.",
-    affinity: ["The Bat", "The Bear", "The Raven-class Fox"],
+    affinity: ["The Bat", "The Bear", "The Fox"],
+    clashes: ["The Frog", "The Magpie"],
   },
   frog: {
     emoji: "🐸",
     name: "The Frog",
     tagline: '"The current Any% world record is 47 minutes and I will demolish it."',
+    rarity: "5% of players",
     desc: "The Frog doesn't play games — the Frog dissects them. Where others see a fantasy world, you see a physics engine with exploitable edge cases. Speedrunning, sequence-breaking, out-of-bounds glitches, unintended mechanics: these aren't bugs to you, they're the secret language the game speaks when no one's looking. You have a deep, almost perverse love for the hidden skeleton of games. Optimization is your art form.",
+    tell: "They know the frame-perfect input window for a skip that saves exactly 8 seconds.",
     traits: ["Speedrunner DNA", "Glitch hunter", "Deeply analytical", "Anti-narrative (systems-first)", "Relentless optimizer"],
+    onlyYouWould: [
+      "Feel genuine excitement — not frustration — the moment you discover a game-breaking glitch",
+      "Skip every single cutscene without hesitation and feel absolutely nothing about it",
+      "Spend 50 hours 'completing' a game in ways the developers never intended, then move on",
+    ],
     games: [
       { name: "Super Mario Odyssey", genre: "Platformer Speedrun" },
       { name: "Celeste", genre: "Precision Platformer" },
@@ -883,14 +1394,22 @@ const ARCHETYPES = {
       { label: "Exploration Urge", value: 65 },
     ],
     shadow: "You can utterly drain the fun from a game by reducing it to a series of inputs to optimize. Friends who just want to enjoy a story playthrough find your instinct to skip dialogue and break cutscenes deeply frustrating. You may have spent 200 hours in games most people finish in 10.",
-    affinity: ["The Falcon", "The Gecko", "The Jaguar"],
+    affinity: ["The Falcon", "The Gecko", "The Fox"],
+    clashes: ["The Owl", "The Dolphin"],
   },
   dragon: {
     emoji: "🐉",
     name: "The Dragon",
     tagline: '"Level 1 is an insult. I will be gods before this week is over."',
+    rarity: "14% of players",
     desc: "The Dragon craves power — not over other players, but over the game world itself. You exist for the moment your build becomes unstoppable, when enemies that were once terrifying become ash underfoot. You grind with religious devotion, not because you have to, but because every number going up is deeply, intrinsically satisfying. Gear score, skill trees, prestige levels, endless loop progression systems — these are your cathedrals. You want to become legend.",
+    tell: "They're still playing a game they openly called 'not that good' because the gear treadmill still has one more tier.",
     traits: ["Power-progression obsessed", "Methodical grinder", "Build theorycrafting", "Prestige seeker", "Loop endurance"],
+    onlyYouWould: [
+      "Accumulate 1,000 hours in a game you consider mediocre, simply because the numbers kept going up",
+      "Feel genuine loss when a game patches away a currency or progression system you'd been grinding",
+      "Know the exact drop rate percentage for items you've been farming for weeks — from memory",
+    ],
     games: [
       { name: "Path of Exile 2", genre: "ARPG" },
       { name: "Destiny 2 (Endgame)", genre: "Looter Shooter" },
@@ -906,14 +1425,22 @@ const ARCHETYPES = {
       { label: "Exploration Urge", value: 38 },
     ],
     shadow: "You're susceptible to the most predatory game monetization in existence — loot boxes, battle passes, gear treadmills. Games without meaningful progression loops bore you within hours. You may have 1,000 hours in a game you consider 'mediocre' simply because the numbers kept going up.",
-    affinity: ["The Wolf", "The Kraken", "The Jaguar"],
+    affinity: ["The Wolf", "The Kraken", "The Bear"],
+    clashes: ["The Bat", "The Frog"],
   },
   dolphin: {
     emoji: "🐬",
     name: "The Dolphin",
     tagline: '"Best session ever. We played literally nothing special. But everyone was there."',
+    rarity: "13% of players",
     desc: "The Dolphin doesn't care if the game is good — they care if the people playing it are great. For you, games are a social venue, a way to maintain friendships and create shared memories. The actual game is almost incidental. You've had transcendent evenings playing terrible party games with the right people, and you've felt nothing playing 'masterpieces' alone. You're the one who organizes game nights, introduces people to new games, and remembers everyone's preferences.",
+    tell: "They remember the funniest moment from last game night more vividly than any single-player ending they've ever seen.",
     traits: ["Intrinsically social", "Party game maestro", "Mood-reader", "Friendship architect", "Adaptable to any genre"],
+    onlyYouWould: [
+      "Buy a game you'll never enjoy solo just because your friends have it and want to play together",
+      "Have more fun playing a mediocre game badly with people than playing a masterpiece alone",
+      "Plan an entire gaming session around who can show up, not what to play",
+    ],
     games: [
       { name: "Jackbox Party Pack", genre: "Party Game" },
       { name: "It Takes Two", genre: "Co-op Adventure" },
@@ -929,14 +1456,22 @@ const ARCHETYPES = {
       { label: "Exploration Urge", value: 40 },
     ],
     shadow: "Solo gaming can feel meaningless or even depressing for you. You may overextend yourself socially — always the organizer, always the hype person — while secretly wishing someone else would take the wheel. Your taste in games often bends toward what others want, leaving your own preferences unexplored.",
-    affinity: ["The Wolf", "The Bear", "The Dragon"],
+    affinity: ["The Wolf", "The Bear", "The Magpie"],
+    clashes: ["The Gecko", "The Frog"],
   },
   fox: {
     emoji: "🦊",
     name: "The Fox",
     tagline: '"I had the answer before you finished explaining the puzzle."',
+    rarity: "7% of players",
     desc: "The Fox is drawn to games like a key is drawn to a lock — they exist to solve things. Strategy, deduction, resource management, lateral thinking: these are not obstacles between you and the fun, they ARE the fun. You love the click of a plan coming together, the elegant solution to a seemingly impossible problem. You read the rules thoroughly before playing. You've probably found unintended solutions in games that broke the designer's intentions, and you were proud of it.",
+    tell: "They pause a co-op session to explain the optimal routing strategy while everyone else is already trying to play.",
     traits: ["Puzzle-solving instinct", "Strategic depth seeker", "Resource manager", "Systems thinker", "Planful, deliberate"],
+    onlyYouWould: [
+      "Solve a puzzle without looking it up and feel quietly smug about it for days",
+      "Build a voluntary spreadsheet for a game's crafting economy because it was faster than the wiki",
+      "Replay a strategy game's first hour repeatedly just to test different opening moves",
+    ],
     games: [
       { name: "Slay the Spire", genre: "Deckbuilder Roguelike" },
       { name: "Return of the Obra Dinn", genre: "Deduction Mystery" },
@@ -953,19 +1488,27 @@ const ARCHETYPES = {
     ],
     shadow: "Pure action games with no strategic depth bore you quickly. You can over-think cooperative games, turning casual sessions into planning sessions that exhaust your teammates. Occasionally your need to 'solve' everything removes spontaneity and joy from the experience.",
     affinity: ["The Owl", "The Frog", "The Bat"],
+    clashes: ["The Magpie", "The Dolphin"],
   },
   gecko: {
     emoji: "🦎",
     name: "The Gecko",
     tagline: '"I\'ve done this boss 70 times. I\'m not frustrated. I\'m learning."',
+    rarity: "6% of players",
     desc: "The Gecko is defined by one thing above all: mastery. Not progression, not narrative, not social — pure, uncut mechanical mastery. You want games that demand everything from you, that punish sloppiness and reward precision. You're the player who learned every frame of a boss pattern, who practices movement tech in empty rooms, who could write an essay on the feel of a dodge roll. The harder the game, the more you love it.",
+    tell: "They practice in an empty room — no enemies, no objectives — for 20 minutes before attempting the boss again.",
     traits: ["Mastery-obsessed", "High pain tolerance", "Precision-first", "Patience of stone", "Anti-hand-holding"],
+    onlyYouWould: [
+      "Turn off music and reduce resolution specifically to minimize input lag in a single-player game",
+      "Feel bored by a game after 3 attempts if it never demanded your full concentration",
+      "Describe a boss as 'fair' with genuine conviction after dying to it 60 times",
+    ],
     games: [
       { name: "Sekiro: Shadows Die Twice", genre: "Action / Precision" },
-      { name: "Hollow Knight: Silksong", genre: "Precision Platformer" },
+      { name: "Hollow Knight", genre: "Precision Platformer" },
       { name: "Hades II", genre: "Action Roguelike" },
       { name: "Cuphead", genre: "Run & Gun" },
-      { name: "Elden Ring (Dlc bosses)", genre: "Soulslike" },
+      { name: "Elden Ring (DLC bosses)", genre: "Soulslike" },
       { name: "Dead Cells", genre: "Roguelike Metroidvania" },
     ],
     spectrums: [
@@ -976,13 +1519,21 @@ const ARCHETYPES = {
     ],
     shadow: "You have near-zero tolerance for games that feel 'too easy' and will often dismiss beloved games as shallow. You can come across as gatekeeping or elitist about difficulty. Casual gaming sessions with family or less-experienced players can feel torturous.",
     affinity: ["The Frog", "The Falcon", "The Bat"],
+    clashes: ["The Magpie", "The Dolphin"],
   },
   bear: {
     emoji: "🐻",
     name: "The Bear",
     tagline: '"I built an entire village today. Nobody died. It was perfect."',
+    rarity: "16% of players",
     desc: "The Bear doesn't game to prove anything. You play to be cozy, to sink into a gentle world that asks nothing of you but presence. Farming sims, city builders, life games, creative sandboxes — you have a deep need for the meditative loop: plant, grow, harvest, repeat. Games are your rest state. The most stressful thing you'll tolerate is a light time-pressure mechanic, and even that feels like a lot. Your game library is a museum of tranquility.",
+    tell: "They're on hour four decorating their in-game home with furniture that no other player will ever see.",
     traits: ["Cozy-first philosophy", "Creative sandbox lover", "Completionist (gently)", "Long-haul player", "Anti-competitive"],
+    onlyYouWould: [
+      "Restart a cozy game from scratch just to relive the calming early hours",
+      "Turn down a multiplayer invitation because your in-game farm genuinely needs tending",
+      "Have a dedicated gaming playlist, perfectly curated to match the mood of your current farming sim",
+    ],
     games: [
       { name: "Stardew Valley", genre: "Farming Sim" },
       { name: "Animal Crossing: NH", genre: "Life Sim" },
@@ -999,13 +1550,21 @@ const ARCHETYPES = {
     ],
     shadow: "You can mistake comfort for depth, returning to the same cozy loops for years while avoiding experiences that might genuinely challenge or change you. Progress in your games is often measured in aesthetic satisfaction rather than growth, and the line between relaxation and avoidance can blur.",
     affinity: ["The Dolphin", "The Owl", "The Fox"],
+    clashes: ["The Falcon", "The Gecko"],
   },
   bat: {
     emoji: "🦇",
     name: "The Bat",
     tagline: '"I don\'t follow the critical path. There is no critical path."',
+    rarity: "7% of players",
     desc: "The Bat is a free-form explorer — you navigate by echolocation, bouncing off the dark walls of game worlds to find what no one else noticed. You're not doing quests; you're surveying territory. You climb the mountain just to see what's behind it. You read every environmental clue. You ignore the main story until you've exhausted every inch of the map. Open worlds weren't made for you — you were made for them.",
+    tell: "They've completed 30% of the main story after 60 hours of play, and they consider this to be good progress.",
     traits: ["Compulsive map revealer", "Off-path wanderer", "Discoverer of secrets", "Environment reader", "Anti-rush"],
+    onlyYouWould: [
+      "Climb a mountain in-game with no objective, purely to see what the view looks like from the top",
+      "Feel mild but real anxiety in games with invisible walls or loading corridors disguised as caves",
+      "Intentionally get lost in a new area just to experience the satisfaction of finding your way back",
+    ],
     games: [
       { name: "The Elder Scrolls V: Skyrim", genre: "Open World RPG" },
       { name: "Red Dead Redemption 2", genre: "Open World" },
@@ -1022,19 +1581,27 @@ const ARCHETYPES = {
     ],
     shadow: "You can get lost — literally and figuratively — and never finish games. Your backlog is enormous. You sometimes never see endings because the journey was enough. Tightly structured linear games feel like corridors and make you anxious. You may spend 80 hours 'exploring' and finish 20% of the story.",
     affinity: ["The Owl", "The Fox", "The Bear"],
+    clashes: ["The Falcon", "The Dragon"],
   },
   kraken: {
     emoji: "🦑",
     name: "The Kraken",
     tagline: '"I don\'t have a genre. I have a collection that defies categorization."',
+    rarity: "10% of players",
     desc: "The Kraken's tentacles reach everywhere. You are the genre chameleon, the omnivorous gamer who refuses to be boxed in. One week you're 80 hours deep in an ARPG. The next, a visual novel. Then a racing game. Then a city builder. Your tastes are vast, shifting, and impossible to predict. You don't have a favorite genre — you have phases. What unifies all your sessions is a search for something that feels genuinely different, a new sensation the medium hasn't given you yet.",
+    tell: "Their game library contains genres that no one would ever expect to find on the same shelf.",
     traits: ["Genre-fluid", "Novelty seeker", "Broad tastes", "Trend-agnostic", "Experience over mastery"],
+    onlyYouWould: [
+      "Move directly from a cozy farming game to a hardcore roguelike in the same evening, and enjoy both",
+      "Enter a deep 3-week obsession with an entire genre you'd never touched before, then leave it completely",
+      "Refuse to name a single favorite game because the list changes every few weeks",
+    ],
     games: [
       { name: "Weird indie games (all of them)", genre: "Everything" },
       { name: "Hades + Stardew + Elden Ring", genre: "Genre Omnivore" },
       { name: "Death Stranding", genre: "Genre-defying" },
       { name: "Disco Elysium + Monster Hunter", genre: "The whole shelf" },
-      { name: "Whatever is surprising", genre: "Current obsession" },
+      { name: "Whatever surprised me last week", genre: "Current obsession" },
       { name: "Inscryption", genre: "Meta/Experimental" },
     ],
     spectrums: [
@@ -1045,215 +1612,446 @@ const ARCHETYPES = {
     ],
     shadow: "You abandon games the moment they feel routine, sometimes right before the payoff. Your FOMO is immense — the backlog grows faster than you can play. You may never achieve deep mastery of anything because novelty pulls you away before you reach it. You're the 'jack of all games, master of none.'",
     affinity: ["The Bat", "The Owl", "The Fox"],
+    clashes: ["The Gecko", "The Falcon"],
   },
-  jaguar: {
-    emoji: "🐆",
-    name: "The Jaguar",
-    tagline: '"Check your stats. Check my stats. Now think about what that means."',
-    desc: "The Jaguar operates on a precise mixture of competitive fire and self-betterment. You're not just trying to beat others — you're trying to beat your own limits, to become a more complete player. You study the meta but adapt it to your own style. You care deeply about mechanical excellence AND strategic innovation. You record yourself, review your play, and have opinions on game balance that could fill a blog. You're the player other players ask how to improve.",
-    traits: ["Meta-aware", "Self-improvement drive", "Analytical mid-match", "Innovative within systems", "Balanced aggression"],
+  magpie: {
+    emoji: "🐦",
+    name: "The Magpie",
+    tagline: '"Three minutes in a waiting room is a perfectly good gaming session."',
+    rarity: "15% of players",
+    desc: "The Magpie doesn't need a gaming rig, a headset, or three hours blocked on the calendar. You play wherever you are — in bed, on the bus, during ads, between meetings. Games are a companion to daily life, not an escape from it. You're drawn to things that reward quickly, feel good to tap, and don't punish you for stopping mid-session. You might not call yourself 'a gamer' — but you've racked up more hours than most people who do, one stolen moment at a time.",
+    tell: "They've put 200+ hours into mobile games they would never once describe as their hobby.",
+    traits: ["Session-first mindset", "Quick-reward seeker", "Plays everywhere", "Casual but consistent", "Low-friction explorer"],
+    onlyYouWould: [
+      "Play the same 3-minute game loop 40 times across a single day, scattered through commutes and breaks",
+      "Abandon a game the moment it asks for more than 5 minutes of uninterrupted, undivided attention",
+      "Have a genuinely impressive streak on a daily puzzle game that started 'just to kill 2 minutes'",
+    ],
     games: [
-      { name: "Dota 2", genre: "MOBA" },
-      { name: "Chess.com (rapid)", genre: "Abstract Strategy" },
-      { name: "Guilty Gear: Strive", genre: "Fighting" },
-      { name: "Apex Legends", genre: "Battle Royale" },
-      { name: "Dwarf Fortress", genre: "Deep Simulation" },
-      { name: "Age of Empires IV", genre: "RTS" },
+      { name: "Candy Crush / Match-3", genre: "Mobile Puzzle" },
+      { name: "Wordle / NYT Games", genre: "Daily Puzzle" },
+      { name: "Pokémon GO", genre: "Augmented Reality" },
+      { name: "Clash Royale", genre: "Mobile Strategy" },
+      { name: "Monument Valley", genre: "Puzzle Adventure" },
+      { name: "Balatro / Vampire Survivors", genre: "Approachable Roguelike" },
     ],
     spectrums: [
-      { label: "Competitive Drive", value: 88 },
-      { label: "Social Play", value: 50 },
+      { label: "Competitive Drive", value: 22 },
+      { label: "Social Play", value: 55 },
       { label: "Story Immersion", value: 28 },
-      { label: "Exploration Urge", value: 45 },
+      { label: "Exploration Urge", value: 38 },
     ],
-    shadow: "Your constant self-analysis can paralyze you with perfectionism. You've probably quit games you loved because the community or meta felt unhealthy. You can alienate teammates by treating casual sessions like scrimmages. Balance review and play or you'll overthink yourself out of joy.",
-    affinity: ["The Falcon", "The Wolf", "The Gecko"],
+    shadow: "You rarely go deep enough to reach a game's most rewarding content. You've started dozens of games and finished few. Your gaming is reactive rather than intentional — you play because it's there. Games engineered for compulsive micro-engagement have found a willing partner in your habits, and the line between casual fun and an invisible time-sink can blur before you notice.",
+    affinity: ["The Bear", "The Dolphin", "The Kraken"],
+    clashes: ["The Owl", "The Gecko"],
   },
 };
 
 // ═══════════════════════════════════════════════════════
-// QUESTIONS — each answer scores archetype points
-// Format: { text, answers: [{ text, scores: {archetype: pts} }] }
+// QUESTIONS — situational statements scored on a 5-point scale
+// answers[0]=Never  [1]=Rarely  [2]=Sometimes  [3]=Often  [4]=Always
 // ═══════════════════════════════════════════════════════
+const SCALE_LABELS = ["Never", "Rarely", "Sometimes", "Often", "Always"];
+
 const QUESTIONS = [
   {
-    text: "You sit down to game with no obligations tonight. What's the first thing you feel?",
+    text: "After losing a close match or dying to a boss, you start another round immediately rather than taking a break.",
     answers: [
-      { text: "The itch to queue ranked and climb.", scores: { falcon: 3, jaguar: 2 } },
-      { text: "Relief — finally time to sink into a world and exist in it.", scores: { owl: 3, bear: 2 } },
-      { text: "The urge to call your friends and get everyone online.", scores: { wolf: 3, dolphin: 2 } },
-      { text: "Excitement about what strange new game to try tonight.", scores: { kraken: 3, bat: 2 } },
+      { scores: { bear: 2, dolphin: 1 } },
+      { scores: { bear: 1 } },
+      { scores: {} },
+      { scores: { falcon: 2, gecko: 1 } },
+      { scores: { falcon: 3, gecko: 2 } },
     ]
   },
   {
-    text: "You've just started a new RPG. You immediately:",
+    text: "You pull out your phone to play a game during a commute, a wait in line, or any idle moment in the day.",
     answers: [
-      { text: "Open every container, read every scroll, and talk to every NPC before leaving the starting area.", scores: { owl: 3, bat: 2 } },
-      { text: "Look up the optimal starting build and plan your progression tree.", scores: { dragon: 3, jaguar: 2 } },
-      { text: "Play it naturally, guided by vibes and whatever feels exciting.", scores: { kraken: 2, bear: 2 } },
-      { text: "Test the movement mechanics to see if anything interesting breaks.", scores: { frog: 3, gecko: 2 } },
+      { scores: { gecko: 2, dragon: 1 } },
+      { scores: { bat: 1 } },
+      { scores: {} },
+      { scores: { magpie: 2, bear: 1 } },
+      { scores: { magpie: 3, dolphin: 1 } },
     ]
   },
   {
-    text: "A challenging boss has killed you twelve times. You:",
+    text: "When a new game drops, you look up guides, patch notes, or community discussions before or during your first session.",
     answers: [
-      { text: "Feel yourself getting better with each attempt — this is exactly what you wanted.", scores: { gecko: 3, jaguar: 2 } },
-      { text: "Look up the pattern, optimize your approach, and hit the run.", scores: { frog: 3, falcon: 2 } },
-      { text: "Ask a friend to co-op it with you — more fun that way anyway.", scores: { wolf: 3, dolphin: 2 } },
-      { text: "Enable assists or lower difficulty — you're here for the story, not punishment.", scores: { owl: 2, bear: 2 } },
+      { scores: { kraken: 1, magpie: 1 } },
+      { scores: { bear: 1 } },
+      { scores: {} },
+      { scores: { fox: 2, dragon: 1 } },
+      { scores: { fox: 3, owl: 2 } },
     ]
   },
   {
-    text: "What does a 'perfect gaming session' look like to you?",
+    text: "You've invited someone to play a game primarily so you'd have someone to share the experience with.",
     answers: [
-      { text: "Grinding a build until it's completely overpowered, then watching it melt everything.", scores: { dragon: 3, gecko: 1 } },
-      { text: "Discovering a secret area or piece of lore nobody else seems to know about.", scores: { bat: 3, owl: 2 } },
-      { text: "Climbing two full divisions in ranked with a clean performance.", scores: { falcon: 3, jaguar: 2 } },
-      { text: "Laughing until you cry at something absurd with your group.", scores: { dolphin: 3, wolf: 2 } },
+      { scores: { frog: 1, bat: 1 } },
+      { scores: { gecko: 1 } },
+      { scores: {} },
+      { scores: { wolf: 2, dolphin: 2 } },
+      { scores: { wolf: 3, dolphin: 3 } },
     ]
   },
   {
-    text: "Your honest relationship with the game's story/lore:",
+    text: "You ignore the main quest or objective and explore every corner of the map before following the story.",
     answers: [
-      { text: "I absorb every fragment. I theorize. I post about it.", scores: { owl: 3, bat: 2 } },
-      { text: "It matters if it's good, but I skip bad dialogue without guilt.", scores: { kraken: 2, jaguar: 1 } },
-      { text: "Honestly I skip most of it to get back to the gameplay loop.", scores: { dragon: 2, frog: 2, gecko: 2 } },
-      { text: "Story IS the gameplay. A game without narrative is just a screensaver.", scores: { owl: 3, bear: 2 } },
+      { scores: { falcon: 2, magpie: 1 } },
+      { scores: { dragon: 1 } },
+      { scores: {} },
+      { scores: { bat: 2, owl: 1 } },
+      { scores: { bat: 3, owl: 1 } },
     ]
   },
   {
-    text: "A new multiplayer game drops. You:",
+    text: "You've read item descriptions, journal entries, or lore tooltips that the vast majority of players skip entirely.",
     answers: [
-      { text: "Fire it up solo, treat it like a puzzle, and find the dominant strategy before anyone else.", scores: { fox: 3, frog: 2 } },
-      { text: "Immediately organize your squad to play it together.", scores: { wolf: 3, dolphin: 3 } },
-      { text: "Dive in competitively, determined to rank up before the meta is solved.", scores: { falcon: 3, jaguar: 2 } },
-      { text: "Watch some gameplay to decide if it has enough depth to bother with.", scores: { gecko: 2, owl: 2 } },
+      { scores: { frog: 2, magpie: 1 } },
+      { scores: { frog: 1 } },
+      { scores: {} },
+      { scores: { owl: 2, bat: 1 } },
+      { scores: { owl: 3, bat: 2 } },
     ]
   },
   {
-    text: "What kind of progression system excites you most?",
+    text: "When a game gets hard, you push through on the current difficulty rather than adjusting it down.",
     answers: [
-      { text: "Gear with meaningful stats that compound into a powerful build.", scores: { dragon: 3, jaguar: 2 } },
-      { text: "Skill-based mastery — getting better, not getting bigger numbers.", scores: { gecko: 3, falcon: 2 } },
-      { text: "Unlocking lore, codex entries, and narrative progression.", scores: { owl: 3, bat: 2 } },
-      { text: "Cosmetic and world-building — improving my space/character aesthetically.", scores: { bear: 3, dolphin: 2 } },
+      { scores: { magpie: 2, bear: 1 } },
+      { scores: { bear: 1 } },
+      { scores: {} },
+      { scores: { gecko: 2, falcon: 1 } },
+      { scores: { gecko: 3, frog: 1 } },
     ]
   },
   {
-    text: "You're given a 30-hour sandbox open world game. You:",
+    text: "You've spent an hour or more on one repetitive loop — farming materials, grinding levels, crafting items — without it feeling like a chore.",
     answers: [
-      { text: "Reveal every inch of the map before touching the critical path.", scores: { bat: 3, owl: 2 } },
-      { text: "Rush the main story and come back for side content if it's compelling.", scores: { falcon: 2, frog: 2 } },
-      { text: "Build a base/settlement and ignore quests entirely.", scores: { bear: 3, dragon: 2 } },
-      { text: "Find every exploit and see how fast you can see the credits.", scores: { frog: 3, gecko: 2 } },
+      { scores: { bat: 1, kraken: 1 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { dragon: 2, bear: 1 } },
+      { scores: { dragon: 3, bear: 2 } },
     ]
   },
   {
-    text: "Your friends describe your gaming persona as:",
+    text: "You've explained game mechanics, recommended a title, or walked someone through strategy without them asking.",
     answers: [
-      { text: '"The one who always knows what to play next and makes it happen."', scores: { dolphin: 3, wolf: 2 } },
-      { text: '"The one who has an insane amount of hours and somehow still knows obscure secrets."', scores: { owl: 3, bat: 2 } },
-      { text: '"The one who\'s terrifyingly good and slightly scary to play against."', scores: { falcon: 3, jaguar: 3 } },
-      { text: '"The one who takes forever because they\'re exploring some random cave for two hours."', scores: { bat: 3, bear: 2 } },
+      { scores: { bat: 1, frog: 1 } },
+      { scores: { gecko: 1 } },
+      { scores: {} },
+      { scores: { wolf: 2, dolphin: 2 } },
+      { scores: { wolf: 3, dolphin: 2 } },
     ]
   },
   {
-    text: "Losing in a competitive match makes you feel:",
+    text: "You notice details in a game world — a changed NPC dialogue, a background painting, a hidden symbol — that others walk straight past.",
     answers: [
-      { text: "Fired up. I analyze what went wrong and immediately queue again.", scores: { falcon: 3, jaguar: 3 } },
-      { text: "Curious — what did they do that I didn't? Can I reverse-engineer it?", scores: { fox: 3, jaguar: 2 } },
-      { text: "Disappointed, but mostly because it affected the group vibe.", scores: { wolf: 3, dolphin: 2 } },
-      { text: "Relieved to go back to single-player. This is why I avoid competitive.", scores: { bear: 2, owl: 2 } },
+      { scores: { falcon: 1, magpie: 1 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { owl: 2, bat: 2 } },
+      { scores: { owl: 3, bat: 2 } },
     ]
   },
   {
-    text: "Which statement resonates most deeply?",
+    text: "You've tried to break or skip a section of a game — finding a shortcut, a glitch, or an unintended path.",
     answers: [
-      { text: '"A game without challenge is a screensaver."', scores: { gecko: 3, falcon: 2 } },
-      { text: '"A game without wonder is just a task list."', scores: { bat: 3, owl: 2 } },
-      { text: '"A game without people is just a very expensive way to be alone."', scores: { dolphin: 3, wolf: 2 } },
-      { text: '"A game without systems is a movie with worse cinematography."', scores: { fox: 3, frog: 2 } },
+      { scores: { owl: 2, bear: 1 } },
+      { scores: { owl: 1 } },
+      { scores: {} },
+      { scores: { frog: 2, gecko: 1 } },
+      { scores: { frog: 3, gecko: 1 } },
     ]
   },
   {
-    text: "You've played 10 hours of a beloved game and it's still not clicking. You:",
+    text: "A game session runs much longer than you planned because you kept finding reasons not to stop.",
     answers: [
-      { text: "Push through. It'll click. I've seen the community — they're clearly getting something I'm not yet.", scores: { gecko: 3, owl: 2 } },
-      { text: "Pivot immediately to something new. Life is short and the backlog is long.", scores: { kraken: 3, dolphin: 2 } },
-      { text: "Try a different approach — maybe I've been playing it wrong strategically.", scores: { fox: 3, jaguar: 2 } },
-      { text: "Ask friends if it's worth continuing. Their consensus matters.", scores: { wolf: 2, dolphin: 2 } },
+      { scores: { magpie: 2 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { owl: 2, dragon: 1 } },
+      { scores: { dragon: 3, gecko: 1 } },
     ]
   },
   {
-    text: "The gaming accomplishment you're most proud of:",
+    text: "You feel noticeably more engaged in a game when a friend or group of people is playing alongside you.",
     answers: [
-      { text: "Reaching peak rank / a world record time / top ladder position.", scores: { falcon: 3, jaguar: 2 } },
-      { text: "100% completion — every achievement, every secret, every ending.", scores: { owl: 3, gecko: 2, dragon: 2 } },
-      { text: "Building something in-game that other people genuinely appreciated.", scores: { bear: 3, dolphin: 2 } },
-      { text: "Finishing a game that genuinely changed how I see the world.", scores: { owl: 3, kraken: 2 } },
+      { scores: { gecko: 2, frog: 1 } },
+      { scores: { bat: 1 } },
+      { scores: {} },
+      { scores: { wolf: 2, dolphin: 2 } },
+      { scores: { wolf: 3, dolphin: 3 } },
     ]
   },
   {
-    text: "Your ideal co-op dynamic:",
+    text: "After reaching the credits, you go back to complete side content, collectibles, or achievements you missed.",
     answers: [
-      { text: "Clear roles, clear communication, zero wasted actions. We win this.", scores: { wolf: 3, falcon: 2 } },
-      { text: "Chaos and improv — the fun is in the unexpected moments.", scores: { dolphin: 3, kraken: 2 } },
-      { text: "I explain the mechanics; they follow. Respectfully.", scores: { fox: 3, jaguar: 2 } },
-      { text: "You explore that wing, I'll explore this one. Compare notes after.", scores: { bat: 3, owl: 2 } },
+      { scores: { kraken: 2, magpie: 1 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { dragon: 2, bat: 1 } },
+      { scores: { dragon: 3, owl: 2 } },
     ]
   },
   {
-    text: "Which in-game notification makes your heart race?",
+    text: "You find yourself thinking about a game's story, characters, or world while doing something completely unrelated.",
     answers: [
-      { text: "NEW RANK ACHIEVED", scores: { falcon: 3, jaguar: 2 } },
-      { text: "SECRET AREA DISCOVERED", scores: { bat: 3, owl: 2 } },
-      { text: "LEGENDARY DROP ACQUIRED", scores: { dragon: 3 } },
-      { text: "PERSONAL BEST TIME", scores: { frog: 3, gecko: 2 } },
+      { scores: { magpie: 2, frog: 1 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { owl: 2, bat: 1 } },
+      { scores: { owl: 3, bat: 2 } },
     ]
   },
   {
-    text: "On a gaming night alone, you tend to:",
+    text: "Your game sessions feel satisfying only when you've made visible progress — leveled up, unlocked something, or won.",
     answers: [
-      { text: "Play whatever genre you haven't tried in a while.", scores: { kraken: 3, bat: 2 } },
-      { text: "Return to a comfort game that you know deeply and love.", scores: { bear: 3, dragon: 2 } },
-      { text: "Practice something specific — a technique, a boss, a build.", scores: { gecko: 3, falcon: 2 } },
-      { text: "Start a new narrative game and commit to experiencing it fully.", scores: { owl: 3, fox: 2 } },
+      { scores: { bat: 2, bear: 1 } },
+      { scores: { bat: 1 } },
+      { scores: {} },
+      { scores: { dragon: 2, falcon: 1 } },
+      { scores: { dragon: 3, magpie: 1 } },
     ]
   },
   {
-    text: "The worst thing a game can do:",
+    text: "You prefer a game where the fun comes from outsmarting an opponent or the system, not from reacting quickly.",
     answers: [
-      { text: "Have unbalanced, unfair competitive design.", scores: { falcon: 3, jaguar: 2 } },
-      { text: "Have no lore, no depth, no world to get lost in.", scores: { owl: 3, bat: 2 } },
-      { text: "Not let me play with friends or be played only online.", scores: { dolphin: 3, wolf: 3 } },
-      { text: "Artificially pad time instead of offering real depth.", scores: { frog: 3, gecko: 2 } },
+      { scores: { gecko: 2, falcon: 1 } },
+      { scores: { falcon: 1 } },
+      { scores: {} },
+      { scores: { fox: 2, frog: 1 } },
+      { scores: { fox: 3, owl: 1 } },
     ]
   },
   {
-    text: "Your relationship with game difficulty settings:",
+    text: "You've organized a game night, scheduled a co-op session, or actively rallied others to play together.",
     answers: [
-      { text: "Always hardest available. If there's a higher custom option, I'm using it.", scores: { gecko: 3, falcon: 2 } },
-      { text: "Normal, but I'll turn it up if the game starts to feel routine.", scores: { jaguar: 2, wolf: 2 } },
-      { text: "Whatever lets me experience the story without stress.", scores: { bear: 3, owl: 2 } },
-      { text: "Difficulty is just a variable in the optimization equation.", scores: { frog: 3, fox: 2 } },
+      { scores: { gecko: 1, frog: 1 } },
+      { scores: { bat: 1 } },
+      { scores: {} },
+      { scores: { wolf: 2, dolphin: 2 } },
+      { scores: { wolf: 3, dolphin: 3 } },
     ]
   },
   {
-    text: "When you think about gaming, your emotional relationship is:",
+    text: "You build or create something in a game — a base, a farm, a city, a character — with no goal beyond how it looks or feels.",
     answers: [
-      { text: "Passion with a tinge of obsession. I think about it when I'm not playing.", scores: { dragon: 2, gecko: 2, falcon: 2 } },
-      { text: "Pure joy and comfort — it's my happy place, my reset button.", scores: { bear: 3, dolphin: 2 } },
-      { text: "Intellectual fascination — games are systems that demand to be understood.", scores: { fox: 3, frog: 2 } },
-      { text: "A sense of wonder that certain games still manage to surprise me.", scores: { kraken: 3, bat: 2, owl: 2 } },
+      { scores: { falcon: 2, frog: 1 } },
+      { scores: { falcon: 1 } },
+      { scores: {} },
+      { scores: { bear: 2, bat: 1 } },
+      { scores: { bear: 3, kraken: 1 } },
     ]
   },
   {
-    text: "You find an old copy of a classic game you've never played. You feel:",
+    text: "Discovering that a game has rich lore, hidden backstory, or layered world-building makes you more motivated to keep playing.",
     answers: [
-      { text: "Curious whether it still holds up mechanically — let's test it.", scores: { gecko: 2, frog: 2 } },
-      { text: "Excited to experience a piece of gaming history and absorb its world.", scores: { owl: 3, bat: 2 } },
-      { text: "Like you've found treasure — another genre or experience you haven't tasted.", scores: { kraken: 3, bear: 2 } },
-      { text: "Mild interest — you'll play it if a friend wants to try it together.", scores: { dolphin: 2, wolf: 2 } },
+      { scores: { frog: 2, magpie: 1 } },
+      { scores: { frog: 1 } },
+      { scores: {} },
+      { scores: { owl: 2, bat: 1 } },
+      { scores: { owl: 3, bat: 2 } },
+    ]
+  },
+  {
+    text: "You replay a level, dungeon, or match specifically to see if you can do it faster, cleaner, or more efficiently.",
+    answers: [
+      { scores: { dolphin: 1, bear: 1 } },
+      { scores: { bear: 1 } },
+      { scores: {} },
+      { scores: { frog: 2, gecko: 1 } },
+      { scores: { frog: 3, falcon: 2 } },
+    ]
+  },
+  {
+    text: "Between gaming sessions, you switch to a completely different game genre rather than returning to one type.",
+    answers: [
+      { scores: { dragon: 2, falcon: 1 } },
+      { scores: { falcon: 1 } },
+      { scores: {} },
+      { scores: { kraken: 2, bat: 1 } },
+      { scores: { kraken: 3, magpie: 1 } },
+    ]
+  },
+  {
+    text: "The competitive element of a game — ranking, scoring, outplaying others — is part of what motivates you to keep coming back.",
+    answers: [
+      { scores: { bear: 2, owl: 1 } },
+      { scores: { bear: 1 } },
+      { scores: {} },
+      { scores: { falcon: 2, wolf: 1 } },
+      { scores: { falcon: 3, gecko: 2 } },
+    ]
+  },
+  {
+    text: "You spend time decorating, customizing, or personalizing your character, base, or game space — just for your own satisfaction.",
+    answers: [
+      { scores: { frog: 2, falcon: 1 } },
+      { scores: { falcon: 1 } },
+      { scores: {} },
+      { scores: { bear: 2, bat: 1 } },
+      { scores: { bear: 3, dolphin: 1 } },
+    ]
+  },
+  {
+    text: "When playing with others, you naturally shift into a coordinator or support role without being asked.",
+    answers: [
+      { scores: { gecko: 1, frog: 1 } },
+      { scores: { bat: 1 } },
+      { scores: {} },
+      { scores: { wolf: 3, dolphin: 1 } },
+      { scores: { wolf: 3, dolphin: 2 } },
+    ]
+  },
+  {
+    text: "You've looked up lore wikis, fan theories, or developer commentary for a game world you love — outside of the game itself.",
+    answers: [
+      { scores: { frog: 2, magpie: 1 } },
+      { scores: { frog: 1 } },
+      { scores: {} },
+      { scores: { owl: 3, bat: 1 } },
+      { scores: { owl: 3, kraken: 1 } },
+    ]
+  },
+  {
+    text: "You pick up your phone and open a game for just a few minutes, without planning or intending a longer session.",
+    answers: [
+      { scores: { gecko: 2, dragon: 1 } },
+      { scores: { bat: 1 } },
+      { scores: {} },
+      { scores: { magpie: 2, bear: 1 } },
+      { scores: { magpie: 3, kraken: 1 } },
+    ]
+  },
+  {
+    text: "After a rough day, you turn on a game specifically to calm down or decompress — not for challenge or competition.",
+    answers: [
+      { scores: { falcon: 1, frog: 1 } },
+      { scores: { gecko: 1 } },
+      { scores: {} },
+      { scores: { bear: 2, magpie: 1 } },
+      { scores: { bear: 3, dolphin: 1 } },
+    ]
+  },
+  {
+    text: "You've stuck with a hard game long enough to notice yourself meaningfully improving at it.",
+    answers: [
+      { scores: { magpie: 2, bear: 1 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { gecko: 2, frog: 1 } },
+      { scores: { gecko: 3, falcon: 1 } },
+    ]
+  },
+  {
+    text: "You plan your build, deck, or strategy in advance rather than figuring things out as you go.",
+    answers: [
+      { scores: { dolphin: 1, magpie: 1 } },
+      { scores: { bear: 1 } },
+      { scores: {} },
+      { scores: { fox: 2, dragon: 1 } },
+      { scores: { fox: 3, frog: 2 } },
+    ]
+  },
+  {
+    text: "You've felt genuine, lasting frustration — not just disappointment — when a teammate played carelessly in a game you cared about.",
+    answers: [
+      { scores: { dolphin: 2, bear: 1 } },
+      { scores: { dolphin: 1 } },
+      { scores: {} },
+      { scores: { wolf: 1, falcon: 2 } },
+      { scores: { falcon: 3, wolf: 1 } },
+    ]
+  },
+  {
+    text: "A victory feels hollow or incomplete if nobody else witnessed it or if you can't tell someone about it.",
+    answers: [
+      { scores: { gecko: 2, frog: 1 } },
+      { scores: { frog: 1 } },
+      { scores: {} },
+      { scores: { wolf: 2, dolphin: 2 } },
+      { scores: { dolphin: 3, wolf: 2 } },
+    ]
+  },
+  {
+    text: "You find yourself thinking 'what if I tried this completely differently?' and starting over to test the idea.",
+    answers: [
+      { scores: { magpie: 2, dolphin: 1 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { frog: 2, fox: 1 } },
+      { scores: { frog: 3, fox: 2 } },
+    ]
+  },
+  {
+    text: "You're drawn to games that reward patience — slow progression, building over time, or long-term investment.",
+    answers: [
+      { scores: { falcon: 2, magpie: 1 } },
+      { scores: { falcon: 1 } },
+      { scores: {} },
+      { scores: { bear: 2, dragon: 1 } },
+      { scores: { bear: 3, dragon: 2 } },
+    ]
+  },
+  {
+    text: "You watch gameplay videos, streams, or reviews of games even when you have no plans to play them.",
+    answers: [
+      { scores: { bat: 1, gecko: 1 } },
+      { scores: { bat: 1 } },
+      { scores: {} },
+      { scores: { owl: 2, wolf: 1 } },
+      { scores: { owl: 2, kraken: 2 } },
+    ]
+  },
+  {
+    text: "The act of collecting — items, skins, achievements, cards — gives you real satisfaction even if you never use them.",
+    answers: [
+      { scores: { frog: 2, gecko: 1 } },
+      { scores: { frog: 1 } },
+      { scores: {} },
+      { scores: { dragon: 2, magpie: 1 } },
+      { scores: { dragon: 3, bear: 1 } },
+    ]
+  },
+  {
+    text: "You've stumbled onto something in a game that surprised you — a secret area, an Easter egg, a developer joke — that you were not looking for.",
+    answers: [
+      { scores: { falcon: 1, magpie: 1 } },
+      { scores: { magpie: 1 } },
+      { scores: {} },
+      { scores: { bat: 2, owl: 1 } },
+      { scores: { bat: 3, owl: 2 } },
+    ]
+  },
+  {
+    text: "You'd rather play a game you genuinely love alone than play something mediocre with other people.",
+    answers: [
+      { scores: { dolphin: 3, wolf: 1 } },
+      { scores: { dolphin: 2 } },
+      { scores: {} },
+      { scores: { gecko: 1, owl: 1 } },
+      { scores: { gecko: 2, frog: 2 } },
+    ]
+  },
+  {
+    text: "You track your progress or performance metrics — scores, stats, win rates, streaks — even in games you play casually.",
+    answers: [
+      { scores: { bear: 2, dolphin: 1 } },
+      { scores: { bear: 1 } },
+      { scores: {} },
+      { scores: { falcon: 2, frog: 1 } },
+      { scores: { falcon: 3, dragon: 1 } },
+    ]
+  },
+  {
+    text: "You've switched game genres so dramatically — e.g. from a shooter to a farming sim — that friends were genuinely surprised.",
+    answers: [
+      { scores: { dragon: 1, falcon: 1 } },
+      { scores: { gecko: 1 } },
+      { scores: {} },
+      { scores: { kraken: 2, bat: 1 } },
+      { scores: { kraken: 3, magpie: 1 } },
     ]
   },
 ];
@@ -1289,47 +2087,43 @@ function startTest() {
 function renderQuestion() {
   const q = QUESTIONS[currentQ];
   const total = QUESTIONS.length;
+  const s = STRINGS[currentLang];
 
-  document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${total}`;
+  document.getElementById('q-counter').textContent = s.questionOf(currentQ + 1, total);
   document.getElementById('q-pct').textContent = `${Math.round((currentQ / total) * 100)}%`;
   document.getElementById('progress-fill').style.width = `${(currentQ / total) * 100}%`;
-  document.getElementById('q-number').textContent = `Question ${currentQ + 1}`;
-  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-number').textContent = s.questionLabel(currentQ + 1);
 
+  const questionText = currentLang === 'ru' ? QUESTIONS_RU[currentQ] : q.text;
+  document.getElementById('q-text').textContent = questionText;
+
+  const scaleLabels = s.scaleLabels;
   const container = document.getElementById('options-container');
-  const letters = ['A', 'B', 'C', 'D'];
-  container.innerHTML = q.answers.map((a, i) => `
-    <button class="option ${answers[currentQ] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">
-      <span class="option-letter">${letters[i]}.</span>${a.text}
-    </button>
-  `).join('');
+  container.innerHTML = `
+    <div class="scale-options">
+      ${scaleLabels.map((l, i) => `
+        <button class="scale-opt ${answers[currentQ] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">${l}</button>
+      `).join('')}
+    </div>
+  `;
 
   document.getElementById('btn-prev').disabled = currentQ === 0;
-  document.getElementById('btn-next').textContent = currentQ === total - 1 ? 'See My Archetype →' : 'Continue →';
+  document.getElementById('btn-prev').textContent = s.backBtn;
 }
 
 function selectAnswer(idx) {
   answers[currentQ] = idx;
-  document.querySelectorAll('.option').forEach((el, i) => {
+  document.querySelectorAll('.scale-opt').forEach((el, i) => {
     el.classList.toggle('selected', i === idx);
   });
-}
-
-function nextQuestion() {
-  if (answers[currentQ] === null) {
-    document.getElementById('question-card').style.animation = 'none';
-    document.getElementById('question-card').style.borderColor = 'rgba(192,57,43,0.5)';
-    setTimeout(() => {
-      document.getElementById('question-card').style.borderColor = '';
-    }, 600);
-    return;
-  }
-  if (currentQ < QUESTIONS.length - 1) {
-    currentQ++;
-    renderQuestion();
-  } else {
-    computeResult();
-  }
+  setTimeout(() => {
+    if (currentQ < QUESTIONS.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      computeResult();
+    }
+  }, 360);
 }
 
 function prevQuestion() {
@@ -1359,48 +2153,82 @@ function computeResult() {
 
 function showResult(key, sorted) {
   const arch = ARCHETYPES[key];
+  const ruArch = ARCHETYPES_RU[key];
+  const isRu = currentLang === 'ru';
+  const s = STRINGS[currentLang];
 
   document.getElementById('result-animal').textContent = arch.emoji;
-  document.getElementById('result-name').textContent = arch.name;
-  document.getElementById('result-tagline').textContent = arch.tagline;
-  document.getElementById('result-desc').textContent = arch.desc;
+  document.getElementById('result-name').textContent = isRu ? ruArch.name : arch.name;
+  document.getElementById('result-tagline').textContent = isRu ? ruArch.tagline : arch.tagline;
+  document.getElementById('result-rarity').textContent = isRu ? ruArch.rarity : arch.rarity;
+  document.getElementById('result-desc').textContent = isRu ? ruArch.desc : arch.desc;
+  document.getElementById('result-tell').textContent = isRu ? ruArch.tell : arch.tell;
+
+  document.getElementById('result-label').textContent = s.resultLabel;
 
   document.getElementById('result-traits').innerHTML = arch.traits.map(t =>
     `<span class="trait-tag">${t}</span>`
+  ).join('');
+
+  const onlyYouWould = isRu ? ruArch.onlyYouWould : arch.onlyYouWould;
+  document.getElementById('result-only').innerHTML = onlyYouWould.map(item =>
+    `<li>${item}</li>`
   ).join('');
 
   document.getElementById('result-games').innerHTML = arch.games.map(g =>
     `<div class="game-card"><strong>${g.name}</strong><div class="game-genre">${g.genre}</div></div>`
   ).join('');
 
-  document.getElementById('result-spectrums').innerHTML = arch.spectrums.map(s => `
+  document.getElementById('result-spectrums').innerHTML = arch.spectrums.map(sp => `
     <div class="spectrum-row">
       <div class="spectrum-label">
-        <span>${s.label}</span>
-        <span>${s.value}%</span>
+        <span>${sp.label}</span>
+        <span>${sp.value}%</span>
       </div>
       <div class="spectrum-bar">
-        <div class="spectrum-fill" style="width:${s.value}%"></div>
+        <div class="spectrum-fill" style="width:${sp.value}%"></div>
       </div>
     </div>
   `).join('');
 
-  document.getElementById('result-shadow').textContent = arch.shadow;
+  document.getElementById('result-shadow').textContent = isRu ? ruArch.shadow : arch.shadow;
 
-  document.getElementById('result-affinity').innerHTML = arch.affinity.map(a =>
+  const affinity = isRu ? ruArch.affinity : arch.affinity;
+  const clashes = isRu ? ruArch.clashes : arch.clashes;
+
+  document.getElementById('result-affinity').innerHTML = affinity.map(a =>
     `<span class="affinity-tag">${a}</span>`
   ).join('');
 
+  document.getElementById('result-clashes').innerHTML = clashes.map(a =>
+    `<span class="clash-tag">${a}</span>`
+  ).join('');
+
   const maxScore = sorted[0][1] || 1;
-  document.getElementById('score-breakdown').innerHTML = sorted.slice(0, 6).map(([k, v]) => {
+  document.getElementById('score-breakdown').innerHTML = sorted.map(([k, v], idx) => {
     const a = ARCHETYPES[k];
+    const aName = isRu ? ARCHETYPES_RU[k].name : a.name;
     const pct = Math.round((v / maxScore) * 100);
-    return `<div class="score-item">
-      <span class="si-icon">${a.emoji}</span>
-      <span class="si-name">${a.name}</span>
-      <span class="si-score">${pct}%</span>
+    return `<div class="score-bar-wrap">
+      <div class="score-bar-meta">
+        <span class="sb-icon">${a.emoji}</span>
+        <span class="sb-name">${aName}</span>
+        <span class="sb-pct">${pct}%</span>
+      </div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill${idx === 0 ? ' winner' : ''}" style="width:${pct}%"></div>
+      </div>
     </div>`;
   }).join('');
+
+  // Apply result screen section titles
+  const titleEls = document.querySelectorAll('#screen-result .result-section-title');
+  const titles = [s.sectionIdentity, s.sectionTell, s.sectionTraits, s.sectionOnly,
+                  s.sectionGames, s.sectionSpectrum, s.sectionShadow,
+                  s.sectionAffinity, s.sectionClashes, s.sectionBreakdown];
+  titleEls.forEach((el, i) => { if (titles[i]) el.textContent = titles[i]; });
+  document.querySelector('.shadow-title').textContent = s.shadowWarning;
+  document.querySelector('[onclick="restart()"]').textContent = s.restartBtn;
 
   showScreen('screen-result');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1410,6 +2238,9 @@ function restart() {
   showScreen('screen-intro');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// Apply default language on load
+applyStrings();
 </script>
 </body>
 </html>
