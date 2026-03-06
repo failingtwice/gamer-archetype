@@ -1120,6 +1120,57 @@
     margin-bottom: 8px;
   }
 
+  /* Big Five profile facets */
+  .profile-intro {
+    font-size: 14px;
+    color: var(--text2);
+    font-style: italic;
+    margin-bottom: 26px;
+    line-height: 1.6;
+  }
+
+  .profile-facet {
+    margin-bottom: 26px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border2);
+  }
+
+  .profile-facet:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .profile-facet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .profile-facet-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .profile-facet-reading {
+    font-size: 12px;
+    color: var(--amber);
+    font-style: italic;
+    flex-shrink: 0;
+  }
+
+  .profile-facet-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0;
+  }
+
   /* Responsive */
   @media (max-width: 600px) {
     .question-card, .intro-card, .result-body { padding: 24px 18px; }
@@ -2599,6 +2650,103 @@ const ARCHETYPE_VECTORS = {
 };
 
 // ═══════════════════════════════════════════════════════
+// PERSONALITY BANDS — Big Five-mapped descriptions per axis score range
+// Three bands per axis: low (0–0.33), mid (0.33–0.67), high (0.67–1.0)
+// ═══════════════════════════════════════════════════════
+const PERSONALITY_BANDS = {
+  social: {
+    en: [
+      { max: 0.33, reading: "Introverted",
+        text: "Your social energy is directed primarily inward. You are most productive and satisfied when working independently, and extended social interaction tends to drain rather than energize you. Your relationships tend to be few and deep rather than wide and shallow — in groups you observe before participating, and you need meaningful solitary time to recover. This is not shyness; it is how your energy system works. In Big Five terms this maps closely to the introversion end of the Extraversion scale." },
+      { max: 0.67, reading: "Ambivert",
+        text: "You sit in the ambivert range — genuinely capable of social engagement without depending on it for energy. You work effectively alone and with others, adapting between modes without significant cost. Your connection needs are moderate: you enjoy collaboration when it adds value but don't require it to feel purposeful. You come across as engaged but not overwhelming, and selectively outgoing rather than indiscriminately social. Most people find you easy to work with across a range of contexts." },
+      { max: 1.00, reading: "Extraverted",
+        text: "Your energy is strongly interpersonal. You think better out loud, are energized by other people's presence, and tend to feel flat or under-motivated without social contact. You likely maintain a wide network and find shared experiences significantly more rewarding than solo ones. In Big Five terms this maps to high Extraversion: you are naturally expressive, group-oriented, and gain energy from interaction. The tradeoff is a lower tolerance for solitude and a risk of over-extending socially at the cost of reflection." },
+    ],
+    ru: [
+      { max: 0.33, reading: "Интроверт",
+        text: "Твоя социальная энергия направлена преимущественно вовнутрь. Ты наиболее продуктивен и удовлетворён, когда работаешь независимо, а продолжительное социальное взаимодействие истощает, а не заряжает тебя. Твои отношения, как правило, немногочисленны, но глубоки — в группах ты обычно наблюдаешь, прежде чем участвовать, и нуждаешься в значимом одиночестве для восстановления. Это не застенчивость; так устроена твоя энергетическая система. По Большой Пятёрке это соответствует выраженной интроверсии в шкале Экстраверсии." },
+      { max: 0.67, reading: "Амбиверт",
+        text: "Ты находишься в зоне амбиверсии — способен к искреннему социальному участию, не завися от него как от источника энергии. Ты одинаково эффективно работаешь в одиночку и в команде, без особых потерь переключаясь между режимами. Потребность в общении умеренная: ты ценишь совместные переживания, когда они добавляют ценность, но не нуждаешься в них для ощущения цели. Окружающие воспринимают тебя как вовлечённого, но не подавляющего — избирательно общительного, а не бесконтрольно." },
+      { max: 1.00, reading: "Экстраверт",
+        text: "Твоя энергия сильно межличностна. Ты лучше думаешь вслух, заряжаешься от присутствия других людей и чувствуешь опустошённость без социального контакта. Ты, скорее всего, поддерживаешь широкую сеть контактов и находишь совместные переживания значительно более наполненными, чем сольные. По Большой Пятёрке это высокая Экстраверсия: ты естественно выразителен, ориентирован на группу и черпаешь энергию из взаимодействия. Оборотная сторона — более низкая устойчивость к одиночеству и риск социального перенапряжения." },
+    ],
+  },
+  systems: {
+    en: [
+      { max: 0.33, reading: "Narrative-oriented",
+        text: "Your cognitive style is primarily experiential and narrative. You engage with the world through meaning, story, and emotional resonance rather than abstraction or rule structures. In Big Five terms this corresponds to high Openness to Aesthetics and Experience alongside moderate Openness to Ideas — you are drawn to depth of feeling and immersive worlds over elegant mechanisms. You reason most naturally through examples, cases, and personal connection rather than frameworks or first principles." },
+      { max: 0.67, reading: "Balanced",
+        text: "You move fluidly between narrative engagement and systematic thinking. You can be absorbed in a story's emotional arc just as readily as in optimizing a mechanical system — context determines which mode activates. This reflects broad Openness in Big Five terms: you appreciate both the experiential and the analytical, rarely sacrificing one entirely for the other. You're likely perceived as both creative and analytical depending on the situation, and you adapt your thinking style to what the problem requires." },
+      { max: 1.00, reading: "Systems-oriented",
+        text: "Your thinking is fundamentally systematic. You naturally abstract, model, and seek underlying rules in whatever you engage with. In Big Five terms this reflects high Openness to Ideas: you are drawn to the architecture behind things rather than their surface form, and you find pure narrative or aesthetic experience most satisfying when it conceals structural depth. You are at your best when you can dissect how something works, and you tend to find 'just experiencing' something without understanding it subtly unsatisfying." },
+    ],
+    ru: [
+      { max: 0.33, reading: "Нарративный тип",
+        text: "Твой когнитивный стиль преимущественно экспериенциальный и нарративный. Ты вовлекаешься в мир через смысл, историю и эмоциональный резонанс, а не через абстракции или структуры правил. По Большой Пятёрке это соответствует высокой Открытости к Эстетике и Опыту при умеренной Открытости к Идеям — тебя привлекает глубина переживания и иммерсивные миры, а не элегантные механизмы. Ты рассуждаешь наиболее естественно через примеры, случаи и личную связь, а не через схемы или первопринципы." },
+      { max: 0.67, reading: "Сбалансированный",
+        text: "Ты свободно переключаешься между нарративным вовлечением и системным мышлением. Ты можешь быть поглощён эмоциональной дугой истории так же легко, как и оптимизацией механической системы — контекст определяет, какой режим активируется. Это отражает широкую Открытость по Большой Пятёрке: ты ценишь как экспериенциальное, так и аналитическое, и редко полностью жертвуешь одним ради другого. Окружающие воспринимают тебя как творческого или аналитического — в зависимости от ситуации." },
+      { max: 1.00, reading: "Системный тип",
+        text: "Твоё мышление фундаментально системно. Ты естественно абстрагируешь, моделируешь и ищешь базовые правила во всём, с чем сталкиваешься. По Большой Пятёрке это высокая Открытость к Идеям: тебя привлекает архитектура вещей, а не их поверхностная форма, и чистые нарративные или эстетические переживания удовлетворяют тебя наиболее полно, когда за ними скрывается структурная глубина. Ты в своей лучшей форме, когда можешь разобрать, как что-то работает — просто «переживать» что-то, не понимая этого, тебе тихо недостаточно." },
+    ],
+  },
+  challenge: {
+    en: [
+      { max: 0.33, reading: "Comfort-seeking",
+        text: "You have a strongly comfort-oriented approach to voluntary activity. You engage to recover, restore, and enjoy — not to accumulate difficulty or push limits. In Big Five Conscientiousness terms this reflects low Achievement Striving: you are not intrinsically motivated by difficulty, and you have a healthy relationship with 'good enough.' Your capacity for genuine rest and low-friction enjoyment is a real asset. The risk is that comfort zones can quietly become permanent, and meaningful growth typically requires the friction you've learned to minimize." },
+      { max: 0.67, reading: "Balanced",
+        text: "You have a balanced achievement orientation. You are capable of sustained effort and deliberate challenge when the context warrants it, but you don't seek difficulty for its own sake. This maps to moderate Conscientiousness in Big Five terms: disciplined when it matters, comfortable when it doesn't. You are selective about where you invest hard work, which typically means your effort is well-targeted rather than spread thin. You avoid both the exhaustion of constant striving and the stagnation of perpetual ease." },
+      { max: 1.00, reading: "Challenge-seeking",
+        text: "You have a strongly challenge-seeking orientation. Difficulty is not something you tolerate — it's something you require. Activities that don't push your current ceiling feel hollow or pointless. In Big Five terms this reflects high Achievement Striving within Conscientiousness, combined with low Neuroticism around failure: you are energized by the gap between your current ability and your potential, and you interpret resistance as a signal that the activity is worth your time. The risk is applying this standard everywhere, including domains where ease is appropriate." },
+    ],
+    ru: [
+      { max: 0.33, reading: "Ориентация на комфорт",
+        text: "У тебя выраженная комфорто-ориентированная установка в отношении добровольной деятельности. Ты вовлекаешься ради восстановления, отдыха и удовольствия — не ради накопления трудностей или преодоления своих пределов. По шкале Добросовестности Большой Пятёрки это низкое Стремление к Достижениям: ты не мотивирован сложностью ради неё самой, и у тебя здоровые отношения с понятием «достаточно хорошо». Твоя способность к подлинному отдыху — настоящее преимущество. Риск в том, что зоны комфорта могут незаметно стать постоянными, а реальный рост обычно требует именно того трения, которое ты научился минимизировать." },
+      { max: 0.67, reading: "Сбалансированный",
+        text: "У тебя сбалансированная ориентация на достижения. Ты способен на устойчивые усилия и намеренный вызов, когда контекст этого требует, но не ищешь сложности ради неё самой. Это соответствует умеренной Добросовестности по Большой Пятёрке: дисциплинированный там, где это важно, расслабленный там, где нет. Ты избирателен в том, куда вкладываешь серьёзные усилия, что обычно означает точно направленные инвестиции. Ты избегаешь как истощения от постоянного стремления, так и застоя от вечного покоя." },
+      { max: 1.00, reading: "Ориентация на вызов",
+        text: "У тебя выраженная ориентация на вызов. Сложность — это не то, что ты терпишь, это то, что тебе необходимо. Занятия, не толкающие к потолку твоих возможностей, кажутся пустыми. По Большой Пятёрке это высокое Стремление к Достижениям в рамках Добросовестности в сочетании с низким Нейротизмом в отношении неудачи: тебя заряжает разрыв между текущими способностями и потенциалом, и ты воспринимаешь сопротивление как сигнал, что занятие стоит твоего времени. Риск — применять этот стандарт везде, включая области, где лёгкость уместна." },
+    ],
+  },
+  dominance: {
+    en: [
+      { max: 0.33, reading: "Exploratory",
+        text: "You have a strongly non-competitive, exploratory orientation. In Big Five terms this maps to high Agreeableness combined with high Openness: you are more interested in discovery, cooperation, and shared experience than in winning, ranking, or asserting control. In group dynamics you naturally support rather than lead, and you tend to find competitive framing actively less interesting than collaborative or open-ended alternatives. You are likely experienced by others as easy to work with, genuinely curious, and free of ego around outcomes." },
+      { max: 0.67, reading: "Selective",
+        text: "You have a selective relationship with competition. You can engage competitively in domains you care about while remaining largely indifferent elsewhere. This corresponds to moderate Agreeableness in Big Five terms — cooperative by default, assertive when invested. You're neither a habitual competitor who needs to win everything nor someone who avoids all competitive contexts; rather, you engage when the stakes feel personally meaningful. You can lead when needed but don't require the lead role to feel satisfied." },
+      { max: 1.00, reading: "Competitive",
+        text: "You are strongly competitive and dominance-oriented. Winning — against opponents, systems, or your own previous performance — is a significant part of what makes activities meaningful. In Big Five terms this maps to low Agreeableness and high Assertiveness: you are direct, results-driven, and tend to impose structure on situations rather than adapt to them. You are likely perceived as confident and decisive in groups. The tradeoff: people with less competitive orientations may experience you as demanding or dismissive of process-over-outcome thinking." },
+    ],
+    ru: [
+      { max: 0.33, reading: "Исследователь",
+        text: "У тебя выраженная некомпетентная, исследовательская ориентация. По Большой Пятёрке это соответствует высокой Доброжелательности в сочетании с высокой Открытостью: тебя больше интересуют открытие, сотрудничество и общий опыт, чем победа, ранжирование или утверждение контроля. В групповой динамике ты естественно поддерживаешь, а не руководишь, и склонен находить конкурентное обрамление активно менее интересным, чем совместные альтернативы. Окружающие, вероятно, воспринимают тебя как лёгкого в работе, искренне любопытного и свободного от эго в отношении результатов." },
+      { max: 0.67, reading: "Избирательный",
+        text: "У тебя избирательные отношения с конкуренцией. Ты можешь конкурентно вовлекаться в значимых для тебя областях, оставаясь в целом безразличным в других. Это соответствует умеренной Доброжелательности по Большой Пятёрке — по умолчанию кооперативный, но напористый там, где вложен. Ты ни привычный конкурент, которому нужно побеждать везде, ни тот, кто избегает всех конкурентных контекстов. Ты можешь взять на себя ведущую роль, когда это необходимо, но не нуждаешься в ней для удовлетворения." },
+      { max: 1.00, reading: "Конкурентный",
+        text: "Ты сильно конкурентен и ориентирован на доминирование. Победа — над соперниками, системами или собственными прошлыми результатами — значительная часть того, что придаёт деятельности смысл. По Большой Пятёрке это низкая Доброжелательность и высокая Напористость: ты прямой, ориентированный на результат и склонен навязывать структуру ситуациям, а не адаптироваться к ним. Окружающие, вероятно, воспринимают тебя как уверенного и решительного. Оборотная сторона: люди с менее конкурентной ориентацией могут ощущать тебя требовательным или пренебрежительным к мышлению «процесс важнее результата»." },
+    ],
+  },
+  pace: {
+    en: [
+      { max: 0.33, reading: "Deliberate",
+        text: "You are strongly deliberate and methodical. You plan before acting, sustain focus longer than average, and find satisfaction in slow-building complexity rather than rapid novelty. In Big Five Conscientiousness terms, this reflects high Deliberateness and Orderliness: you are resistant to distraction, skeptical of reactive decisions, and most effective when you can work through something thoroughly. Others may experience you as careful or slow-moving; you experience impulsive people as careless. You tend to produce better work through iteration than through speed." },
+      { max: 0.67, reading: "Adaptive",
+        text: "Your pace is flexible and context-dependent. You can plan and execute methodically when required and shift to faster, more reactive engagement when the situation calls for it. You don't have a strong natural bias toward either deliberateness or spontaneity, which makes you broadly adaptable. In Big Five terms this reflects moderate Conscientiousness on the deliberateness dimension — neither compulsively thorough nor habitually impulsive. You tend to calibrate depth of investment to the actual stakes rather than applying uniform thoroughness to everything." },
+      { max: 1.00, reading: "Impulsive",
+        text: "You have a fast, reactive, and stimulus-driven engagement style. You decide quickly, switch contexts readily, and are energized by novelty and immediacy over depth and duration. In Big Five terms this reflects low Conscientiousness on deliberateness alongside elements of Extraversion's excitement-seeking. Your strength is rapid adaptation and broad scanning across many inputs; the cost is difficulty sustaining attention past the initial engagement window, and a tendency for decision-making to outrun its own analysis. You are at your best in fast-moving, high-variety environments." },
+    ],
+    ru: [
+      { max: 0.33, reading: "Методичный",
+        text: "Ты сильно обдуманный и методичный. Ты планируешь, прежде чем действовать, поддерживаешь фокус дольше среднего и находишь удовлетворение в медленно нарастающей сложности, а не в быстрой новизне. По шкале Добросовестности Большой Пятёрки это высокая Обдуманность и Упорядоченность: ты устойчив к отвлечениям, скептичен к реактивным решениям и наиболее эффективен, когда можешь основательно разобраться в чём-либо. Окружающие могут воспринимать тебя как осторожного или медлительного; ты воспринимаешь импульсивных людей как небрежных. Ты обычно производишь лучшую работу через итерации, чем через скорость." },
+      { max: 0.67, reading: "Адаптивный",
+        text: "Твой темп гибок и зависит от контекста. Ты можешь планировать и выполнять методично, когда требуется, и переключаться на более быстрое, реактивное вовлечение по ситуации. У тебя нет сильного природного предпочтения ни обдуманности, ни спонтанности, что делает тебя широко адаптируемым. По Большой Пятёрке это умеренная Добросовестность по измерению обдуманности — ни компульсивно основательный, ни привычно импульсивный. Ты склонен калибровать глубину вложений по реальным ставкам, а не применять одинаковую тщательность ко всему." },
+      { max: 1.00, reading: "Импульсивный",
+        text: "У тебя быстрый, реактивный и стимул-управляемый стиль вовлечения. Ты принимаешь решения быстро, легко переключаешь контексты и заряжаешься от новизны и немедленности, а не от глубины и длительности. По Большой Пятёрке это низкая Добросовестность по обдуманности в сочетании с элементами поиска возбуждения из Экстраверсии. Твоя сила — быстрая адаптация и широкое сканирование множества входящих сигналов; стоимость — трудность поддержания внимания за начальным окном вовлечения и тенденция к принятию решений, опережающих их анализ. Ты в своей лучшей форме в быстро меняющихся средах с высоким разнообразием." },
+    ],
+  },
+};
+
+// ═══════════════════════════════════════════════════════
 // SCORING
 // ═══════════════════════════════════════════════════════
 function computeResult() {
@@ -2686,6 +2834,29 @@ function renderArchAxisBars(archVec, isRu) {
   }).join('');
 }
 
+function generatePersonalityProfile(norm, isRu) {
+  const lang = isRu ? 'ru' : 'en';
+  const intro = isRu
+    ? 'На основе твоих ответов — картина твоей личности за пределами игр, соотнесённая с измерениями Большой Пятёрки.'
+    : 'Based on your responses, here is a picture of your personality outside games, mapped to Big Five dimensions.';
+
+  const facets = AXIS_CONFIG.map(ax => {
+    const score = norm[ax.key] ?? 0.5;
+    const bands = PERSONALITY_BANDS[ax.key][lang];
+    const band = bands.find(b => score <= b.max) || bands[bands.length - 1];
+    const axLabel = isRu ? ax.ru.name : ax.en.name;
+    return `<div class="profile-facet">
+      <div class="profile-facet-header">
+        <span class="profile-facet-name">${axLabel}</span>
+        <span class="profile-facet-reading">${band.reading}</span>
+      </div>
+      <div class="profile-facet-text">${band.text}</div>
+    </div>`;
+  }).join('');
+
+  return `<p class="profile-intro">${intro}</p>${facets}`;
+}
+
 function showResult(key, sorted, norm) {
   const arch = ARCHETYPES[key];
   const ruArch = ARCHETYPES_RU[key];
@@ -2724,8 +2895,8 @@ function showResult(key, sorted, norm) {
 
   // Personality outside gaming
   document.getElementById('title-personality').textContent = s.sectionPersonality;
-  document.getElementById('result-personality').textContent =
-    isRu ? ruArch.personality : arch.personality;
+  document.getElementById('result-personality').innerHTML =
+    generatePersonalityProfile(norm, isRu);
 
   document.getElementById('result-spectrums').innerHTML = arch.spectrums.map(sp => {
     const label = s.spectrumLabels[sp.label] || sp.label;
