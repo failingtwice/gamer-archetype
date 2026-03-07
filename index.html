@@ -1192,8 +1192,8 @@
   <!-- ───────── INTRO SCREEN ───────── -->
   <div id="screen-intro" class="screen active">
     <div class="intro-card">
-      <p>Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 40 situational questions.</p>
-      <p>For each situation, answer how often it applies to you — from <em>Never</em> to <em>Always</em>. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes. There are no wrong answers.</p>
+      <p>Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 36 situational scenarios.</p>
+      <p>For each scenario, choose the option that best describes your <em>actual</em> behavior — not the player you aspire to be. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes. There are no wrong answers.</p>
     </div>
 
     <div class="archetype-grid">
@@ -2097,15 +2097,15 @@ const QUESTIONS = [
       { label: "Message my squad — debrief together before deciding", label_ru: "Пишу команде — сначала разбираем вместе, потом решаем", axes: { social: 0.7, dominance: 0.2 }, archetypes: { wolf: 3, dolphin: 2 } },
     ]
   },
-  // Q2 ★ MIRROR of Q1 — Competition: sustained failure
+  // Q2 — First contact: starting a game cold
   {
-    text: "Your rank has dropped three tiers over the past week and nothing is clicking. After another bad session, you…",
-    text_ru: "За прошедшую неделю твой рейтинг упал на три дивизиона и ничего не получается. После очередной провальной сессии ты…",
+    text: "You start a new game cold — no tutorial, no walkthrough, no prior knowledge. Your first instinct:",
+    text_ru: "Ты запускаешь новую игру с нуля — без туториала, без гайдов, без предварительного знания. Твой первый инстинкт:",
     choices: [
-      { label: "Keep going — rank variance is normal, the climb continues", label_ru: "Продолжаю играть — колебания рейтинга нормальны, подъём продолжается", axes: { dominance: 0.8, challenge: 0.6 }, archetypes: { falcon: 3, gecko: 3 } },
-      { label: "Log off without drama — not my night", label_ru: "Выхожу без лишних эмоций — сегодня просто не мой вечер", axes: { dominance: -0.2, challenge: -0.1 }, archetypes: { bear: 2, magpie: 1 } },
-      { label: "Rally my squad — get their read on what's happening", label_ru: "Пишу команде — хочу понять их взгляд на происходящее", axes: { social: 0.7, dominance: 0.2 }, archetypes: { wolf: 3, dolphin: 2 } },
-      { label: "Watch top-player replays obsessively to diagnose the problem", label_ru: "Навязчиво пересматриваю реплеи топ-игроков, чтобы найти проблему", axes: { systems: 0.7, dominance: 0.4, pace: -0.3 }, archetypes: { fox: 3, beaver: 2 } },
+      { label: "Jump straight in — context arrives through playing, not reading", label_ru: "Сразу погружаюсь — контекст приходит в процессе игры, не через чтение", axes: { dominance: -0.3, pace: 0.5 }, archetypes: { bat: 3, bear: 1, magpie: 1 } },
+      { label: "Spend a few minutes in settings and menus before touching the game", label_ru: "Сначала несколько минут в настройках и меню, прежде чем трогать саму игру", axes: { systems: 0.6, pace: -0.4 }, archetypes: { fox: 2, gecko: 2, beaver: 2 } },
+      { label: "Find a quick beginner's guide — no need to reinvent the wheel", label_ru: "Нахожу быстрый гайд для новичков — незачем изобретать велосипед", axes: { systems: 0.4, pace: 0.1 }, archetypes: { fox: 2, frog: 2 } },
+      { label: "Ask someone who's played it what to expect", label_ru: "Спрашиваю кого-нибудь, кто играл, чего ожидать", axes: { social: 0.7 }, archetypes: { wolf: 2, dolphin: 2 } },
     ]
   },
   // Q3 — Narrative: NPC eavesdrop
@@ -2289,9 +2289,9 @@ const QUESTIONS = [
     text: "A teammate in a team game is clearly struggling and dragging the group down.",
     text_ru: "Один из тиммейтов в командной игре явно не справляется и тянет группу вниз.",
     choices: [
-      { label: "Lead in covering for them — this is a team and we adapt", label_ru: "Беру на себя поддержку — это команда, мы адаптируемся", axes: { social: 0.7, dominance: 0.3 }, archetypes: { wolf: 3, dolphin: 2 } },
+      { label: "Reorganize team roles and strategy on the fly to compensate", label_ru: "Перестраиваем роли и стратегию команды на ходу, чтобы компенсировать", axes: { social: 0.7, dominance: 0.3 }, archetypes: { wolf: 3 } },
       { label: "Quietly carry harder without mentioning it", label_ru: "Тихо тащу сильнее, ничего не говоря", axes: { dominance: 0.6, social: 0.1 }, archetypes: { falcon: 3 } },
-      { label: "Encourage them directly and offer help between rounds", label_ru: "Ободряю напрямую и предлагаю помощь между раундами", axes: { social: 0.8 }, archetypes: { dolphin: 3, wolf: 2 } },
+      { label: "Send them a private message checking in — sometimes people are just having a rough time", label_ru: "Пишу им личное сообщение — иногда у людей просто тяжёлый день", axes: { social: 0.8 }, archetypes: { dolphin: 3, bear: 1 } },
       { label: "Feel genuine frustration but contain it", label_ru: "Ощущаю настоящее раздражение, но сдерживаю его", axes: { dominance: 0.4, social: -0.2 }, archetypes: { falcon: 2 } },
     ]
   },
@@ -2325,7 +2325,7 @@ const QUESTIONS = [
       { label: "Finish the current session first — no point half-doing both", label_ru: "Сначала заканчиваю текущую сессию — нет смысла делать оба дела наполовину", axes: { dominance: 0.2, pace: -0.5, challenge: 0.2 }, archetypes: { gecko: 2, falcon: 2 } },
       { label: "Switch immediately — probably won't go back to the first one tonight", label_ru: "Переключаюсь сразу — скорее всего, сегодня уже не вернусь к первой", axes: { pace: 0.7, dominance: -0.2 }, archetypes: { magpie: 3 } },
       { label: "Finish the current objective, then consider switching", label_ru: "Заканчиваю текущую задачу, потом думаю о переключении", axes: { pace: 0.1 }, archetypes: { fox: 1 } },
-      { label: "Open both and alternate depending on the moment", label_ru: "Открываю обе и чередую в зависимости от настроения", axes: { pace: 0.6 }, archetypes: { magpie: 3 } },
+      { label: "Resist the pull — staying in one thing is how you actually get anywhere", label_ru: "Сдерживаю порыв — оставаться в одном деле это и есть единственный способ чего-то достичь", axes: { pace: -0.4, challenge: 0.2 }, archetypes: { gecko: 2, falcon: 1, beaver: 1 } },
     ]
   },
   // Q23 — Patience: 10-hour onboarding
@@ -2339,15 +2339,15 @@ const QUESTIONS = [
       { label: "Read up on it first to make the ramp feel shorter", label_ru: "Сначала почитаю про неё, чтобы вход казался короче", axes: { systems: 0.5, pace: 0.1 }, archetypes: { fox: 3, owl: 1 } },
     ]
   },
-  // Q24 — Theory vs practice
+  // Q24 — Realisation: misunderstood core mechanic
   {
-    text: "A build you spent significant time theorycrafting gets crushed badly on first attempt.",
-    text_ru: "Билд, над которым ты долго теоркрафтил, с треском провалился при первой попытке.",
+    text: "Ten hours in, you realise you've been misunderstanding a core mechanic the whole time.",
+    text_ru: "Через 10 часов ты понимаешь, что всё это время неправильно понимал одну из ключевых механик игры.",
     choices: [
-      { label: "Reassess the theory — the loss is data", label_ru: "Пересматриваю теорию — поражение это данные", axes: { systems: 0.7, challenge: 0.3 }, archetypes: { fox: 3, falcon: 2 } },
-      { label: "Test it more before concluding — one match isn't enough", label_ru: "Тестирую ещё — одного матча недостаточно для выводов", axes: { systems: 0.5, challenge: 0.5, pace: -0.3 }, archetypes: { fox: 3, beaver: 2 } },
-      { label: "Feel the gap between theory and practice, pivot to something proven", label_ru: "Ощущаю разрыв между теорией и практикой, переключаюсь на что-то проверенное", axes: { dominance: 0.3, systems: 0.2 }, archetypes: { falcon: 2 } },
-      { label: "The crafting was the fun part — the outcome matters less than I expected", label_ru: "Процесс теоркрафтинга и был веселью — результат оказался менее важным, чем я думал", axes: { systems: 0.5, challenge: -0.2 }, archetypes: { beaver: 2, fox: 1 } },
+      { label: "Start fresh — the 10 hours built the knowledge; do it properly now", label_ru: "Начинаю заново — эти 10 часов дали знание; теперь сделаю правильно", axes: { challenge: 0.7, systems: 0.4, pace: -0.5 }, archetypes: { gecko: 3, beaver: 2 } },
+      { label: "Correct course from here — resetting wastes real progress", label_ru: "Корректирую курс отсюда — сбрасывать реальный прогресс нет смысла", axes: { dominance: 0.4, systems: 0.3 }, archetypes: { falcon: 2, fox: 2 } },
+      { label: "Keep going — it's probably not as critical as it feels", label_ru: "Продолжаю как есть — скорее всего это не так критично, как кажется", axes: { challenge: -0.4, pace: 0.3 }, archetypes: { bear: 2, bat: 2, magpie: 1 } },
+      { label: "Check whether the misunderstanding actually matters before deciding", label_ru: "Проверяю, действительно ли это непонимание что-то меняет, прежде чем решать", axes: { systems: 0.6, pace: -0.1 }, archetypes: { fox: 3, frog: 1 } },
     ]
   },
   // Q25 — Exploration: 2 hours off the main path
@@ -2372,15 +2372,15 @@ const QUESTIONS = [
       { label: "Decline — I'd rather play something good alone", label_ru: "Отказываюсь — лучше сыграю в хорошую игру один", axes: { social: -0.5, challenge: 0.3 }, archetypes: { gecko: 2, falcon: 2 } },
     ]
   },
-  // Q27 — Systems: inefficient layout
+  // Q27 — Systems: approach won't scale
   {
-    text: "You're deep into a base-building game. Your current layout won't scale efficiently.",
-    text_ru: "Ты глубоко в игре по строительству баз. Твоя текущая планировка не масштабируется эффективно.",
+    text: "Deep into a game, you realise your current approach is going to cause real problems later.",
+    text_ru: "Глубоко в игре ты понимаешь, что твой текущий подход создаст реальные проблемы позже.",
     choices: [
-      { label: "Rebuild from scratch — a flawed foundation only compounds", label_ru: "Перестраиваю с нуля — плохой фундамент только усугубляет проблему", axes: { systems: 0.8, pace: -0.6, dominance: 0.2 }, archetypes: { beaver: 3 } },
-      { label: "Patch issues as they arise — no need to demolish something that works", label_ru: "Устраняю проблемы по мере возникновения — незачем сносить то, что работает", axes: { systems: -0.3, pace: 0.3 }, archetypes: { bat: 2, bear: 2 } },
-      { label: "Finish the current goal, then do a planned redesign", label_ru: "Заканчиваю текущую задачу, потом делаю запланированный редизайн", axes: { systems: 0.5, dominance: 0.2, pace: -0.2 }, archetypes: { beaver: 2, fox: 2 } },
-      { label: "The inefficiency doesn't bother me as long as it functions", label_ru: "Неэффективность меня не беспокоит, пока всё работает", axes: { systems: -0.5 }, archetypes: { bear: 2, bat: 2 } },
+      { label: "Stop and fix the foundation now — problems only compound", label_ru: "Останавливаюсь и исправляю фундамент сейчас — проблемы только накапливаются", axes: { systems: 0.8, pace: -0.6, dominance: 0.2 }, archetypes: { beaver: 3, gecko: 2 } },
+      { label: "Keep going and handle problems when they actually arrive", label_ru: "Продолжаю и разбираюсь с проблемами когда они появятся", axes: { systems: -0.3, pace: 0.4 }, archetypes: { bat: 2, bear: 2, magpie: 1 } },
+      { label: "Finish the current goal, then do a planned redesign", label_ru: "Заканчиваю текущую цель, потом делаю запланированный редизайн", axes: { systems: 0.5, dominance: 0.2, pace: -0.2 }, archetypes: { beaver: 2, fox: 2 } },
+      { label: "The imperfection doesn't bother me as long as it keeps working", label_ru: "Несовершенство меня не беспокоит, пока всё продолжает работать", axes: { systems: -0.5 }, archetypes: { bear: 2, bat: 1 } },
     ]
   },
   // Q28 — Co-op toggle
@@ -2424,7 +2424,7 @@ const QUESTIONS = [
       { label: "Yes — not for long, but a bad session can colour the next hour", label_ru: "Да — ненадолго, но плохая сессия может окрасить следующий час", axes: { dominance: 0.5, challenge: 0.3 }, archetypes: { falcon: 3, gecko: 2 } },
       { label: "Big competitive losses hit differently; casual losses don't", label_ru: "Крупные поражения в соревновательном режиме бьют иначе; казуальные — нет", axes: { dominance: 0.4, challenge: 0.2 }, archetypes: { falcon: 2, gecko: 1 } },
       { label: "Rarely — the game and my mood stay pretty well separated", label_ru: "Редко — игра и моё настроение довольно хорошо разделены", axes: { dominance: -0.2, challenge: -0.1 }, archetypes: { bear: 2, bat: 1 } },
-      { label: "Genuinely no — I play for the experience, not the outcome", label_ru: "Нет, искренне — я играю ради процесса, а не результата", axes: { dominance: -0.5, challenge: -0.2 }, archetypes: { owl: 2, bear: 2, bat: 1 } },
+      { label: "No — the game and real life stay completely separate for me", label_ru: "Нет — игра и реальная жизнь остаются полностью отделёнными для меня", axes: { dominance: -0.5, challenge: -0.2 }, archetypes: { owl: 2, bear: 2, bat: 1 } },
     ]
   },
   // Q32 — Sharing wins
@@ -2449,15 +2449,15 @@ const QUESTIONS = [
       { label: "Kind of wish they'd warned me — not what I came for", label_ru: "Жаль, что не предупредили — я не за этим сюда пришёл", axes: { systems: 0.3, pace: 0.5 }, archetypes: { magpie: 1 } },
     ]
   },
-  // Q34 — Story vs mechanics priority
+  // Q34 — Loop awareness: 60-hour repetitive game
   {
-    text: "A game with an amazing story is known to have shallow, repetitive mechanics.",
-    text_ru: "Игра с потрясающим сюжетом известна поверхностными, повторяющимися механиками.",
+    text: "You've put 60 hours into a game a friend just called 'kind of repetitive.' You think...",
+    text_ru: "Ты провёл в игре 60 часов, и друг только что назвал её «немного однообразной». Твоя реакция...",
     choices: [
-      { label: "Story is enough — mechanics just need to not get in the way", label_ru: "Сюжета достаточно — механики просто не должны мешать", axes: { systems: -0.7 }, archetypes: { owl: 3 } },
-      { label: "Pass — mechanics are the actual medium; story is supplementary", label_ru: "Пропускаю — механики это настоящий язык игры; сюжет вторичен", axes: { systems: 0.7, dominance: 0.2 }, archetypes: { frog: 3, falcon: 2 } },
-      { label: "A little repetition is fine for a great narrative", label_ru: "Немного повторения допустимо ради хорошего нарратива", axes: { systems: -0.2 }, archetypes: { bear: 2, owl: 1 } },
-      { label: "Would play but feel the friction from the mechanics throughout", label_ru: "Играл бы, но всё время ощущал бы трение от механик", axes: { systems: 0.3 }, archetypes: { fox: 2 } },
+      { label: "They're right, but the loop is satisfying — repetition is exactly the point", label_ru: "Они правы, но петля приятна — однообразие и есть суть", axes: { systems: 0.4, challenge: -0.2, pace: -0.3 }, archetypes: { dragon: 3 } },
+      { label: "I hadn't really noticed — I'm too absorbed in optimising the system", label_ru: "Я особо не замечал — слишком поглощён оптимизацией системы", axes: { systems: 0.7, pace: -0.5 }, archetypes: { beaver: 3 } },
+      { label: "I stopped worrying about that ages ago — I'm just seeing where the world goes", label_ru: "Я перестал беспокоиться об этом давно — просто смотрю, куда ведёт мир", axes: { dominance: -0.4, pace: 0.2 }, archetypes: { bat: 2, owl: 1 } },
+      { label: "Honestly, same — I should probably move on but something keeps pulling me back", label_ru: "Честно говоря, то же самое — пора бы двигаться дальше, но что-то продолжает тянуть обратно", axes: { pace: 0.4, dominance: -0.2 }, archetypes: { magpie: 2, dragon: 2 } },
     ]
   },
   // Q35 — Social energy: post-session
@@ -2578,7 +2578,7 @@ const ARCHETYPE_VECTORS = {
   wolf:    { social: 0.95, systems: 0.50, challenge: 0.70, dominance: 0.72, pace: 0.62 },
   owl:     { social: 0.30, systems: 0.05, challenge: 0.50, dominance: 0.15, pace: 0.18 },
   frog:    { social: 0.22, systems: 0.95, challenge: 0.85, dominance: 0.48, pace: 0.68 },
-  dragon:  { social: 0.52, systems: 0.65, challenge: 0.72, dominance: 0.55, pace: 0.30 },
+  dragon:  { social: 0.40, systems: 0.80, challenge: 0.58, dominance: 0.82, pace: 0.20 },
   dolphin: { social: 0.97, systems: 0.45, challenge: 0.28, dominance: 0.30, pace: 0.72 },
   fox:     { social: 0.27, systems: 0.80, challenge: 0.75, dominance: 0.38, pace: 0.08 },
   gecko:   { social: 0.15, systems: 0.58, challenge: 0.97, dominance: 0.62, pace: 0.38 },
@@ -2587,6 +2587,20 @@ const ARCHETYPE_VECTORS = {
   magpie:  { social: 0.55, systems: 0.35, challenge: 0.08, dominance: 0.38, pace: 0.88 },
   beaver:  { social: 0.25, systems: 0.72, challenge: 0.42, dominance: 0.18, pace: 0.10 },
 };
+
+// ═══════════════════════════════════════════════════════
+// AXIS_STATS — per-axis mean and std of archetype positions (for Mahalanobis scoring)
+// ═══════════════════════════════════════════════════════
+const AXIS_STATS = (() => {
+  const stats = {};
+  AXES.forEach(ax => {
+    const vals = Object.values(ARCHETYPE_VECTORS).map(v => v[ax]);
+    const mean = vals.reduce((s, v) => s + v, 0) / vals.length;
+    const std = Math.sqrt(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / vals.length);
+    stats[ax] = { mean, std: Math.max(std, 0.01) };
+  });
+  return stats;
+})();
 
 // ═══════════════════════════════════════════════════════
 // PERSONALITY BANDS — Big Five-mapped descriptions per axis score range
@@ -2718,14 +2732,20 @@ function computeResult() {
     norm[ax] = range === 0 ? 0.5 : Math.max(0, Math.min(1, (raw[ax] - lo[ax]) / range));
   });
 
-  // Direct archetype scoring — sum points from each chosen answer
-  const archetypeScores = Object.fromEntries(Object.keys(ARCHETYPE_VECTORS).map(k => [k, 0]));
-  answers.forEach((ansIdx, qIdx) => {
-    if (ansIdx === null) return;
-    const arch = QUESTIONS[qIdx].choices[ansIdx].archetypes || {};
-    Object.entries(arch).forEach(([k, v]) => { archetypeScores[k] = (archetypeScores[k] || 0) + v; });
-  });
-  const sorted = Object.entries(archetypeScores).sort((a, b) => b[1] - a[1]);
+  // Mahalanobis-style similarity: standardize each axis by archetype distribution,
+  // then compute RMS distance in z-score space. Convert to similarity for display.
+  const sorted = Object.entries(ARCHETYPE_VECTORS)
+    .map(([key, archVec]) => {
+      const sumSq = AXES.reduce((acc, ax) => {
+        const { mean, std } = AXIS_STATS[ax];
+        const userZ = (norm[ax] - mean) / std;
+        const archZ = (archVec[ax] - mean) / std;
+        return acc + (userZ - archZ) ** 2;
+      }, 0);
+      const similarity = 1 / (1 + Math.sqrt(sumSq / AXES.length));
+      return [key, similarity];
+    })
+    .sort((a, b) => b[1] - a[1]);
 
   showResult(sorted[0][0], sorted, norm);
 }
