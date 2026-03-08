@@ -29,6 +29,18 @@ const STRINGS = {
     axesLegendArch: "Archetype baseline",
     sectionPersonality: "Beyond the Screen",
     sectionModalAxes: "Archetype Profile",
+    sectionInsights: "What Makes You Unusual",
+    sectionHiddenSide: "Your Hidden Side",
+    hiddenSideIntro: "The creature that almost claimed you",
+    runnerUpLabel: "with shades of",
+    readMore: "Read more ↓",
+    readLess: "Collapse ↑",
+    shareBtn: "Copy Result",
+    shareCopied: "Copied!",
+    sectionFingerprint: "Your Answer Pattern",
+    decisiveLabel: "Clearest signal",
+    conflictedLabel: "Most torn",
+    sectionLightShadow: "Light & Shadow",
     restartBtn: "Take the Test Again",
     backBtn: "← Back",
     questionOf: (cur, total) => `Question ${cur} of ${total}`,
@@ -61,6 +73,18 @@ const STRINGS = {
     axesLegendArch: "Базовый архетип",
     sectionPersonality: "За пределами экрана",
     sectionModalAxes: "Профиль архетипа",
+    sectionInsights: "Что в тебе необычного",
+    sectionHiddenSide: "Твоя скрытая сторона",
+    hiddenSideIntro: "Существо, которое почти завладело тобой",
+    runnerUpLabel: "с оттенками",
+    readMore: "Подробнее ↓",
+    readLess: "Свернуть ↑",
+    shareBtn: "Скопировать результат",
+    shareCopied: "Скопировано!",
+    sectionFingerprint: "Паттерн ответов",
+    decisiveLabel: "Самый чёткий сигнал",
+    conflictedLabel: "Самый спорный",
+    sectionLightShadow: "Свет и тень",
     restartBtn: "Пройти тест снова",
     backBtn: "← Назад",
     questionOf: (cur, total) => `Вопрос ${cur} из ${total}`,
@@ -241,13 +265,6 @@ const ARCHETYPES_RU = {
 };
 
 
-function setLang(lang) {
-  currentLang = lang;
-  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-  document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
-  applyStrings();
-}
-
 const ARCHETYPE_PILLS_RU = [
   "Сокол", "Волк", "Сова", "Лягушка", "Дракон", "Дельфин",
   "Лис", "Геккон", "Медведь", "Летучая мышь",
@@ -277,19 +294,11 @@ const ARCHETYPES = {
       { name: "Street Fighter 6", genre: "Fighting Game" },
       { name: "StarCraft II", genre: "RTS" },
       { name: "Tekken 8", genre: "Fighting Game" },
+      { name: "Apex Legends (Ranked)", genre: "Battle Royale" },
+      { name: "Mortal Kombat 1", genre: "Fighting Game" },
+      { name: "Dota 2", genre: "MOBA" },
+      { name: "Guilty Gear Strive", genre: "Fighting Game" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 30 },
-      { label: "Immersion", value: 15 },
-      { label: "Mastery Drive", value: 85 },
-      { label: "Competition", value: 95 },
-      { label: "Structure", value: 70 },
-      { label: "Commitment", value: 80 },
-    ],
-    shadow: "A loss can ruin your day — or your week. You're prone to tilt, blame-shifting, and quietly resenting players who don't take the game as seriously. If you're not improving, you feel worthless. Be wary of rage-quitting relationships alongside matches.",
-    personality: "You approach most things in life the way you approach games: with a scoreboard. You set measurable goals, track performance compulsively, and feel low-grade discomfort when progress can't be quantified. In competitive domains — sport, work, academics — you register your rank and feel it personally. People who genuinely don't care about the outcome quietly frustrate you, even in contexts where caring doesn't make sense.",
-    affinity: ["The Wolf", "The Gecko", "The Frog"],
-    clashes: ["The Bear", "The Dolphin"],
   },
   wolf: {
     emoji: "🐺",
@@ -311,19 +320,11 @@ const ARCHETYPES = {
       { name: "World of Warcraft (Raids)", genre: "MMO" },
       { name: "Overwatch 2", genre: "Team FPS" },
       { name: "FFXIV (Savage Raids)", genre: "MMO" },
+      { name: "Lethal Company", genre: "Co-op Horror" },
+      { name: "Monster Hunter: Wilds", genre: "Co-op Action RPG" },
+      { name: "Phasmophobia", genre: "Co-op Investigation" },
+      { name: "Left 4 Dead 2", genre: "Co-op Shooter" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 95 },
-      { label: "Immersion", value: 30 },
-      { label: "Mastery Drive", value: 65 },
-      { label: "Competition", value: 70 },
-      { label: "Structure", value: 45 },
-      { label: "Commitment", value: 75 },
-    ],
-    shadow: "Solo games feel hollow and pointless to you. Without your pack, you lose motivation fast. You can also become over-reliant on group validation — if the squad disbands or drifts apart, your gaming identity may crumble entirely.",
-    personality: "Your identity is woven into your in-group. You thrive in coordinated effort, naturally assume the organizer role, and feel something close to genuine loss when your crew drifts apart. You're the person who remembers what everyone drinks, keeps the group chat alive, and first notices when someone goes quiet. Solo endeavors feel hollow — not because you can't do them, but because there's no one to debrief with afterward.",
-    affinity: ["The Falcon", "The Dolphin", "The Dragon"],
-    clashes: ["The Gecko", "The Frog"],
   },
   owl: {
     emoji: "🦉",
@@ -345,19 +346,11 @@ const ARCHETYPES = {
       { name: "Pathologic 2", genre: "Survival Drama" },
       { name: "Hollow Knight", genre: "Metroidvania" },
       { name: "Morrowind", genre: "Open World RPG" },
+      { name: "Baldur's Gate 3", genre: "CRPG" },
+      { name: "Dark Souls (Lore)", genre: "Environmental Storytelling" },
+      { name: "Divinity: Original Sin 2", genre: "Tactical RPG" },
+      { name: "Pentiment", genre: "Narrative Adventure" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 25 },
-      { label: "Immersion", value: 95 },
-      { label: "Mastery Drive", value: 40 },
-      { label: "Competition", value: 10 },
-      { label: "Structure", value: 15 },
-      { label: "Commitment", value: 90 },
-    ],
-    shadow: "You avoid games with shallow narratives like the plague, even when they're genuinely fun. You can spend hours in menus reading lore instead of playing. Multiplayer feels vacuous. You may have a backlog you'll never finish because each game demands weeks of full immersion.",
-    personality: "You don't do surface-level — in relationships, interests, or conversation. You want the depth version of everything and will seek it out even when no one else is looking. You read footnotes, follow citations, and hold opinions about things most people don't know exist. Small talk is mild torture. You likely have a rich inner life and a handful of deep relationships you'd trade a hundred casual ones for.",
-    affinity: ["The Bat", "The Bear", "The Fox"],
-    clashes: ["The Frog", "The Bear"],
   },
   frog: {
     emoji: "🐸",
@@ -379,19 +372,11 @@ const ARCHETYPES = {
       { name: "Portal 2", genre: "Puzzle/Speedrun" },
       { name: "Getting Over It", genre: "Precision Challenge" },
       { name: "Trackmania", genre: "Racing Precision" },
+      { name: "Neon White", genre: "Speedrun FPS" },
+      { name: "Spelunky 2", genre: "Roguelike Speedrun" },
+      { name: "Mirror's Edge", genre: "Parkour FPS" },
+      { name: "Ori and the Will of the Wisps", genre: "Precision Platformer" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 15 },
-      { label: "Immersion", value: 10 },
-      { label: "Mastery Drive", value: 90 },
-      { label: "Competition", value: 45 },
-      { label: "Structure", value: 90 },
-      { label: "Commitment", value: 40 },
-    ],
-    shadow: "You can utterly drain the fun from a game by reducing it to a series of inputs to optimize. Friends who just want to enjoy a story playthrough find your instinct to skip dialogue and break cutscenes deeply frustrating. You may have spent 200 hours in games most people finish in 10.",
-    personality: "You are instinctively contrarian — not for show, but because 'how it's supposed to work' genuinely interests you less than 'how it actually works.' You find loopholes in systems, edge cases in processes, faster routes no one mapped. This makes you unusually effective when creative problem-solving is needed and quietly difficult in situations that require following procedure without question.",
-    affinity: ["The Falcon", "The Gecko", "The Fox"],
-    clashes: ["The Owl", "The Dolphin"],
   },
   dragon: {
     emoji: "🐉",
@@ -413,19 +398,11 @@ const ARCHETYPES = {
       { name: "Monster Hunter: World", genre: "Action RPG" },
       { name: "Warframe", genre: "Free-to-Play Looter" },
       { name: "Final Fantasy XIV", genre: "MMO" },
+      { name: "Genshin Impact", genre: "Gacha RPG" },
+      { name: "World of Warcraft (Mythic+)", genre: "MMO Endgame" },
+      { name: "The Division 2", genre: "Looter Shooter" },
+      { name: "Lost Ark", genre: "MMO ARPG" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 45 },
-      { label: "Immersion", value: 35 },
-      { label: "Mastery Drive", value: 55 },
-      { label: "Competition", value: 55 },
-      { label: "Structure", value: 70 },
-      { label: "Commitment", value: 95 },
-    ],
-    shadow: "You're susceptible to the most predatory game monetization in existence — loot boxes, battle passes, gear treadmills. Games without meaningful progression loops bore you within hours. You may have 1,000 hours in a game you consider 'mediocre' simply because the numbers kept going up.",
-    personality: "You are reward-driven at a deeper level than most people admit about themselves. Systems with clear progression — career tracks, skill certifications, personal bests — energize you in ways open-ended work does not. You likely track more metrics than you tell people: steps, streaks, finances. When a feedback loop closes, something satisfies. When it stalls, something itches — and you notice the itch before you notice the cause.",
-    affinity: ["The Wolf", "The Bear", "The Gecko"],
-    clashes: ["The Bat", "The Frog"],
   },
   dolphin: {
     emoji: "🐬",
@@ -447,19 +424,11 @@ const ARCHETYPES = {
       { name: "Among Us", genre: "Social Deduction" },
       { name: "Nintendo Switch Sports", genre: "Party Sports" },
       { name: "Phasmophobia", genre: "Social Horror" },
+      { name: "Mario Party Superstars", genre: "Party Game" },
+      { name: "Fall Guys", genre: "Battle Royale Party" },
+      { name: "Keep Talking and Nobody Explodes", genre: "Co-op Puzzle" },
+      { name: "Gartic Phone", genre: "Social Drawing" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 95 },
-      { label: "Immersion", value: 40 },
-      { label: "Mastery Drive", value: 20 },
-      { label: "Competition", value: 25 },
-      { label: "Structure", value: 30 },
-      { label: "Commitment", value: 45 },
-    ],
-    shadow: "Solo gaming can feel meaningless or even depressing for you. You may overextend yourself socially — always the organizer, always the hype person — while secretly wishing someone else would take the wheel. Your taste in games often bends toward what others want, leaving your own preferences unexplored.",
-    personality: "For you, an experience only feels complete when it's shared. You're a natural connector — you know what everyone prefers, maintain friendships across eras of your life, and host gatherings less for the logistics and more because you need people in the room. The risk: your own preferences can quietly flatten under the weight of what everyone else wants, and you may struggle to know what you actually enjoy when left to decide alone.",
-    affinity: ["The Wolf", "The Bear", "The Bat"],
-    clashes: ["The Gecko", "The Frog"],
   },
   fox: {
     emoji: "🦊",
@@ -481,19 +450,11 @@ const ARCHETYPES = {
       { name: "Baba Is You", genre: "Logic Puzzle" },
       { name: "Satisfactory", genre: "3D Factory Builder" },
       { name: "Outer Wilds", genre: "Exploration Mystery" },
+      { name: "Civilization VI", genre: "4X Strategy" },
+      { name: "Kerbal Space Program", genre: "Physics Sandbox" },
+      { name: "Opus Magnum", genre: "Programming Puzzle" },
+      { name: "Shapez", genre: "Factory Automation" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 20 },
-      { label: "Immersion", value: 35 },
-      { label: "Mastery Drive", value: 70 },
-      { label: "Competition", value: 30 },
-      { label: "Structure", value: 95 },
-      { label: "Commitment", value: 85 },
-    ],
-    shadow: "Pure action games with no strategic depth bore you quickly. You can over-think cooperative games, turning casual sessions into planning sessions that exhaust your teammates. You may spend 40 hours on infrastructure you'll never use, optimizing for scenarios that will never occur. When someone else's 'good enough' solution works fine, it quietly drives you insane.",
-    personality: "You think in structures. Before engaging with a problem, you want to understand the rules completely — not to follow them, but to know the full space of available moves. You build frameworks, create spreadsheets no one asked for, and typically see two or three implications ahead of the room. The risk: optimizing the system can become its own reward, pulling your focus away from the actual goal the system was meant to serve.",
-    affinity: ["The Owl", "The Frog", "The Bat"],
-    clashes: ["The Dolphin", "The Bear"],
   },
   gecko: {
     emoji: "🦎",
@@ -515,19 +476,11 @@ const ARCHETYPES = {
       { name: "Cuphead", genre: "Run & Gun" },
       { name: "Elden Ring (DLC bosses)", genre: "Soulslike" },
       { name: "Dead Cells", genre: "Roguelike Metroidvania" },
+      { name: "Sifu", genre: "Martial Arts Action" },
+      { name: "Returnal", genre: "Roguelike Shooter" },
+      { name: "Nioh 2", genre: "Soulslike ARPG" },
+      { name: "Furi", genre: "Boss Rush" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 10 },
-      { label: "Immersion", value: 20 },
-      { label: "Mastery Drive", value: 97 },
-      { label: "Competition", value: 55 },
-      { label: "Structure", value: 50 },
-      { label: "Commitment", value: 80 },
-    ],
-    shadow: "You have near-zero tolerance for games that feel 'too easy' and will often dismiss beloved games as shallow. You can come across as gatekeeping or elitist about difficulty. Casual gaming sessions with family or less-experienced players can feel torturous.",
-    personality: "Your mastery orientation extends well beyond games. Whatever you care about, you practice it deliberately, hold yourself to standards others find excessive, and find 'good enough' genuinely unsatisfying. You're the person still refining something after everyone else has moved on — not from perfectionism exactly, but from a clean internal sense that you haven't reached what you know is achievable.",
-    affinity: ["The Frog", "The Falcon", "The Bat"],
-    clashes: ["The Bear", "The Dolphin"],
   },
   bear: {
     emoji: "🐻",
@@ -549,19 +502,11 @@ const ARCHETYPES = {
       { name: "Wordle / NYT Games", genre: "Daily Puzzle" },
       { name: "Spiritfarer", genre: "Cozy Indie" },
       { name: "Monument Valley", genre: "Puzzle Adventure" },
+      { name: "Unpacking", genre: "Cozy Puzzle" },
+      { name: "A Short Hike", genre: "Exploration" },
+      { name: "Coffee Talk", genre: "Visual Novel" },
+      { name: "Dorfromantik", genre: "Relaxing Strategy" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 50 },
-      { label: "Immersion", value: 55 },
-      { label: "Mastery Drive", value: 8 },
-      { label: "Competition", value: 10 },
-      { label: "Structure", value: 25 },
-      { label: "Commitment", value: 40 },
-    ],
-    shadow: "You can mistake comfort for depth, returning to the same cozy loops for years while avoiding experiences that might genuinely challenge or change you. Your gaming is sometimes reactive rather than intentional — you play because it's there. Games engineered for compulsive micro-engagement have found a willing partner in your habits, and the line between casual fun and an invisible time-sink can blur before you notice.",
-    personality: "You understand the value of psychological safety and create it for others naturally — warm environments, consistent routines, space where nothing needs to be proven. You're the person others relax around without knowing why. The risk is that 'comfortable' can become a place you never leave, and meaningful growth tends to require exactly the friction you've learned to minimize.",
-    affinity: ["The Dolphin", "The Owl", "The Bat"],
-    clashes: ["The Falcon", "The Gecko"],
   },
   bat: {
     emoji: "🦇",
@@ -583,19 +528,11 @@ const ARCHETYPES = {
       { name: "Breath of the Wild", genre: "Open World Action" },
       { name: "No Man's Sky", genre: "Space Exploration" },
       { name: "Subnautica", genre: "Survival Exploration" },
+      { name: "Tears of the Kingdom", genre: "Open World Action" },
+      { name: "Death Stranding", genre: "Exploration / Walking Sim" },
+      { name: "Sable", genre: "Open World Exploration" },
+      { name: "The Witcher 3: Wild Hunt", genre: "Open World RPG" },
     ],
-    spectrums: [
-      { label: "Social Drive", value: 20 },
-      { label: "Immersion", value: 80 },
-      { label: "Mastery Drive", value: 35 },
-      { label: "Competition", value: 5 },
-      { label: "Structure", value: 20 },
-      { label: "Commitment", value: 35 },
-    ],
-    shadow: "You can get lost — literally and figuratively — and never finish games. Your backlog is enormous. You sometimes never see endings because the journey was enough. Tightly structured linear games feel like corridors and make you anxious. You may spend 80 hours 'exploring' and finish 20% of the story.",
-    personality: "You're built for beginnings. Ideas, new directions, unexpected connections between fields — you generate these naturally and with genuine enthusiasm. The challenge isn't starting things; it's that around the time real work begins, the next interesting thing appears. You have more unfinished projects and half-read books than almost anyone you know, alongside an unusually broad range of topics you know a little about.",
-    affinity: ["The Owl", "The Fox", "The Bear"],
-    clashes: ["The Falcon", "The Dragon"],
   },
 };
 
@@ -610,8 +547,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Play an incredible game completely solo", label_ru: "Играть в невероятную игру полностью в одиночку", axes: { social: -0.7, immersion: 0.3 } },
-      { label: "Play a mediocre game with great friends", label_ru: "Играть в посредственную игру с отличными друзьями", axes: { social: 0.7, immersion: -0.3 } },
+      { label: "Play an incredible game completely solo", label_ru: "Играть в крутую игру одному", axes: { social: -0.7, immersion: 0.3 } },
+      { label: "Play a mediocre game with great friends", label_ru: "Играть в средненькую игру с хорошей компанией", axes: { social: 0.7, immersion: -0.3 } },
     ]
   },
   // Q2 — Social: team role preference
@@ -619,8 +556,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Lead a raid team and coordinate the strategy", label_ru: "Руководить рейд-группой и координировать стратегию", axes: { social: 0.7, competition: 0.3 } },
-      { label: "Be the reliable solo carry who doesn't need a team", label_ru: "Быть надёжным соло-игроком, которому команда не нужна", axes: { social: -0.7, mastery: 0.3 } },
+      { label: "Hop on voice chat and coordinate with a group", label_ru: "Зайти в войс и играть с командой", axes: { social: 0.7, competition: 0.3 } },
+      { label: "Put on headphones and handle things yourself", label_ru: "Надеть наушники и разрулить самому", axes: { social: -0.7, mastery: 0.3 } },
     ]
   },
   // Q3 — Social: sharing achievements
@@ -628,8 +565,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Share your best gaming moment with friends immediately", label_ru: "Сразу поделиться своим лучшим игровым моментом с друзьями", axes: { social: 0.7, competition: 0.2 } },
-      { label: "Savor it privately — you know what you did", label_ru: "Насладиться этим в одиночку — ты знаешь, что сделал", axes: { social: -0.7, mastery: 0.2 } },
+      { label: "Share your best gaming moment with friends immediately", label_ru: "Сразу скинуть друзьям свой лучший момент", axes: { social: 0.7, competition: 0.2 } },
+      { label: "Savor it privately — you know what you did", label_ru: "Оставить при себе — ты и так знаешь, что сделал", axes: { social: -0.7, mastery: 0.2 } },
     ]
   },
   // Q4 — Social: community engagement
@@ -647,8 +584,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Read every journal entry and inscription in a dungeon", label_ru: "Прочитать каждую запись и надпись в подземелье", axes: { immersion: 0.7, structure: -0.3 } },
-      { label: "Skip the flavor text and head straight to the boss fight", label_ru: "Пропустить описания и идти прямо к боссу", axes: { immersion: -0.7, mastery: 0.3 } },
+      { label: "Stop to read the lore notes scattered around a dungeon", label_ru: "Читать все записки и лор в подземелье", axes: { immersion: 0.7, structure: -0.3 } },
+      { label: "Push deeper into the dungeon — you're here for the action", label_ru: "Идти дальше — ты здесь ради экшена", axes: { immersion: -0.7, mastery: 0.3 } },
     ]
   },
   // Q6 — Immersion: world vs mechanics
@@ -657,7 +594,7 @@ const QUESTIONS = [
     text_ru: "Что бы ты предпочёл...",
     choices: [
       { label: "A game with a breathtaking world but simple mechanics", label_ru: "Игру с потрясающим миром, но простыми механиками", axes: { immersion: 0.7, structure: -0.3 } },
-      { label: "A game with deep, complex mechanics but a generic world", label_ru: "Игру с глубокими, сложными механиками, но скучным миром", axes: { immersion: -0.7, structure: 0.3 } },
+      { label: "A game with deep, complex mechanics but a generic world", label_ru: "Игру с глубокими механиками, но шаблонным миром", axes: { immersion: -0.7, structure: 0.3 } },
     ]
   },
   // Q7 — Immersion: character identity
@@ -666,7 +603,7 @@ const QUESTIONS = [
     text_ru: "Что бы ты предпочёл...",
     choices: [
       { label: "Play a character with a rich, pre-written backstory", label_ru: "Играть персонажем с богатой, прописанной предысторией", axes: { immersion: 0.7, commitment: 0.2 } },
-      { label: "Play a blank slate you define entirely yourself", label_ru: "Играть чистым листом, которого ты определяешь сам", axes: { immersion: -0.4, structure: 0.3, competition: -0.2 } },
+      { label: "Play a blank slate you define entirely yourself", label_ru: "Играть персонажем, которого создаёшь сам с нуля", axes: { immersion: -0.7, structure: 0.3 } },
     ]
   },
   // Q8 — Immersion: vista vs build
@@ -675,7 +612,7 @@ const QUESTIONS = [
     text_ru: "У тебя есть 20 свободных минут в игре. Что бы ты предпочёл...",
     choices: [
       { label: "Explore a beautiful area with no gameplay purpose", label_ru: "Исследовать красивую локацию без игровой цели", axes: { immersion: 0.7, competition: -0.3 } },
-      { label: "Spend it optimizing your character build", label_ru: "Потратить их на оптимизацию билда персонажа", axes: { immersion: -0.4, structure: 0.5, mastery: 0.2 } },
+      { label: "Spend it optimizing your character build", label_ru: "Потратить на оптимизацию билда", axes: { immersion: -0.7, structure: 0.5, mastery: 0.2 } },
     ]
   },
   // ── MASTERY (Q9-Q12) ──
@@ -684,8 +621,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Replay a boss 50 times until you beat it cleanly on your own", label_ru: "Переигрывать босса 50 раз, пока не победишь его чисто сам", axes: { mastery: 0.7, commitment: 0.3 } },
-      { label: "Use a guide after a few tries and move on", label_ru: "Воспользоваться гайдом после нескольких попыток и двигаться дальше", axes: { mastery: -0.7, commitment: -0.3 } },
+      { label: "Keep throwing yourself at a boss until you crack it yourself", label_ru: "Долбить босса, пока не победишь сам", axes: { mastery: 0.7, commitment: 0.3 } },
+      { label: "Look up a strategy so you can see the rest of the game", label_ru: "Загуглить тактику и пойти дальше", axes: { mastery: -0.7, commitment: -0.3 } },
     ]
   },
   // Q10 — Mastery: depth vs breadth
@@ -693,8 +630,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Master one character or weapon completely", label_ru: "Полностью освоить одного персонажа или оружие", axes: { mastery: 0.7, commitment: 0.3 } },
-      { label: "Be decent with all of them", label_ru: "Уметь нормально обращаться со всеми", axes: { mastery: -0.5, commitment: -0.3, structure: 0.2 } },
+      { label: "Master one character or weapon completely", label_ru: "Выучить одного персонажа или оружие вдоль и поперёк", axes: { mastery: 0.7, commitment: 0.3 } },
+      { label: "Be decent with all of them", label_ru: "Уметь нормально играть за всех", axes: { mastery: -0.5, commitment: -0.3, structure: 0.2 } },
     ]
   },
   // Q11 — Mastery: balanced vs breakable
@@ -702,8 +639,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "A perfectly balanced game you can't cheese", label_ru: "Идеально сбалансированную игру, которую нельзя обмануть", axes: { mastery: 0.5, competition: 0.3, structure: -0.3 } },
-      { label: "A game you can break wide open with enough knowledge", label_ru: "Игру, которую можно разломать, если знаешь достаточно", axes: { mastery: 0.2, structure: 0.7, competition: -0.3 } },
+      { label: "A perfectly balanced game you can't cheese", label_ru: "Идеально сбалансированную игру, которую нельзя сломать", axes: { structure: -0.7, competition: 0.3 } },
+      { label: "A game you can break wide open with enough knowledge", label_ru: "Игру, которую можно разнести, если хватает знаний", axes: { structure: 0.7, competition: -0.3 } },
     ]
   },
   // Q12 — Mastery: decompression style
@@ -711,8 +648,8 @@ const QUESTIONS = [
     text: "After a rough day, would you rather...",
     text_ru: "После тяжёлого дня, что бы ты предпочёл...",
     choices: [
-      { label: "Play something that genuinely challenges you", label_ru: "Играть во что-то, что по-настоящему бросает тебе вызов", axes: { mastery: 0.7, competition: 0.2 } },
-      { label: "Play something cozy and relaxing", label_ru: "Играть во что-то уютное и расслабляющее", axes: { mastery: -0.7, immersion: 0.3 } },
+      { label: "Load up something intense — stress burns off stress", label_ru: "Запустить что-то жёсткое — клин клином", axes: { mastery: 0.7, competition: 0.2 } },
+      { label: "Load up something gentle — you've had enough friction for today", label_ru: "Запустить что-то спокойное — на сегодня хватит", axes: { mastery: -0.7, immersion: 0.3 } },
     ]
   },
   // ── COMPETITION (Q13-Q15) ──
@@ -721,8 +658,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Win a close match against a worthy opponent", label_ru: "Выиграть напряжённый матч у достойного противника", axes: { competition: 0.7, social: 0.2 } },
-      { label: "Pull off a creative solo achievement nobody asked for", label_ru: "Совершить креативное достижение в одиночку, о котором никто не просил", axes: { competition: -0.5, immersion: 0.3, mastery: 0.2 } },
+      { label: "Win a close match against a worthy opponent", label_ru: "Выиграть плотный матч у сильного противника", axes: { competition: 0.7, social: 0.2 } },
+      { label: "Pull off a creative solo achievement nobody asked for", label_ru: "Провернуть что-то крутое в одиночку, о чём никто не просил", axes: { competition: -0.5, immersion: 0.3, mastery: 0.2 } },
     ]
   },
   // Q14 — Competition: leaderboard vs exploration
@@ -730,8 +667,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Top the leaderboard in a game you're already good at", label_ru: "Возглавить таблицу лидеров в игре, в которой ты уже хорош", axes: { competition: 0.7, commitment: 0.3 } },
-      { label: "Explore a brand new game you've never tried", label_ru: "Исследовать совершенно новую игру, в которую никогда не играл", axes: { competition: -0.7, immersion: 0.3 } },
+      { label: "Top the leaderboard in a game you're already good at", label_ru: "Забраться на топ лидерборда в знакомой игре", axes: { competition: 0.7, commitment: 0.3 } },
+      { label: "Explore a brand new game you've never tried", label_ru: "Попробовать совершенно новую игру, в которую ещё не играл", axes: { competition: -0.7, immersion: 0.3 } },
     ]
   },
   // Q15 — Competition: losing streak response
@@ -739,17 +676,17 @@ const QUESTIONS = [
     text: "Your rank drops after a losing streak. Would you rather...",
     text_ru: "Твой рейтинг падает после серии поражений. Что бы ты предпочёл...",
     choices: [
-      { label: "Grind it back — the rank is the point", label_ru: "Выгриндить обратно — рейтинг и есть цель", axes: { competition: 0.7, mastery: 0.3 } },
-      { label: "Switch to something else — life's too short for tilt", label_ru: "Переключиться на что-то другое — жизнь слишком коротка для тильта", axes: { competition: -0.7, commitment: -0.3 } },
+      { label: "Queue up again — you're not ending the night on a loss", label_ru: "Встать в очередь — не заканчивать же на поражении", axes: { competition: 0.7, mastery: 0.3 } },
+      { label: "Switch to something else — no point playing tilted", label_ru: "Переключиться на что-то другое — нет смысла играть на тильте", axes: { competition: -0.7, commitment: -0.3 } },
     ]
   },
   // ── STRUCTURE (Q16-Q19) ──
   // Q16 — Structure: exploit ethics
   {
     text: "You discover an unintended shortcut in a game. Would you rather...",
-    text_ru: "Ты обнаружил непредусмотренное сокращение в игре. Что бы ты предпочёл...",
+    text_ru: "Ты нашёл незапланированный эксплойт в игре. Что бы ты предпочёл...",
     choices: [
-      { label: "Use it to your advantage — the game allows it, so it's fair", label_ru: "Использовать в свою пользу — игра позволяет, значит это честно", axes: { structure: 0.7, mastery: 0.3 } },
+      { label: "Use it to your advantage — the game allows it, so it's fair", label_ru: "Юзать — игра позволяет, значит всё честно", axes: { structure: 0.7, mastery: 0.3 } },
       { label: "Play as intended — exploits cheapen the experience", label_ru: "Играть как задумано — эксплойты обесценивают опыт", axes: { structure: -0.5, immersion: 0.4 } },
     ]
   },
@@ -759,7 +696,7 @@ const QUESTIONS = [
     text_ru: "У тебя свободный вечер для игр. Что бы ты предпочёл...",
     choices: [
       { label: "Spend it theorycrafting builds and reading wikis", label_ru: "Провести его за теорикрафтингом билдов и чтением вики", axes: { structure: 0.7, commitment: 0.3 } },
-      { label: "Spend it actually playing the game", label_ru: "Провести его, играя в саму игру", axes: { structure: -0.5, immersion: 0.3 } },
+      { label: "Spend it actually playing the game", label_ru: "Просто поиграть", axes: { structure: -0.5, immersion: 0.3 } },
     ]
   },
   // Q18 — Structure: meta vs personal style
@@ -767,8 +704,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Follow the optimal meta strategy", label_ru: "Следовать оптимальной мета-стратегии", axes: { structure: 0.7, competition: 0.3 } },
-      { label: "Experiment with your own unorthodox approach", label_ru: "Экспериментировать со своим нестандартным подходом", axes: { structure: -0.7, immersion: 0.2 } },
+      { label: "Follow the optimal meta strategy", label_ru: "Играть по мете", axes: { structure: 0.7, competition: 0.3 } },
+      { label: "Experiment with your own unorthodox approach", label_ru: "Пробовать свой нестандартный подход", axes: { structure: -0.7, immersion: 0.2 } },
     ]
   },
   // Q19 — Structure: complexity preference
@@ -776,8 +713,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "A game with complex interlocking systems to master", label_ru: "Игру со сложными взаимосвязанными системами для освоения", axes: { structure: 0.7, mastery: 0.3 } },
-      { label: "A game with elegant simplicity that's easy to pick up", label_ru: "Игру с элегантной простотой, которую легко освоить", axes: { structure: -0.7, mastery: -0.2 } },
+      { label: "A game with complex interlocking systems to master", label_ru: "Игру со сложными переплетёнными системами", axes: { structure: 0.7, mastery: 0.3 } },
+      { label: "A game with elegant simplicity that's easy to pick up", label_ru: "Игру с элегантной простотой, в которую легко войти", axes: { structure: -0.7, mastery: -0.2 } },
     ]
   },
   // ── COMMITMENT (Q20-Q22) ──
@@ -786,7 +723,7 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Put 500 hours into one game this year", label_ru: "Провести 500 часов в одной игре за год", axes: { commitment: 0.7, mastery: 0.3 } },
+      { label: "Put 500 hours into one game this year", label_ru: "Залить 500 часов в одну игру за год", axes: { commitment: 0.7, mastery: 0.3 } },
       { label: "Play 50 hours each across 10 different games", label_ru: "Поиграть по 50 часов в 10 разных игр", axes: { commitment: -0.7, immersion: 0.2 } },
     ]
   },
@@ -795,8 +732,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "Finish every game you start, no matter what", label_ru: "Заканчивать каждую начатую игру, несмотря ни на что", axes: { commitment: 0.7, structure: 0.2 } },
-      { label: "Drop games the moment they stop being fun", label_ru: "Бросать игры в тот момент, когда они перестают быть интересными", axes: { commitment: -0.7, structure: -0.2 } },
+      { label: "See a game through to the credits, even through slow stretches", label_ru: "Дойти до титров, даже через затянутые моменты", axes: { commitment: 0.7, structure: 0.2 } },
+      { label: "Move on once a game stops earning your time", label_ru: "Забить, когда игра перестаёт цеплять", axes: { commitment: -0.7, structure: -0.2 } },
     ]
   },
   // Q22 — Commitment: onboarding patience
@@ -804,8 +741,8 @@ const QUESTIONS = [
     text: "Would you rather...",
     text_ru: "Что бы ты предпочёл...",
     choices: [
-      { label: "A game with a 10-hour learning curve that becomes incredible", label_ru: "Игру с 10-часовой кривой обучения, которая становится невероятной", axes: { commitment: 0.7, immersion: 0.3 } },
-      { label: "A game that's fun from the very first minute", label_ru: "Игру, которая приносит удовольствие с самой первой минуты", axes: { commitment: -0.7, mastery: -0.2 } },
+      { label: "A game with a 10-hour learning curve that becomes incredible", label_ru: "Игру, в которую нужно 10 часов въехать, зато потом она невероятна", axes: { commitment: 0.7, immersion: 0.3 } },
+      { label: "A game that's fun from the very first minute", label_ru: "Игру, которая цепляет с первой минуты", axes: { commitment: -0.7, mastery: -0.2 } },
     ]
   },
 ];
@@ -839,7 +776,7 @@ const ARCHETYPE_VECTORS = {
   dolphin: { social: 0.95, immersion: 0.40, mastery: 0.20, competition: 0.25, structure: 0.30, commitment: 0.45 },
   fox:     { social: 0.20, immersion: 0.35, mastery: 0.70, competition: 0.30, structure: 0.95, commitment: 0.85 },
   gecko:   { social: 0.10, immersion: 0.20, mastery: 0.97, competition: 0.55, structure: 0.50, commitment: 0.80 },
-  bear:    { social: 0.50, immersion: 0.55, mastery: 0.08, competition: 0.10, structure: 0.25, commitment: 0.40 },
+  bear:    { social: 0.65, immersion: 0.45, mastery: 0.08, competition: 0.10, structure: 0.25, commitment: 0.50 },
   bat:     { social: 0.20, immersion: 0.80, mastery: 0.35, competition: 0.05, structure: 0.20, commitment: 0.35 },
 };
 
@@ -971,6 +908,192 @@ const PERSONALITY_BANDS = {
     ],
   },
 };
+
+// ═══════════════════════════════════════════════════════
+// INSIGHTS — computed from user scores + archetype data
+// ═══════════════════════════════════════════════════════
+function computeInsights(norm, archKey, sorted, isRu) {
+  const archVec = ARCHETYPE_VECTORS[archKey];
+  const insights = [];
+  const axCfg = k => AXIS_CONFIG.find(a => a.key === k);
+
+  // 1. Strongest signal: axis furthest from 0.5
+  let maxDist = 0, strongestAx = AXES[0];
+  AXES.forEach(ax => {
+    const d = Math.abs(norm[ax] - 0.5);
+    if (d > maxDist) { maxDist = d; strongestAx = ax; }
+  });
+  const strongVal = Math.round(norm[strongestAx] * 100);
+  const strongCfg = axCfg(strongestAx);
+  const strongPole = norm[strongestAx] > 0.5
+    ? (isRu ? strongCfg.ru.high : strongCfg.en.high)
+    : (isRu ? strongCfg.ru.low : strongCfg.en.low);
+  const strongName = isRu ? strongCfg.ru.name : strongCfg.en.name;
+  insights.push({
+    icon: '◈',
+    title: isRu ? 'Твой сильнейший сигнал' : 'Your strongest signal',
+    text: isRu
+      ? `${strongName}: ${strongVal}% — ярко выраженный "${strongPole}"`
+      : `${strongName}: ${strongVal}% — strongly "${strongPole}"`
+  });
+
+  // 2. Biggest deviation from archetype
+  let maxDev = 0, devAx = AXES[0];
+  AXES.forEach(ax => {
+    const d = Math.abs(norm[ax] - archVec[ax]);
+    if (d > maxDev) { maxDev = d; devAx = ax; }
+  });
+  const devCfg = axCfg(devAx);
+  const devName = isRu ? devCfg.ru.name : devCfg.en.name;
+  const userPct = Math.round(norm[devAx] * 100);
+  const archPct = Math.round(archVec[devAx] * 100);
+  const archName = isRu ? ARCHETYPES_RU[archKey].name : ARCHETYPES[archKey].name;
+  insights.push({
+    icon: '◇',
+    title: isRu ? 'Где ты отличаешься от архетипа' : 'Where you diverge',
+    text: isRu
+      ? `${devName}: ты ${userPct}%, а ${archName} — ${archPct}%`
+      : `${devName}: you scored ${userPct}% vs ${archName}'s ${archPct}%`
+  });
+
+  // 3. Rarest combo: user's two most extreme axes — which archetypes share this
+  const ranked = AXES.map(ax => ({ ax, dist: Math.abs(norm[ax] - 0.5) }))
+    .sort((a, b) => b.dist - a.dist);
+  const top1 = ranked[0].ax, top2 = ranked[1].ax;
+  const userDir1 = norm[top1] > 0.5, userDir2 = norm[top2] > 0.5;
+  const matching = Object.entries(ARCHETYPE_VECTORS).filter(([k, v]) =>
+    (v[top1] > 0.5) === userDir1 && (v[top2] > 0.5) === userDir2
+  ).map(([k]) => k);
+  const cfg1 = axCfg(top1), cfg2 = axCfg(top2);
+  const pole1 = userDir1 ? (isRu ? cfg1.ru.high : cfg1.en.high) : (isRu ? cfg1.ru.low : cfg1.en.low);
+  const pole2 = userDir2 ? (isRu ? cfg2.ru.high : cfg2.en.high) : (isRu ? cfg2.ru.low : cfg2.en.low);
+  const matchNames = matching
+    .filter(k => k !== archKey)
+    .slice(0, 2)
+    .map(k => isRu ? ARCHETYPES_RU[k].name : ARCHETYPES[k].name);
+  if (matchNames.length > 0) {
+    insights.push({
+      icon: '✦',
+      title: isRu ? 'Твоя редкая комбинация' : 'Your rare combination',
+      text: isRu
+        ? `"${pole1}" + "${pole2}" — это также свойственно: ${matchNames.join(', ')}`
+        : `"${pole1}" + "${pole2}" — shared only with ${matchNames.join(', ')}`
+    });
+  }
+
+  return insights;
+}
+
+function computeAnswerStats(answers, isRu) {
+  // Count per-axis: how many times the user pushed high vs low
+  const axisCounts = {};
+  AXES.forEach(ax => { axisCounts[ax] = { high: 0, low: 0, total: 0 }; });
+
+  answers.forEach((ansIdx, qIdx) => {
+    if (ansIdx === null) return;
+    const choice = QUESTIONS[qIdx].choices[ansIdx];
+    Object.entries(choice.axes).forEach(([ax, val]) => {
+      if (!axisCounts[ax]) return;
+      axisCounts[ax].total++;
+      if (val > 0) axisCounts[ax].high++;
+      else if (val < 0) axisCounts[ax].low++;
+    });
+  });
+
+  // Most decisive: highest ratio in one direction
+  let bestRatio = 0, decisive = null;
+  // Most conflicted: closest to 50/50
+  let bestSplit = 1, conflicted = null;
+
+  AXES.forEach(ax => {
+    const c = axisCounts[ax];
+    if (c.total < 2) return;
+    const ratio = Math.max(c.high, c.low) / c.total;
+    const split = Math.abs(c.high - c.low) / c.total;
+    if (ratio > bestRatio) {
+      bestRatio = ratio;
+      const cfg = AXIS_CONFIG.find(a => a.key === ax);
+      const dir = c.high > c.low;
+      decisive = {
+        axis: isRu ? cfg.ru.name : cfg.en.name,
+        pole: dir ? (isRu ? cfg.ru.high : cfg.en.high) : (isRu ? cfg.ru.low : cfg.en.low),
+        count: Math.max(c.high, c.low),
+        total: c.total
+      };
+    }
+    if (split < bestSplit) {
+      bestSplit = split;
+      const cfg = AXIS_CONFIG.find(a => a.key === ax);
+      conflicted = {
+        axis: isRu ? cfg.ru.name : cfg.en.name,
+        high: c.high,
+        low: c.low,
+        total: c.total
+      };
+    }
+  });
+
+  return { decisive, conflicted };
+}
+
+// ═══════════════════════════════════════════════════════
+// RADAR CHART — SVG hexagon for 6 axes
+// ═══════════════════════════════════════════════════════
+function renderRadarChart(norm, archVec, isRu) {
+  const pad = 90, inner = 300, size = inner + pad * 2;
+  const cx = size / 2, cy = size / 2, r = inner * 0.38;
+  const n = AXES.length;
+
+  function polar(i, val) {
+    const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+    return [cx + r * val * Math.cos(angle), cy + r * val * Math.sin(angle)];
+  }
+
+  function polygon(values, cls) {
+    const pts = AXES.map((ax, i) => polar(i, values[ax]).join(',')).join(' ');
+    return `<polygon points="${pts}" class="${cls}"/>`;
+  }
+
+  // Grid rings at 25%, 50%, 75%, 100%
+  let grid = '';
+  [0.25, 0.5, 0.75, 1.0].forEach(v => {
+    const pts = AXES.map((_, i) => polar(i, v).join(',')).join(' ');
+    grid += `<polygon points="${pts}" class="radar-ring"/>`;
+  });
+
+  // Grid spokes
+  let spokes = '';
+  AXES.forEach((_, i) => {
+    const [x, y] = polar(i, 1.0);
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" class="radar-spoke"/>`;
+  });
+
+  // Labels
+  let labels = '';
+  AXES.forEach((ax, i) => {
+    const cfg = AXIS_CONFIG.find(a => a.key === ax);
+    const label = isRu ? cfg.ru.name : cfg.en.name;
+    const pct = Math.round(norm[ax] * 100);
+    const [x, y] = polar(i, 1.28);
+    const anchor = x < cx - 10 ? 'end' : x > cx + 10 ? 'start' : 'middle';
+    labels += `<text x="${x}" y="${y}" text-anchor="${anchor}" class="radar-label">${label.toUpperCase()}</text>`;
+    labels += `<text x="${x}" y="${y + 16}" text-anchor="${anchor}" class="radar-value">${pct}%</text>`;
+  });
+
+  // Dots on user polygon
+  let dots = '';
+  AXES.forEach((ax, i) => {
+    const [x, y] = polar(i, norm[ax]);
+    dots += `<circle cx="${x}" cy="${y}" r="3.5" class="radar-dot"/>`;
+  });
+
+  return `<svg viewBox="0 0 ${size} ${size}" class="radar-svg" xmlns="http://www.w3.org/2000/svg">
+    ${grid}${spokes}
+    ${polygon(archVec, 'radar-arch')}
+    ${polygon(norm, 'radar-user')}
+    ${dots}${labels}
+  </svg>`;
+}
 
 // ═══════════════════════════════════════════════════════
 // SCORING — pure function, no DOM dependencies

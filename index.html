@@ -983,6 +983,232 @@
     color: var(--gold);
   }
 
+  /* Runner-up line */
+  .runner-up-line {
+    margin-top: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--text2);
+    font-style: italic;
+  }
+  .runner-up-line .runner-up-emoji { font-style: normal; }
+
+  /* Read more button */
+  .read-more-btn {
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-family: 'Cormorant SC', serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 4px 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .read-more-btn:hover { opacity: 1; }
+
+  /* Radar chart */
+  .radar-container {
+    display: flex;
+    justify-content: center;
+    margin: 8px auto 28px;
+    max-width: 360px;
+  }
+  .radar-svg { width: 100%; height: auto; }
+  .radar-ring {
+    fill: none;
+    stroke: rgba(255,255,255,0.06);
+    stroke-width: 1;
+  }
+  .radar-spoke {
+    stroke: rgba(255,255,255,0.06);
+    stroke-width: 1;
+  }
+  .radar-user {
+    fill: rgba(201,168,76,0.15);
+    stroke: var(--gold);
+    stroke-width: 2;
+  }
+  .radar-arch {
+    fill: none;
+    stroke: rgba(255,255,255,0.25);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+  }
+  .radar-dot {
+    fill: var(--gold);
+  }
+  .radar-label {
+    fill: var(--gold);
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .radar-value {
+    fill: var(--text2);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+  }
+
+  /* Insight cards */
+  .insight-grid {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .insight-card {
+    background: var(--bg3);
+    border-left: 3px solid var(--gold);
+    padding: 14px 16px;
+    border-radius: 0 4px 4px 0;
+  }
+  .insight-card-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .insight-card-icon {
+    color: var(--gold);
+    margin-right: 6px;
+  }
+  .insight-card-text {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--bg3);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 4px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-card-label {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  .stat-card-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .stat-card-detail {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 3px;
+  }
+
+  /* Accordion */
+  .result-accordion {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 0;
+  }
+  .result-accordion:last-child { border-bottom: none; }
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    cursor: pointer;
+    font-family: 'Cormorant SC', serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    list-style: none;
+    user-select: none;
+  }
+  .accordion-header::-webkit-details-marker { display: none; }
+  .accordion-header::marker { display: none; content: ''; }
+  .accordion-header::after {
+    content: '▸';
+    font-size: 14px;
+    transition: transform 0.25s;
+    opacity: 0.5;
+  }
+  .result-accordion[open] > .accordion-header::after {
+    transform: rotate(90deg);
+  }
+  .accordion-content {
+    padding: 0 0 20px;
+  }
+
+  /* Share button */
+  .share-btn {
+    background: var(--bg3) !important;
+    border: 1px solid rgba(201,168,76,0.3) !important;
+    color: var(--gold) !important;
+  }
+  .share-btn:hover {
+    background: rgba(201,168,76,0.08) !important;
+  }
+  .restart-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Clickable breakdown bars */
+  .score-bar-wrap { cursor: pointer; transition: opacity 0.15s; }
+  .score-bar-wrap:hover { opacity: 0.8; }
+  .sb-crown { margin-right: 4px; font-size: 14px; }
+
+  /* Hidden side card */
+  .hidden-side-hero {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .hidden-side-emoji { font-size: 36px; }
+  .hidden-side-name {
+    font-family: 'Cormorant SC', serif;
+    font-size: 22px;
+    color: var(--gold2);
+  }
+  .hidden-side-pct {
+    font-size: 13px;
+    color: var(--text2);
+    margin-left: auto;
+  }
+  .hidden-side-tagline {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text2);
+    margin-bottom: 14px;
+  }
+  .hidden-side-overlap {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .radar-container { max-width: 280px; }
+  }
+
   /* Language toggle */
   .lang-toggle {
     position: fixed;
@@ -1255,76 +1481,59 @@
 
   <!-- ───────── RESULT SCREEN ───────── -->
   <div id="screen-result" class="screen">
+    <!-- ZONE 1: THE REVEAL -->
     <div class="result-hero">
       <div class="result-animal" id="result-animal">🦅</div>
       <div class="result-label" id="result-label">Your Gamer Archetype</div>
       <div class="result-name" id="result-name">The Falcon</div>
-      <div class="result-tagline" id="result-tagline">"Eyes on the prize, talons on the leaderboard."</div>
-      <div class="result-rarity" id="result-rarity">8% of players</div>
+      <div class="result-tagline" id="result-tagline"></div>
+      <div class="result-rarity" id="result-rarity"></div>
+      <div class="runner-up-line" id="result-runner-up"></div>
     </div>
 
     <div class="result-body">
-      <div class="result-section-title">Core Identity</div>
-      <div class="result-desc" id="result-desc"></div>
+      <div class="result-section-title" id="title-identity">Core Identity</div>
+      <div class="result-desc" id="result-desc-short"></div>
+      <div class="result-desc result-desc-full" id="result-desc-full" style="display:none;"></div>
+      <button class="read-more-btn" id="btn-read-more" onclick="toggleDesc()"></button>
 
-      <div class="result-section-title">The Tell</div>
+      <div class="result-section-title" id="title-tell">The Tell</div>
       <div class="tell-card" id="result-tell"></div>
 
-      <div class="result-section-title" style="margin-top:28px;">Defining Traits</div>
+      <div class="result-section-title" id="title-traits" style="margin-top:28px;">Defining Traits</div>
       <div class="traits-list" id="result-traits"></div>
-
-      <div class="result-section-title">Only You Would...</div>
-      <ul class="only-list" id="result-only"></ul>
-
-      <div class="ornamental-divider"><span>✦</span></div>
-
-      <div class="result-section-title">Your Natural Habitat — Games to Seek</div>
-      <div class="games-grid" id="result-games"></div>
-
-      <div class="result-section-title" id="title-axes">Your Profile</div>
-      <div class="axis-legend" id="result-axis-legend">
-        <span class="axis-legend-user">You</span>
-        <span class="axis-legend-arch">Archetype baseline</span>
-      </div>
-      <div id="result-axes"></div>
-
-      <div class="ornamental-divider"><span>✦</span></div>
-
-      <div class="result-section-title" id="title-personality">Beyond the Screen</div>
-      <div class="personality-card" id="result-personality"></div>
-
-      <div class="ornamental-divider"><span>✦</span></div>
-
-      <div class="result-section-title">Psychological Spectrum</div>
-      <div id="result-spectrums"></div>
-
-      <div class="ornamental-divider"><span>✦</span></div>
-
-      <div class="result-section-title">Shadow Side</div>
-      <div class="shadow-section">
-        <div class="shadow-title">⚠ Beware</div>
-        <p id="result-shadow"></p>
-      </div>
-
-      <div style="margin-top:24px; display:flex; gap:28px; flex-wrap:wrap;">
-        <div style="flex:1; min-width:180px;">
-          <div class="result-section-title">Plays Well With</div>
-          <div class="affinity-row" id="result-affinity"></div>
-        </div>
-        <div style="flex:1; min-width:180px;">
-          <div class="result-section-title">Friction With</div>
-          <div class="affinity-row" id="result-clashes"></div>
-        </div>
-      </div>
     </div>
 
+    <!-- ZONE 2: PERSONAL INSIGHTS -->
+    <div class="result-body">
+      <div class="radar-container" id="result-radar"></div>
+
+      <div class="result-section-title" id="title-insights">What Makes You Unusual</div>
+      <div class="insight-grid" id="result-insights"></div>
+
+      <div class="result-section-title" id="title-fingerprint">Your Answer Pattern</div>
+      <div class="stats-grid" id="result-stats"></div>
+
+      <div class="ornamental-divider"><span>✦</span></div>
+
+      <div class="result-section-title" id="title-only">Only You Would...</div>
+      <ul class="only-list" id="result-only"></ul>
+    </div>
+
+    <!-- ZONE 3: GAMES -->
+    <div class="result-body">
+      <div class="result-section-title" id="title-games">Games to Seek</div>
+      <div class="games-grid" id="result-games"></div>
+    </div>
+
+    <!-- ZONE 4: FOOTER -->
     <div class="result-body" style="padding:28px 36px;">
-      <div class="result-section-title">Your Archetype Breakdown</div>
-      <p style="font-size:15px;color:var(--text2);margin-bottom:18px;">How strongly each creature showed up in your answers.</p>
+      <div class="result-section-title" id="title-breakdown">Your Archetype Breakdown</div>
       <div class="score-breakdown" id="score-breakdown"></div>
     </div>
 
     <div class="restart-row">
+      <button class="btn share-btn" id="btn-share" onclick="shareResult()">Copy Result</button>
       <button class="btn" onclick="restart()">Take the Test Again</button>
     </div>
   </div>
@@ -1492,34 +1701,12 @@ function prevQuestion() {
 // ═══════════════════════════════════════════════════════
 // SCORING
 // ═══════════════════════════════════════════════════════
+let _lastResult = null; // Store for share function
+
 function computeResult() {
   const { winner, sorted, norm } = scoreQuiz(answers);
-  showResult(winner, sorted, norm);
-}
-
-function renderAxisBars(axisValues, archVec, isRu) {
-  return AXIS_CONFIG.map(ax => {
-    const userPct = Math.round((axisValues[ax.key] ?? 0.5) * 100);
-    const archPct = archVec ? Math.round(archVec[ax.key] * 100) : null;
-    const label = isRu ? ax.ru.name : ax.en.name;
-    const lowLabel = isRu ? ax.ru.low : ax.en.low;
-    const highLabel = isRu ? ax.ru.high : ax.en.high;
-    const refMark = archPct !== null
-      ? `<div class="axis-ref-mark" style="left:${archPct}%"></div>`
-      : '';
-    return `
-      <div class="axis-row">
-        <div class="axis-header">
-          <span class="axis-name">${label}</span>
-          <span class="axis-value">${userPct}%</span>
-        </div>
-        <div class="axis-track">
-          <div class="axis-fill" style="width:${userPct}%"></div>
-          ${refMark}
-        </div>
-        <div class="axis-poles"><span>${lowLabel}</span><span>${highLabel}</span></div>
-      </div>`;
-  }).join('');
+  _lastResult = { winner, sorted, norm };
+  showResult(winner, sorted, norm, answers);
 }
 
 function renderArchAxisBars(archVec, isRu) {
@@ -1553,111 +1740,173 @@ function generatePersonalityProfile(norm, isRu) {
     const bands = PERSONALITY_BANDS[ax.key][lang];
     const band = bands.find(b => score <= b.max) || bands[bands.length - 1];
     const axLabel = isRu ? ax.ru.name : ax.en.name;
-    return `<div class="profile-facet">
-      <div class="profile-facet-header">
+    return `<details class="profile-facet">
+      <summary class="profile-facet-header">
         <span class="profile-facet-name">${axLabel}</span>
         <span class="profile-facet-reading">${band.reading}</span>
-      </div>
+      </summary>
       <div class="profile-facet-text">${band.text}</div>
-    </div>`;
+    </details>`;
   }).join('');
 
   return `<p class="profile-intro">${intro}</p>${facets}`;
 }
 
-function showResult(key, sorted, norm) {
+function toggleDesc() {
+  const full = document.getElementById('result-desc-full');
+  const btn = document.getElementById('btn-read-more');
+  const s = STRINGS[currentLang];
+  const showing = full.style.display !== 'none';
+  full.style.display = showing ? 'none' : 'block';
+  btn.textContent = showing ? s.readMore : s.readLess;
+}
+
+function shareResult() {
+  if (!_lastResult) return;
+  const { winner, sorted, norm } = _lastResult;
+  const isRu = currentLang === 'ru';
+  const arch = ARCHETYPES[winner];
+  const name = isRu ? ARCHETYPES_RU[winner].name : arch.name;
+  const runnerKey = sorted[1][0];
+  const runnerName = isRu ? ARCHETYPES_RU[runnerKey].name : ARCHETYPES[runnerKey].name;
+  const axes = AXIS_CONFIG.map(ax => {
+    const label = isRu ? ax.ru.name : ax.en.name;
+    return `${label}: ${Math.round(norm[ax.key] * 100)}%`;
+  }).join(' | ');
+
+  const text = isRu
+    ? `${arch.emoji} Мой архетип геймера: ${name}\n"${ARCHETYPES_RU[winner].tagline}"\nС оттенками: ${runnerName}\n${axes}\n\nThe Gamer Bestiary`
+    : `${arch.emoji} My Gamer Archetype: ${name}\n"${arch.tagline}"\nWith shades of: ${runnerName}\n${axes}\n\nThe Gamer Bestiary`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('btn-share');
+    const s = STRINGS[currentLang];
+    btn.textContent = s.shareCopied;
+    setTimeout(() => { btn.textContent = s.shareBtn; }, 2000);
+  });
+}
+
+function showResult(key, sorted, norm, userAnswers) {
   const arch = ARCHETYPES[key];
   const ruArch = ARCHETYPES_RU[key];
   const isRu = currentLang === 'ru';
   const s = STRINGS[currentLang];
 
+  // ── ZONE 1: THE REVEAL ──
   document.getElementById('result-animal').textContent = arch.emoji;
+  document.getElementById('result-label').textContent = s.resultLabel;
   document.getElementById('result-name').textContent = isRu ? ruArch.name : arch.name;
   document.getElementById('result-tagline').textContent = isRu ? ruArch.tagline : arch.tagline;
   document.getElementById('result-rarity').textContent = isRu ? ruArch.rarity : arch.rarity;
-  document.getElementById('result-desc').textContent = isRu ? ruArch.desc : arch.desc;
+
+  // Runner-up line
+  const runnerKey = sorted[1][0];
+  const runnerArch = ARCHETYPES[runnerKey];
+  const runnerName = isRu ? ARCHETYPES_RU[runnerKey].name : runnerArch.name;
+  const runnerPct = Math.round((sorted[1][1] / sorted[0][1]) * 100);
+  document.getElementById('result-runner-up').innerHTML =
+    `<span class="runner-up-emoji">${runnerArch.emoji}</span> ${s.runnerUpLabel} ${runnerName} (${runnerPct}%)`;
+
+  // Identity — split into short (first 2 sentences) + full
+  const desc = isRu ? ruArch.desc : arch.desc;
+  const sentences = desc.match(/[^.!?]+[.!?]+/g) || [desc];
+  const shortDesc = sentences.slice(0, 2).join('');
+  const restDesc = sentences.slice(2).join('');
+  document.getElementById('result-desc-short').textContent = shortDesc;
+  if (restDesc) {
+    document.getElementById('result-desc-full').textContent = restDesc;
+    document.getElementById('result-desc-full').style.display = 'none';
+    document.getElementById('btn-read-more').textContent = s.readMore;
+    document.getElementById('btn-read-more').style.display = '';
+  } else {
+    document.getElementById('btn-read-more').style.display = 'none';
+  }
+
+  // Tell
   document.getElementById('result-tell').textContent = isRu ? ruArch.tell : arch.tell;
 
-  document.getElementById('result-label').textContent = s.resultLabel;
-
+  // Traits
   document.getElementById('result-traits').innerHTML = arch.traits.map(t =>
     `<span class="trait-tag">${t}</span>`
   ).join('');
 
+  // ── ZONE 2: PERSONAL INSIGHTS ──
+
+  // Radar chart
+  document.getElementById('result-radar').innerHTML =
+    renderRadarChart(norm, ARCHETYPE_VECTORS[key], isRu);
+
+  // Insights
+  const insights = computeInsights(norm, key, sorted, isRu);
+  document.getElementById('result-insights').innerHTML = insights.map(ins =>
+    `<div class="insight-card">
+      <div class="insight-card-title"><span class="insight-card-icon">${ins.icon}</span>${ins.title}</div>
+      <div class="insight-card-text">${ins.text}</div>
+    </div>`
+  ).join('');
+
+  // Answer stats
+  const stats = computeAnswerStats(userAnswers, isRu);
+  let statsHtml = '';
+  if (stats.decisive) {
+    statsHtml += `<div class="stat-card">
+      <div class="stat-card-label">${s.decisiveLabel}</div>
+      <div class="stat-card-value">${stats.decisive.pole}</div>
+      <div class="stat-card-detail">${stats.decisive.axis} — ${stats.decisive.count}/${stats.decisive.total}</div>
+    </div>`;
+  }
+  if (stats.conflicted) {
+    statsHtml += `<div class="stat-card">
+      <div class="stat-card-label">${s.conflictedLabel}</div>
+      <div class="stat-card-value">${stats.conflicted.axis}</div>
+      <div class="stat-card-detail">${stats.conflicted.high}↑ ${stats.conflicted.low}↓</div>
+    </div>`;
+  }
+  document.getElementById('result-stats').innerHTML = statsHtml;
+
+  // Only You Would
   const onlyYouWould = isRu ? ruArch.onlyYouWould : arch.onlyYouWould;
   document.getElementById('result-only').innerHTML = onlyYouWould.map(item =>
     `<li>${item}</li>`
   ).join('');
 
+  // ── ZONE 3: GAMES ──
   document.getElementById('result-games').innerHTML = arch.games.map(g =>
     `<div class="game-card"><strong>${g.name}</strong><div class="game-genre">${g.genre}</div></div>`
   ).join('');
 
-  // Axis profile: user's actual scores with archetype baseline marks
-  document.getElementById('title-axes').textContent = s.sectionAxes;
-  document.getElementById('result-axis-legend').innerHTML =
-    `<span class="axis-legend-user">${s.axesLegendUser}</span>` +
-    `<span class="axis-legend-arch">${s.axesLegendArch}</span>`;
-  document.getElementById('result-axes').innerHTML =
-    renderAxisBars(norm, ARCHETYPE_VECTORS[key], isRu);
+  // ── ZONE 4: FOOTER ──
 
-  // Personality outside gaming
-  document.getElementById('title-personality').textContent = s.sectionPersonality;
-  document.getElementById('result-personality').innerHTML =
-    generatePersonalityProfile(norm, isRu);
-
-  document.getElementById('result-spectrums').innerHTML = arch.spectrums.map(sp => {
-    const label = s.spectrumLabels[sp.label] || sp.label;
-    return `
-    <div class="spectrum-row">
-      <div class="spectrum-label">
-        <span>${label}</span>
-        <span>${sp.value}%</span>
-      </div>
-      <div class="spectrum-bar">
-        <div class="spectrum-fill" style="width:${sp.value}%"></div>
-      </div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('result-shadow').textContent = isRu ? ruArch.shadow : arch.shadow;
-
-  const affinity = isRu ? ruArch.affinity : arch.affinity;
-  const clashes = isRu ? ruArch.clashes : arch.clashes;
-
-  document.getElementById('result-affinity').innerHTML = affinity.map(a =>
-    `<span class="affinity-tag">${a}</span>`
-  ).join('');
-
-  document.getElementById('result-clashes').innerHTML = clashes.map(a =>
-    `<span class="clash-tag">${a}</span>`
-  ).join('');
-
+  // Archetype breakdown (clickable)
   const maxScore = sorted[0][1] || 1;
   document.getElementById('score-breakdown').innerHTML = sorted.map(([k, v], idx) => {
     const a = ARCHETYPES[k];
     const aName = isRu ? ARCHETYPES_RU[k].name : a.name;
     const pct = Math.max(0, Math.round((v / maxScore) * 100));
-    return `<div class="score-bar-wrap">
+    const crown = idx === 0 ? '<span class="sb-crown">♛</span>' : '';
+    return `<div class="score-bar-wrap" onclick="openArchetype('${k}')">
       <div class="score-bar-meta">
-        <span class="sb-icon">${a.emoji}</span>
+        ${crown}<span class="sb-icon">${a.emoji}</span>
         <span class="sb-name">${aName}</span>
         <span class="sb-pct">${pct}%</span>
       </div>
       <div class="score-bar-track">
-        <div class="score-bar-fill${idx === 0 ? ' winner' : ''}" style="width:${pct}%"></div>
+        <div class="score-bar-fill${idx === 0 ? ' winner' : ''}" style="width:${pct}%;animation-delay:${idx * 0.08}s"></div>
       </div>
     </div>`;
   }).join('');
 
-  // Apply result screen section titles (excludes the dynamically-set axis/personality titles)
-  const titleEls = document.querySelectorAll('#screen-result .result-section-title:not(#title-axes):not(#title-personality)');
-  const titles = [s.sectionIdentity, s.sectionTell, s.sectionTraits, s.sectionOnly,
-                  s.sectionGames, s.sectionSpectrum, s.sectionShadow,
-                  s.sectionAffinity, s.sectionClashes, s.sectionBreakdown];
-  titleEls.forEach((el, i) => { if (titles[i]) el.textContent = titles[i]; });
-  document.querySelector('.shadow-title').textContent = s.shadowWarning;
+  // Apply section titles
+  document.getElementById('title-identity').textContent = s.sectionIdentity;
+  document.getElementById('title-tell').textContent = s.sectionTell;
+  document.getElementById('title-traits').textContent = s.sectionTraits;
+  document.getElementById('title-insights').textContent = s.sectionInsights;
+  document.getElementById('title-fingerprint').textContent = s.sectionFingerprint;
+  document.getElementById('title-only').textContent = s.sectionOnly;
+  document.getElementById('title-games').textContent = s.sectionGames;
+  document.getElementById('title-breakdown').textContent = s.sectionBreakdown;
   document.querySelector('[onclick="restart()"]').textContent = s.restartBtn;
+  document.getElementById('btn-share').textContent = s.shareBtn;
 
   showScreen('screen-result');
   window.scrollTo({ top: 0, behavior: 'smooth' });
