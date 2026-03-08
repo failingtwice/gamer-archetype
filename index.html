@@ -538,29 +538,44 @@
 
   /* ── CHOICE OPTIONS ── */
   .choice-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .choice-or {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 4px;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1 / -1;
+    margin: -8px 0;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.5;
   }
 
   .choice-opt {
     display: flex;
-    align-items: flex-start;
-    gap: 14px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     background: var(--bg3);
     border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 3px;
-    padding: 14px 16px;
-    text-align: left;
+    border-radius: 6px;
+    padding: 28px 20px;
     cursor: pointer;
     font-family: 'Crimson Pro', serif;
-    font-size: 17px;
+    font-size: 18px;
     line-height: 1.55;
     color: var(--text);
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
     position: relative;
     overflow: hidden;
+    min-height: 120px;
   }
 
   .choice-opt::before {
@@ -576,6 +591,7 @@
   .choice-opt:hover {
     border-color: rgba(201,168,76,0.35);
     background: rgba(201,168,76,0.04);
+    transform: translateY(-2px);
   }
 
   .choice-opt:hover::before { opacity: 1; }
@@ -587,20 +603,20 @@
   }
 
   .choice-letter {
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-    opacity: 0.65;
-    min-width: 16px;
-    padding-top: 3px;
-    flex-shrink: 0;
+    display: none;
   }
 
-  .choice-opt.selected .choice-letter { opacity: 1; }
-
-  @media (max-width: 520px) {
-    .choice-opt { font-size: 15px; padding: 12px 14px; }
+  @media (max-width: 600px) {
+    .choice-options {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .choice-opt {
+      font-size: 16px;
+      padding: 20px 16px;
+      min-height: 80px;
+    }
+    .choice-or { display: none; }
   }
 
   /* Navigation */
@@ -1192,8 +1208,8 @@
   <!-- ───────── INTRO SCREEN ───────── -->
   <div id="screen-intro" class="screen active">
     <div class="intro-card">
-      <p>Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 36 situational scenarios.</p>
-      <p>For each scenario, choose the option that best describes your <em>actual</em> behavior — not the player you aspire to be. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes. There are no wrong answers.</p>
+      <p>Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 10 distinct creatures, through 22 quick dilemmas.</p>
+      <p>For each dilemma, pick the option that feels more like you — not the player you aspire to be. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes. There are no wrong answers.</p>
     </div>
 
     <div class="archetype-grid">
@@ -1207,8 +1223,6 @@
       <div class="archetype-pill" onclick="openArchetype('gecko')"><span>🦎</span><strong>The Gecko</strong></div>
       <div class="archetype-pill" onclick="openArchetype('bear')"><span>🐻</span><strong>The Bear</strong></div>
       <div class="archetype-pill" onclick="openArchetype('bat')"><span>🦇</span><strong>The Bat</strong></div>
-      <div class="archetype-pill" onclick="openArchetype('beaver')"><span>🦫</span><strong>The Beaver</strong></div>
-      <div class="archetype-pill" onclick="openArchetype('magpie')"><span>🐦</span><strong>The Magpie</strong></div>
     </div>
 
     <div class="btn-center">
@@ -1370,281 +1384,10 @@
   </div>
 </div>
 
+
+<script src="engine.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════
-// LANGUAGE / INTERNATIONALISATION
-// ═══════════════════════════════════════════════════════
 let currentLang = 'ru';
-
-const STRINGS = {
-  en: {
-    siteTitle: "The Gamer Bestiary — Archetype Test",
-    headerOrnament: "The Gamer Bestiary",
-    h1: "What Beast Do You Play As?",
-    subtitle: "A psychological framework for uncovering the creature that lurks behind your controller.",
-    introP1: 'Every gamer carries a hidden archetype — a pattern of instincts and compulsions that shapes every session and every choice. This assessment reveals your <strong style="color:var(--gold)">Gamer Archetype</strong> from 12 distinct creatures, through 36 situational scenarios.',
-    introP2: "For each scenario, choose the option that best describes your <em>actual</em> behavior — not the player you aspire to be. This works whether you play AAA titles for 8 hours or mobile games for 5 minutes.",
-    startBtn: "Begin the Assessment",
-    resultLabel: "Your Gamer Archetype",
-    sectionIdentity: "Core Identity",
-    sectionTell: "The Tell",
-    sectionTraits: "Defining Traits",
-    sectionOnly: "Only You Would...",
-    sectionGames: "Your Natural Habitat — Games to Seek",
-    sectionSpectrum: "Psychological Spectrum",
-    sectionShadow: "Shadow Side",
-    shadowWarning: "⚠ Beware",
-    sectionAffinity: "Plays Well With",
-    sectionClashes: "Friction With",
-    sectionBreakdown: "Your Archetype Breakdown",
-    breakdownSub: "Similarity to each archetype. 100% = closest match, 0% = furthest.",
-    sectionAxes: "Your Profile",
-    axesLegendUser: "You",
-    axesLegendArch: "Archetype baseline",
-    sectionPersonality: "Beyond the Screen",
-    sectionModalAxes: "Archetype Profile",
-    restartBtn: "Take the Test Again",
-    backBtn: "← Back",
-    questionOf: (cur, total) => `Question ${cur} of ${total}`,
-    questionLabel: (n) => `Question ${n}`,
-    spectrumLabels: {},
-  },
-  ru: {
-    siteTitle: "Бестиарий Геймера — Тест Архетипа",
-    headerOrnament: "Бестиарий Геймера",
-    h1: "Каким зверем ты играешь?",
-    subtitle: "Психологический тест для определения существа, скрытого за твоим контроллером.",
-    introP1: 'Каждый геймер несёт в себе скрытый архетип — паттерн инстинктов и привычек, формирующий каждую сессию и каждый выбор. Это испытание раскроет твой <strong style="color:var(--gold)">Архетип Геймера</strong> из 12 существ — через 36 ситуативных сценариев.',
-    introP2: "В каждом сценарии выбери вариант, который лучше всего описывает твоё <em>реальное</em> поведение — а не того игрока, которым ты хотел бы быть. Подходит как для тех, кто играет по 8 часов, так и для тех, кто запускает игры на 5 минут с телефона.",
-    startBtn: "Начать тест",
-    resultLabel: "Твой архетип геймера",
-    sectionIdentity: "Суть архетипа",
-    sectionTell: "Характерный признак",
-    sectionTraits: "Ключевые черты",
-    sectionOnly: "Только ты способен на...",
-    sectionGames: "Твоя естественная среда — игры для тебя",
-    sectionSpectrum: "Психологический спектр",
-    sectionShadow: "Тёмная сторона",
-    shadowWarning: "⚠ Осторожно",
-    sectionAffinity: "Хорошо сочетается с",
-    sectionClashes: "Трение с",
-    sectionBreakdown: "Распределение по архетипам",
-    breakdownSub: "Схожесть с каждым архетипом. 100% — ближайший, 0% — наиболее далёкий.",
-    sectionAxes: "Твой профиль",
-    axesLegendUser: "Ты",
-    axesLegendArch: "Базовый архетип",
-    sectionPersonality: "За пределами экрана",
-    sectionModalAxes: "Профиль архетипа",
-    restartBtn: "Пройти тест снова",
-    backBtn: "← Назад",
-    questionOf: (cur, total) => `Вопрос ${cur} из ${total}`,
-    questionLabel: (n) => `Вопрос ${n}`,
-    spectrumLabels: {
-      "Social Drive": "Социальность",
-      "Systems Focus": "Системное мышление",
-      "Challenge Seeking": "Тяга к сложности",
-      "Competitive Dominance": "Соревновательность",
-      "Play Pace": "Темп игры",
-    },
-  },
-};
-
-// Russian archetype translations
-const ARCHETYPES_RU = {
-  falcon: {
-    name: "Сокол",
-    tagline: '"Взгляд на приз, когти — на таблицу лидеров."',
-    rarity: "8% игроков",
-    desc: "Сокол — точный соревновательный игрок, чья игровая идентичность построена на измеримых результатах. Ты играешь не ради исследования или отдыха — ты играешь, чтобы ПОБЕДИТЬ, и хочешь доказательств. Рейтинговые матчи, подъём по лестнице, соотношение K/D, турнирные сетки — это твой родной язык. Ты изучаешь повторы, оптимизируешь раскладку клавиш и помнишь свой пиковый рейтинг трёхлетней давности до десятых долей. Кайф не в самом матче — а в момент, когда числа идут вверх.",
-    tell: "Они проверяют свой рейтинг или KDA перед тем, как закрыть игру — каждый раз без исключения.",
-    onlyYouWould: [
-      "Встать в рейтинговую очередь в 2 ночи специально для того, чтобы отыграться после неудачного вечера",
-      "Знать свой процент побед до десятых, но при этом говорить, что «особо не следишь за статой»",
-      "Испытывать настоящее и продолжительное раздражение, когда тиммейт игнорирует твой явно оптимальный вызов",
-    ],
-    shadow: "Поражение может испортить тебе день — или целую неделю. Ты склонен к тильту, перекладыванию вины и тихой неприязни к игрокам, которые не относятся к игре так же серьёзно. Если ты не прогрессируешь — ты чувствуешь себя ничтожеством.",
-    personality: "Ты подходишь к большинству сфер жизни так же, как к играм — со счётом. Ты ставишь измеримые цели, компульсивно отслеживаешь прогресс и испытываешь тихое беспокойство, когда успех нельзя подсчитать. В конкурентных областях — спорте, работе, учёбе — ты фиксируешь своё место в иерархии и воспринимаешь его лично. Людей, которым искренне «всё равно на результат», ты тихо не понимаешь — даже там, где это не имеет смысла.",
-    affinity: ["Волк", "Геккон", "Лягушка"],
-    clashes: ["Медведь", "Дельфин"],
-  },
-  wolf: {
-    name: "Волк",
-    tagline: '"Один я опасен. Со стаей — непобедим."',
-    rarity: "11% игроков",
-    desc: "Волк живёт ради слаженной командной игры — не ради личной славы, а ради электрического синергизма с хорошей командой. Ты помнишь каждый callout, каждое клатчное движение, каждый момент, когда идеально сработавшая командная стратегия сломила противника. Ты собираешь тиммейтов после тяжёлого раунда, пишешь правила Discord-сервера и организуешь тренировочные сессии. Соревнование важно, но только когда оно общее.",
-    tell: "Их группа друзей уже имеет название, одинаковые иконки профилей, и хотя бы раз составленный тренировочный план.",
-    onlyYouWould: [
-      "Сидеть до 3 ночи не потому, что игра крутая, а потому что все ещё онлайн",
-      "Воспринять как личную обиду, когда тиммейт выходит из сессии без предупреждения",
-      "Собрать шестерых людей в кооп, который рассчитан максимум на двоих",
-    ],
-    shadow: "Одиночные игры кажутся тебе пустыми и бессмысленными. Без стаи ты быстро теряешь мотивацию. Ты можешь стать слишком зависимым от групповой валидации — если команда распадётся, твоя игровая идентичность может рухнуть вместе с ней.",
-    personality: "Твоя идентичность вплетена в твою группу. Ты расцветаешь в совместных усилиях, естественно берёшь на себя роль организатора и испытываешь нечто близкое к потере, когда твоя команда распадается. Ты помнишь предпочтения каждого, поддерживаешь чат в живом состоянии и первым замечаешь, когда кто-то замолчал. Одиночные занятия ощущаются пустыми — не потому что не можешь, а потому что не с кем потом поговорить об этом.",
-    affinity: ["Сокол", "Дельфин", "Дракон"],
-    clashes: ["Геккон", "Лягушка"],
-  },
-  owl: {
-    name: "Сова",
-    tagline: '"История не в катсценах. Она — в каждой книге, описании предмета и экране загрузки."',
-    rarity: "9% игроков",
-    desc: "Сова — пожиратель лора, архитектор вики, игрок, который останавливается перед входом в подземелье, чтобы прочитать каждый элемент нарратива на стенах. Ты не просто играешь — ты населяешь целые миры. Ты можешь рассказать политическую историю вымышленных королевств. Ты пишешь теории. Замечаешь изменения в диалогах NPC после третьего акта.",
-    tell: "Они останавливаются посреди игры, чтобы прочитать надпись на надгробии, которая не несёт никакой игровой ценности.",
-    onlyYouWould: [
-      "Отказываться пропускать катсцены даже при втором прохождении игры, которую знаешь наизусть",
-      "Прочитать весь бестиарий в игре до встречи хоть с одним существом из него",
-      "Иметь обоснованные мнения по деталям лора, которые тонко противоречат намерениям разработчиков",
-    ],
-    shadow: "Ты избегаешь игры с поверхностным нарративом как чуму, даже если они по-настоящему веселы. Ты можешь часами сидеть в меню, читая лор, вместо того чтобы играть. Мультиплеер кажется тебе пустым. У тебя огромный беклог, который ты никогда не пройдёшь, потому что каждая игра требует недель полного погружения.",
-    personality: "Ты не умеешь делать что-то поверхностно — ни в отношениях, ни в увлечениях, ни в разговорах. Тебе нужна глубокая версия всего, и ты будешь её искать, даже если никто вокруг не замечает. Ты читаешь сноски, следуешь ссылкам и имеешь развитые мнения о вещах, о которых большинство даже не слышали. Светские беседы — лёгкая пытка. У тебя, вероятно, богатая внутренняя жизнь и несколько глубоких отношений, которые ты не обменяешь на сотню поверхностных.",
-    affinity: ["Летучая мышь", "Медведь", "Лис"],
-    clashes: ["Лягушка", "Сорока"],
-  },
-  frog: {
-    name: "Лягушка",
-    tagline: '"Текущий рекорд Any% — 47 минут, и я его сотру."',
-    rarity: "5% игроков",
-    desc: "Лягушка не играет в игры — Лягушка их препарирует. Там, где другие видят фэнтезийный мир, ты видишь физический движок с эксплуатируемыми краевыми случаями. Спидраны, пропуск последовательностей, глитчи, непредусмотренная механика — это не баги, а тайный язык, на котором игра говорит, когда никто не смотрит.",
-    tell: "Они знают пофреймово точное окно ввода для пропуска, экономящего ровно 8 секунд.",
-    onlyYouWould: [
-      "Испытать настоящий восторг — не разочарование — в момент обнаружения игрового глитча",
-      "Пропускать все катсцены без колебаний и не испытывать по этому поводу абсолютно ничего",
-      "Провести 50 часов, проходя игру способами, которые разработчики не предусматривали, а затем просто двигаться дальше",
-    ],
-    shadow: "Ты можешь полностью лишить игру веселья, сводя её к серии входных данных для оптимизации. Друзья, которые хотят просто насладиться сюжетным прохождением, находят твой инстинкт пропускать диалоги крайне раздражающим.",
-    personality: "Ты инстинктивно ищешь обходной путь — не ради протеста, а потому что «как оно должно работать» интересует тебя меньше, чем «как оно работает на самом деле». Ты находишь лазейки в системах, краевые случаи в процессах, более быстрые маршруты, о которых никто не думал. Это делает тебя ценным там, где нужно нестандартное мышление, и тихо невыносимым там, где нужно следовать процедуре без вопросов.",
-    affinity: ["Сокол", "Геккон", "Лис"],
-    clashes: ["Сова", "Дельфин"],
-  },
-  dragon: {
-    name: "Дракон",
-    tagline: '"Первый уровень — это оскорбление. К концу недели я стану богом."',
-    rarity: "14% игроков",
-    desc: "Дракон жаждет силы — не над другими игроками, а над игровым миром. Ты существуешь ради момента, когда твой билд становится непобедимым, когда враги, некогда пугавшие тебя, превращаются в пепел. Ты гриндишь с религиозным усердием не потому, что вынужден, а потому что каждое растущее число приносит глубокое удовлетворение.",
-    tell: "Они до сих пор играют в игру, которую сами же назвали «так себе» — потому что конвейер снаряжения ещё не закончился.",
-    onlyYouWould: [
-      "Набить 1000 часов в игре, которую считаешь средненькой — просто потому что числа продолжали расти",
-      "Почувствовать реальную потерю, когда игра патчем убирает валюту или систему прогресса, которую ты гриндил",
-      "Знать наизусть точный процент выпадения предметов, которые фармишь уже несколько недель",
-    ],
-    shadow: "Ты уязвим для самой хищнической монетизации в играх — лутбоксы, боевые пропуска, бесконечные конвейеры снаряжения. Игры без осмысленных петель прогресса надоедают тебе за считанные часы.",
-    personality: "Ты глубже, чем большинство людей готовы признать о себе, движим наградами. Системы с чётким прогрессом — карьерные лестницы, сертификации, личные рекорды — заряжают тебя так, как открытые задачи не заряжают. Ты, скорее всего, отслеживаешь больше метрик, чем говоришь другим: шаги, серии, финансы. Когда петля обратной связи закрывается — что-то удовлетворяется. Когда она застревает — что-то зудит, и ты чувствуешь зуд раньше, чем понимаешь причину.",
-    affinity: ["Волк", "Летучая мышь", "Медведь"],
-    clashes: ["Летучая мышь", "Лягушка"],
-  },
-  dolphin: {
-    name: "Дельфин",
-    tagline: '"Лучшая сессия в жизни. Мы играли буквально ни во что особенное. Но все были там."',
-    rarity: "13% игроков",
-    desc: "Дельфину неважно, хороша ли игра — важно, крутые ли люди, которые в неё играют. Для тебя игры — это социальная площадка, способ поддерживать дружбу и создавать общие воспоминания. Ты устраиваешь игровые вечера, знакомишь людей с новыми играми и помнишь предпочтения каждого.",
-    tell: "Они помнят самый смешной момент прошлого игрового вечера ярче, чем любую концовку одиночной игры.",
-    onlyYouWould: [
-      "Купить игру, в которую никогда не будешь играть в одиночку, только потому что друзья хотят поиграть вместе",
-      "Получить больше удовольствия от посредственной игры с людьми, чем от шедевра в одиночестве",
-      "Планировать игровую сессию вокруг того, кто может прийти, а не вокруг того, во что играть",
-    ],
-    shadow: "Одиночные игры могут казаться тебе бессмысленными или даже угнетающими. Ты можешь перегружать себя социально — всегда организатор, всегда источник энергии — тайно желая, чтобы кто-то другой взял на себя инициативу.",
-    personality: "Для тебя переживание завершено только тогда, когда оно разделено. Ты — естественный связующий: знаешь предпочтения каждого, поддерживаешь дружбы через несколько эпох своей жизни и устраиваешь встречи не из любви к логистике, а потому что тебе нужны люди рядом. Риск: твои собственные предпочтения могут тихо сглаживаться под весом того, что хотят все остальные, и ты можешь не знать, что тебе нравится, когда не на кого опереться.",
-    affinity: ["Волк", "Медведь", "Сорока"],
-    clashes: ["Геккон", "Лягушка"],
-  },
-  fox: {
-    name: "Лис",
-    tagline: '"У меня был ответ ещё до того, как ты закончил объяснять загадку."',
-    rarity: "7% игроков",
-    desc: "Лис тянется к играм как ключ к замку — они существуют, чтобы решать задачи. Стратегия, дедукция, управление ресурсами, нестандартное мышление — это не препятствия на пути к веселью, это и есть веселье. Ты любишь щелчок плана, который сходится идеально.",
-    tell: "Они ставят на паузу кооперативную игру, чтобы объяснить оптимальный маршрут — пока все остальные уже пытаются играть.",
-    onlyYouWould: [
-      "Решить загадку без подсказок и тихо гордиться этим несколько дней",
-      "Добровольно создать таблицу для игровой экономики крафта, потому что так быстрее, чем искать в вики",
-      "Перепроходить начало стратегии снова и снова, только чтобы протестировать разные начальные ходы",
-    ],
-    shadow: "Чисто экшн-игры без стратегической глубины быстро тебе надоедают. Ты можешь слишком усердно анализировать кооперативные игры, превращая расслабленные сессии в напряжённые сеансы планирования.",
-    personality: "Ты мыслишь структурами. Прежде чем подступиться к проблеме, ты хочешь полностью понять правила — не чтобы следовать им, а чтобы знать всё пространство ходов. Ты строишь схемы, создаёшь таблицы, которые никто не просил, и обычно видишь на два-три хода вперёд раньше других. Люди читают это как холодную отстранённость. На самом деле ты полностью вовлечён — просто на другой высоте.",
-    affinity: ["Сова", "Лягушка", "Летучая мышь"],
-    clashes: ["Сорока", "Дельфин"],
-  },
-  gecko: {
-    name: "Геккон",
-    tagline: '"Я сделал этого босса 70 раз. Я не раздражён. Я учусь."',
-    rarity: "6% игроков",
-    desc: "Геккон определяется одним: мастерством. Не прогрессом, не нарративом, не социальностью — чистым, неразбавленным механическим мастерством. Ты хочешь игры, которые требуют от тебя всего, наказывают за небрежность и вознаграждают точность. Ты выучил каждый фрейм паттерна босса, практикуешь технику движения в пустых комнатах.",
-    tell: "Они тренируются в пустой комнате — без врагов, без задач — 20 минут, прежде чем снова попробовать босса.",
-    onlyYouWould: [
-      "Выключить музыку и снизить разрешение специально для минимизации задержки ввода в одиночной игре",
-      "Почувствовать скуку от игры после трёх попыток, если она ни разу не потребовала полной концентрации",
-      "С искренней убеждённостью назвать босса «честным» после 60 смертей от его рук",
-    ],
-    shadow: "У тебя почти нулевая толерантность к играм, которые кажутся «слишком лёгкими», и ты часто отвергаешь любимые всеми игры как поверхностные. Ты можешь выглядеть снобом в вопросах сложности. Казуальные игровые сессии с менее опытными игроками могут казаться тебе мучительными.",
-    personality: "Твоя ориентация на мастерство не ограничивается играми. Что бы тебя ни волновало, ты практикуешь это осознанно, держишь себя по стандартам, которые другие считают избыточными, и находишь «достаточно хорошо» искренне неудовлетворительным. Ты тот, кто продолжает оттачивать что-то после того, как все остальные двинулись дальше — не из перфекционизма, а из чёткого внутреннего ощущения, что ты ещё не достиг того, что знаешь как возможное.",
-    affinity: ["Лягушка", "Сокол", "Летучая мышь"],
-    clashes: ["Сорока", "Дельфин"],
-  },
-  bear: {
-    name: "Медведь",
-    tagline: '"Я сегодня построил целую деревню. Никто не умер. Это было идеально."',
-    rarity: "16% игроков",
-    desc: "Медведю нечего доказывать. Ты играешь, чтобы быть уютно, погрузиться в мягкий мир, который ничего от тебя не требует, кроме присутствия. Симуляторы фермы, градостроители, лайф-симы, творческие песочницы — у тебя глубокая потребность в медитативной петле: посади, вырасти, собери, повтори.",
-    tell: "Они уже четыре часа украшают игровой дом мебелью, которую не увидит ни один другой игрок.",
-    onlyYouWould: [
-      "Начать уютную игру заново, просто чтобы снова пережить спокойные начальные часы",
-      "Отказаться от мультиплеерного приглашения, потому что в игре нужно срочно заняться фермой",
-      "Иметь специально подобранный плейлист, идеально соответствующий настроению текущего симулятора фермы",
-    ],
-    shadow: "Ты можешь путать комфорт с глубиной, возвращаясь к тем же уютным петлям годами, избегая переживаний, которые могли бы тебя по-настоящему изменить. Линия между расслаблением и избеганием может размываться незаметно.",
-    personality: "Ты понимаешь ценность психологической безопасности и создаёшь её для других естественно — тёплая обстановка, стабильные ритуалы, пространство, где ничего не нужно доказывать. Ты тот человек, рядом с которым другие расслабляются, сами не зная почему. Риск в том, что «комфортно» может стать местом, из которого ты никогда не выходишь, а настоящий рост обычно требует именно того трения, которое ты научился минимизировать.",
-    affinity: ["Дельфин", "Сова", "Лис"],
-    clashes: ["Сокол", "Геккон"],
-  },
-  bat: {
-    name: "Летучая мышь",
-    tagline: '"Я не следую критическому пути. Критического пути не существует."',
-    rarity: "7% игроков",
-    desc: "Летучая мышь — исследователь без маршрута. Ты ориентируешься эхолокацией, отражаясь от тёмных стен игровых миров, находя то, что никто другой не заметил. Ты не выполняешь задания — ты исследуешь территорию. Залезаешь на гору просто чтобы увидеть, что за ней.",
-    tell: "Они прошли 30% основного сюжета за 60 часов — и считают, что это неплохой прогресс.",
-    onlyYouWould: [
-      "Забраться на гору в игре без какой-либо цели — только чтобы увидеть вид с вершины",
-      "Испытывать лёгкую, но настоящую тревогу в играх с невидимыми стенами или загрузочными коридорами",
-      "Намеренно заблудиться в новой локации, чтобы пережить удовольствие от нахождения обратного пути",
-    ],
-    shadow: "Ты можешь потеряться — буквально и фигурально — и так и не закончить игры. Твой беклог огромен. Ты иногда не добираешься до концовок, потому что путешествие тебе было достаточно. Строго структурированные линейные игры ощущаются как коридоры.",
-    personality: "Ты создан для начал. Идеи, новые направления, неожиданные связи между областями — ты генерируешь их естественно и с настоящим энтузиазмом. Сложность не в том, чтобы начать; а в том, что примерно в момент, когда начинается настоящая работа, появляется следующая интересная вещь. У тебя больше незавершённых проектов и недочитанных книг, чем у почти любого знакомого, — и необычно широкий диапазон вещей, о которых ты кое-что знаешь.",
-    affinity: ["Сова", "Лис", "Медведь"],
-    clashes: ["Сокол", "Дракон"],
-  },
-  beaver: {
-    name: "Бобёр",
-    tagline: '"Конвейер неоптимален. Я его перестраиваю."',
-    rarity: "8% игроков",
-    desc: "Бобёр не просто играет — он проектирует. Не в смысле разработки, а в смысле живого процесса: перестройка систем, оптимизация пропускной способности, реконструкция заводов с нуля — потому что планировку можно сделать лучше. Тебя тянет к играм с взаимосвязанными механиками и возникающей сложностью. Редстоун Minecraft, производственные линии Factorio, дорожные сети Cities Skylines — для Бобра это не игры, это задачи дизайна. Веселье не в победе. Оно в моменте, когда система встаёт на место и начинает работать сама.",
-    tell: "Они перезапускали одну и ту же партию в Factorio четыре раза. Первые три «работали». Этого было недостаточно.",
-    onlyYouWould: [
-      "Снести работающий завод в Factorio, потому что компоновка шины не масштабируется",
-      "Провести три часа, наблюдая за полностью автоматизированной машиной, которая просто работает, — и быть в полном восторге",
-      "Отказываться выполнять основные задачи, пока инфраструктура не будет «готова»",
-    ],
-    shadow: "Ты можешь провести 40 часов над инфраструктурой, которую никогда не используешь. Прогресс стоит, пока система не стала идеальной. Ты оптимизируешь под сценарии, которые никогда не наступят. И когда чьё-то решение «и так сойдёт» работает нормально, это тихо сводит тебя с ума.",
-    personality: "Ты мыслишь системами — не как применяемой техникой, а как нативным когнитивным режимом. Ты инстинктивно моделируешь потоки, находишь узкие места и испытываешь постоянный зуд от неэффективных процессов, который не проходит, пока ты не перепроектируешь их. Другие называют это «слишком много думать»; ты знаешь, что это распознавание паттернов. Риск: оптимизация системы может стать самоцелью, уводя фокус от реальной цели, которой система должна была служить.",
-    affinity: ["Лис", "Дракон", "Медведь"],
-    clashes: ["Сокол", "Сорока"],
-  },
-  magpie: {
-    name: "Сорока",
-    tagline: '"Три минуты в очереди — это вполне нормальная игровая сессия."',
-    rarity: "15% игроков",
-    desc: "Сороке не нужен игровой rig, гарнитура или три часа в календаре. Ты играешь где угодно — в постели, в автобусе, во время рекламы, между встречами. Игры — спутник повседневной жизни, а не побег от неё. Тебя тянет к тому, что быстро вознаграждает, приятно нажимать и не наказывает за остановку.",
-    tell: "У них 200+ часов в мобильных играх, которые они никогда не назвали бы своим хобби.",
-    onlyYouWould: [
-      "Проходить один и тот же трёхминутный игровой цикл 40 раз за день — урывками в дороге и перерывах",
-      "Бросить игру в момент, когда она требует более 5 минут непрерывного, сосредоточенного внимания",
-      "Иметь по-настоящему впечатляющую серию в ежедневной головоломке, которая началась «просто убить 2 минуты»",
-    ],
-    shadow: "Ты редко погружаешься достаточно глубоко, чтобы добраться до самого вознаграждающего контента. Ты начал десятки игр и закончил немногие. Игры, созданные для компульсивного микровзаимодействия, нашли в твоих привычках охотного партнёра.",
-    personality: "Ты живёшь в небольших, эффективных единицах внимания. Ты одновременно в курсе большего числа тем, чем большинство людей — новостные циклы, тренды, разрозненные разговоры — потому что твоё внимание движется быстро и захватывает эффективно. Сложность — глубина: та же скорость, которая делает тебя широко осведомлённым, затрудняет достижение того мастерства, которое требует оставаться на месте очень долго.",
-    affinity: ["Медведь", "Дельфин", "Летучая мышь"],
-    clashes: ["Сова", "Геккон"],
-  },
-};
-
 
 function setLang(lang) {
   currentLang = lang;
@@ -1652,11 +1395,6 @@ function setLang(lang) {
   document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
   applyStrings();
 }
-
-const ARCHETYPE_PILLS_RU = [
-  "Сокол", "Волк", "Сова", "Лягушка", "Дракон", "Дельфин",
-  "Лис", "Геккон", "Медведь", "Летучая мышь", "Бобёр", "Сорока",
-];
 
 function applyStrings() {
   const s = STRINGS[currentLang];
@@ -1675,814 +1413,9 @@ function applyStrings() {
 
   // Update archetype pills on intro screen
   document.querySelectorAll('.archetype-pill strong').forEach((el, i) => {
-    el.textContent = isRu ? ARCHETYPE_PILLS_RU[i] : `The ${['Falcon','Wolf','Owl','Frog','Dragon','Dolphin','Fox','Gecko','Bear','Bat','Beaver','Magpie'][i]}`;
+    el.textContent = isRu ? ARCHETYPE_PILLS_RU[i] : `The ${['Falcon','Wolf','Owl','Frog','Dragon','Dolphin','Fox','Gecko','Bear','Bat'][i]}`;
   });
 }
-
-// ═══════════════════════════════════════════════════════
-// ARCHETYPE DEFINITIONS
-// ═══════════════════════════════════════════════════════
-const ARCHETYPES = {
-  falcon: {
-    emoji: "🦅",
-    name: "The Falcon",
-    tagline: '"Eyes on the prize, talons on the leaderboard."',
-    rarity: "8% of players",
-    desc: "The Falcon is a precision-driven competitor whose entire gaming identity is built around measurable performance. You don't play to explore or relax — you play to WIN, and you want proof of it. Ranked modes, ladder climbs, KDA ratios, and tournament brackets are your natural language. You study replays, optimize keybinds, and can recall your peak rank from three years ago to the decimal. The thrill isn't the match itself — it's the moment the numbers go up.",
-    tell: "They check their rank or KDA before closing the game — every single time.",
-    traits: ["Fiercely competitive", "Data-driven", "Mechanically precise", "Rank-obsessed", "Disciplined practice"],
-    onlyYouWould: [
-      "Queue for ranked at 2am specifically to recover from a bad loss earlier that evening",
-      "Know your win rate to one decimal place but still insist you 'don't really care about stats'",
-      "Feel genuine, lasting frustration when a teammate ignores your clearly optimal play call",
-    ],
-    games: [
-      { name: "Valorant / CS2", genre: "Tactical FPS" },
-      { name: "League of Legends", genre: "MOBA" },
-      { name: "Rocket League", genre: "Competitive Sports" },
-      { name: "Street Fighter 6", genre: "Fighting Game" },
-      { name: "StarCraft II", genre: "RTS" },
-      { name: "Tekken 8", genre: "Fighting Game" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 35 },
-      { label: "Systems Focus", value: 80 },
-      { label: "Challenge Seeking", value: 88 },
-      { label: "Competitive Dominance", value: 97 },
-      { label: "Play Pace", value: 30 },
-    ],
-    shadow: "A loss can ruin your day — or your week. You're prone to tilt, blame-shifting, and quietly resenting players who don't take the game as seriously. If you're not improving, you feel worthless. Be wary of rage-quitting relationships alongside matches.",
-    personality: "You approach most things in life the way you approach games: with a scoreboard. You set measurable goals, track performance compulsively, and feel low-grade discomfort when progress can't be quantified. In competitive domains — sport, work, academics — you register your rank and feel it personally. People who genuinely don't care about the outcome quietly frustrate you, even in contexts where caring doesn't make sense.",
-    affinity: ["The Wolf", "The Gecko", "The Frog"],
-    clashes: ["The Bear", "The Dolphin"],
-  },
-  wolf: {
-    emoji: "🐺",
-    name: "The Wolf",
-    tagline: '"Alone I\'m dangerous. With my pack, I\'m unstoppable."',
-    rarity: "11% of players",
-    desc: "The Wolf lives for coordinated, social play — not for solo glory, but for the electric synergy of a well-oiled squad. You remember every callout, every clutch rotation, every time a perfectly executed team strategy dismantled the enemy. You're the player who rallies teammates after a rough round, drafts the Discord server rules, and organizes practice sessions. Competition matters, but only when it's shared — a victory with your pack is worth ten solo trophies.",
-    tell: "They've named their friend group's squad, have matching profile icons, and have drafted a practice schedule at least once.",
-    traits: ["Team-first mentality", "Natural communicator", "Tactical thinker", "Loyal to squad", "Leadership instinct"],
-    onlyYouWould: [
-      "Stay up until 3am not because the game is good, but because everyone is still online",
-      "Feel personally hurt when a teammate quits a session without warning",
-      "Organize a 6-person co-op run for a game that was designed for 2",
-    ],
-    games: [
-      { name: "Rainbow Six Siege", genre: "Tactical Co-op" },
-      { name: "Deep Rock Galactic", genre: "Co-op Shooter" },
-      { name: "Helldivers 2", genre: "Squad Action" },
-      { name: "World of Warcraft (Raids)", genre: "MMO" },
-      { name: "Overwatch 2", genre: "Team FPS" },
-      { name: "FFXIV (Savage Raids)", genre: "MMO" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 95 },
-      { label: "Systems Focus", value: 50 },
-      { label: "Challenge Seeking", value: 70 },
-      { label: "Competitive Dominance", value: 72 },
-      { label: "Play Pace", value: 62 },
-    ],
-    shadow: "Solo games feel hollow and pointless to you. Without your pack, you lose motivation fast. You can also become over-reliant on group validation — if the squad disbands or drifts apart, your gaming identity may crumble entirely.",
-    personality: "Your identity is woven into your in-group. You thrive in coordinated effort, naturally assume the organizer role, and feel something close to genuine loss when your crew drifts apart. You're the person who remembers what everyone drinks, keeps the group chat alive, and first notices when someone goes quiet. Solo endeavors feel hollow — not because you can't do them, but because there's no one to debrief with afterward.",
-    affinity: ["The Falcon", "The Dolphin", "The Dragon"],
-    clashes: ["The Gecko", "The Frog"],
-  },
-  owl: {
-    emoji: "🦉",
-    name: "The Owl",
-    tagline: '"The story isn\'t in the cutscenes. It\'s in every book, item description, and loading screen."',
-    rarity: "9% of players",
-    desc: "The Owl is the lore devourer, the wiki architect, the player who pauses before entering a dungeon to read every piece of environmental storytelling on the walls. You're not just playing games — you're inhabiting entire worlds. You can recite the political history of fictional kingdoms. You write theories. You notice when an NPC's dialogue changed after the third act. For you, a game's greatest achievement isn't its mechanics; it's the depth of its fictional reality.",
-    tell: "They pause mid-game to read a tombstone inscription that serves absolutely no gameplay purpose.",
-    traits: ["Lore completionist", "Narrative immersion", "Observational depth", "Wiki contributor", "Slow and deliberate"],
-    onlyYouWould: [
-      "Refuse to skip a single cutscene, even on a second playthrough of a game you know by heart",
-      "Read the entire in-game bestiary before encountering a single enemy it describes",
-      "Have well-reasoned opinions on lore details that subtly contradict what the developers intended",
-    ],
-    games: [
-      { name: "Elden Ring", genre: "Action RPG" },
-      { name: "Disco Elysium", genre: "Narrative RPG" },
-      { name: "Planescape: Torment", genre: "Classic RPG" },
-      { name: "Pathologic 2", genre: "Survival Drama" },
-      { name: "Hollow Knight", genre: "Metroidvania" },
-      { name: "Morrowind", genre: "Open World RPG" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 30 },
-      { label: "Systems Focus", value: 5 },
-      { label: "Challenge Seeking", value: 50 },
-      { label: "Competitive Dominance", value: 15 },
-      { label: "Play Pace", value: 18 },
-    ],
-    shadow: "You avoid games with shallow narratives like the plague, even when they're genuinely fun. You can spend hours in menus reading lore instead of playing. Multiplayer feels vacuous. You may have a backlog you'll never finish because each game demands weeks of full immersion.",
-    personality: "You don't do surface-level — in relationships, interests, or conversation. You want the depth version of everything and will seek it out even when no one else is looking. You read footnotes, follow citations, and hold opinions about things most people don't know exist. Small talk is mild torture. You likely have a rich inner life and a handful of deep relationships you'd trade a hundred casual ones for.",
-    affinity: ["The Bat", "The Bear", "The Fox"],
-    clashes: ["The Frog", "The Magpie"],
-  },
-  frog: {
-    emoji: "🐸",
-    name: "The Frog",
-    tagline: '"The current Any% world record is 47 minutes and I will demolish it."',
-    rarity: "5% of players",
-    desc: "The Frog doesn't play games — the Frog dissects them. Where others see a fantasy world, you see a physics engine with exploitable edge cases. Speedrunning, sequence-breaking, out-of-bounds glitches, unintended mechanics: these aren't bugs to you, they're the secret language the game speaks when no one's looking. You have a deep, almost perverse love for the hidden skeleton of games. Optimization is your art form.",
-    tell: "They know the frame-perfect input window for a skip that saves exactly 8 seconds.",
-    traits: ["Speedrunner DNA", "Glitch hunter", "Deeply analytical", "Anti-narrative (systems-first)", "Relentless optimizer"],
-    onlyYouWould: [
-      "Feel genuine excitement — not frustration — the moment you discover a game-breaking glitch",
-      "Skip every single cutscene without hesitation and feel absolutely nothing about it",
-      "Spend 50 hours 'completing' a game in ways the developers never intended, then move on",
-    ],
-    games: [
-      { name: "Super Mario Odyssey", genre: "Platformer Speedrun" },
-      { name: "Celeste", genre: "Precision Platformer" },
-      { name: "Dark Souls (Any%)", genre: "Action RPG Speedrun" },
-      { name: "Portal 2", genre: "Puzzle/Speedrun" },
-      { name: "Getting Over It", genre: "Precision Challenge" },
-      { name: "Trackmania", genre: "Racing Precision" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 22 },
-      { label: "Systems Focus", value: 95 },
-      { label: "Challenge Seeking", value: 85 },
-      { label: "Competitive Dominance", value: 48 },
-      { label: "Play Pace", value: 68 },
-    ],
-    shadow: "You can utterly drain the fun from a game by reducing it to a series of inputs to optimize. Friends who just want to enjoy a story playthrough find your instinct to skip dialogue and break cutscenes deeply frustrating. You may have spent 200 hours in games most people finish in 10.",
-    personality: "You are instinctively contrarian — not for show, but because 'how it's supposed to work' genuinely interests you less than 'how it actually works.' You find loopholes in systems, edge cases in processes, faster routes no one mapped. This makes you unusually effective when creative problem-solving is needed and quietly difficult in situations that require following procedure without question.",
-    affinity: ["The Falcon", "The Gecko", "The Fox"],
-    clashes: ["The Owl", "The Dolphin"],
-  },
-  dragon: {
-    emoji: "🐉",
-    name: "The Dragon",
-    tagline: '"Level 1 is an insult. I will be gods before this week is over."',
-    rarity: "14% of players",
-    desc: "The Dragon craves power — not over other players, but over the game world itself. You exist for the moment your build becomes unstoppable, when enemies that were once terrifying become ash underfoot. You grind with religious devotion, not because you have to, but because every number going up is deeply, intrinsically satisfying. Gear score, skill trees, prestige levels, endless loop progression systems — these are your cathedrals. You want to become legend.",
-    tell: "They're still playing a game they openly called 'not that good' because the gear treadmill still has one more tier.",
-    traits: ["Power-progression obsessed", "Methodical grinder", "Build theorycrafting", "Prestige seeker", "Loop endurance"],
-    onlyYouWould: [
-      "Accumulate 1,000 hours in a game you consider mediocre, simply because the numbers kept going up",
-      "Feel genuine loss when a game patches away a currency or progression system you'd been grinding",
-      "Know the exact drop rate percentage for items you've been farming for weeks — from memory",
-    ],
-    games: [
-      { name: "Path of Exile 2", genre: "ARPG" },
-      { name: "Destiny 2 (Endgame)", genre: "Looter Shooter" },
-      { name: "Diablo IV", genre: "ARPG" },
-      { name: "Monster Hunter: World", genre: "Action RPG" },
-      { name: "Warframe", genre: "Free-to-Play Looter" },
-      { name: "Final Fantasy XIV", genre: "MMO" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 52 },
-      { label: "Systems Focus", value: 65 },
-      { label: "Challenge Seeking", value: 72 },
-      { label: "Competitive Dominance", value: 55 },
-      { label: "Play Pace", value: 30 },
-    ],
-    shadow: "You're susceptible to the most predatory game monetization in existence — loot boxes, battle passes, gear treadmills. Games without meaningful progression loops bore you within hours. You may have 1,000 hours in a game you consider 'mediocre' simply because the numbers kept going up.",
-    personality: "You are reward-driven at a deeper level than most people admit about themselves. Systems with clear progression — career tracks, skill certifications, personal bests — energize you in ways open-ended work does not. You likely track more metrics than you tell people: steps, streaks, finances. When a feedback loop closes, something satisfies. When it stalls, something itches — and you notice the itch before you notice the cause.",
-    affinity: ["The Wolf", "The Bear", "The Gecko"],
-    clashes: ["The Bat", "The Frog"],
-  },
-  dolphin: {
-    emoji: "🐬",
-    name: "The Dolphin",
-    tagline: '"Best session ever. We played literally nothing special. But everyone was there."',
-    rarity: "13% of players",
-    desc: "The Dolphin doesn't care if the game is good — they care if the people playing it are great. For you, games are a social venue, a way to maintain friendships and create shared memories. The actual game is almost incidental. You've had transcendent evenings playing terrible party games with the right people, and you've felt nothing playing 'masterpieces' alone. You're the one who organizes game nights, introduces people to new games, and remembers everyone's preferences.",
-    tell: "They remember the funniest moment from last game night more vividly than any single-player ending they've ever seen.",
-    traits: ["Intrinsically social", "Party game maestro", "Mood-reader", "Friendship architect", "Adaptable to any genre"],
-    onlyYouWould: [
-      "Buy a game you'll never enjoy solo just because your friends have it and want to play together",
-      "Have more fun playing a mediocre game badly with people than playing a masterpiece alone",
-      "Plan an entire gaming session around who can show up, not what to play",
-    ],
-    games: [
-      { name: "Jackbox Party Pack", genre: "Party Game" },
-      { name: "It Takes Two", genre: "Co-op Adventure" },
-      { name: "Overcooked! 2", genre: "Co-op Chaos" },
-      { name: "Among Us", genre: "Social Deduction" },
-      { name: "Nintendo Switch Sports", genre: "Party Sports" },
-      { name: "Phasmophobia", genre: "Social Horror" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 97 },
-      { label: "Systems Focus", value: 45 },
-      { label: "Challenge Seeking", value: 28 },
-      { label: "Competitive Dominance", value: 30 },
-      { label: "Play Pace", value: 72 },
-    ],
-    shadow: "Solo gaming can feel meaningless or even depressing for you. You may overextend yourself socially — always the organizer, always the hype person — while secretly wishing someone else would take the wheel. Your taste in games often bends toward what others want, leaving your own preferences unexplored.",
-    personality: "For you, an experience only feels complete when it's shared. You're a natural connector — you know what everyone prefers, maintain friendships across eras of your life, and host gatherings less for the logistics and more because you need people in the room. The risk: your own preferences can quietly flatten under the weight of what everyone else wants, and you may struggle to know what you actually enjoy when left to decide alone.",
-    affinity: ["The Wolf", "The Bear", "The Magpie"],
-    clashes: ["The Gecko", "The Frog"],
-  },
-  fox: {
-    emoji: "🦊",
-    name: "The Fox",
-    tagline: '"I had the answer before you finished explaining the puzzle."',
-    rarity: "7% of players",
-    desc: "The Fox is drawn to games like a key is drawn to a lock — they exist to solve things. Strategy, deduction, resource management, lateral thinking: these are not obstacles between you and the fun, they ARE the fun. You love the click of a plan coming together, the elegant solution to a seemingly impossible problem. You read the rules thoroughly before playing. You've probably found unintended solutions in games that broke the designer's intentions, and you were proud of it.",
-    tell: "They pause a co-op session to explain the optimal routing strategy while everyone else is already trying to play.",
-    traits: ["Puzzle-solving instinct", "Strategic depth seeker", "Resource manager", "Systems thinker", "Planful, deliberate"],
-    onlyYouWould: [
-      "Solve a puzzle without looking it up and feel quietly smug about it for days",
-      "Build a voluntary spreadsheet for a game's crafting economy because it was faster than the wiki",
-      "Replay a strategy game's first hour repeatedly just to test different opening moves",
-    ],
-    games: [
-      { name: "Slay the Spire", genre: "Deckbuilder Roguelike" },
-      { name: "Return of the Obra Dinn", genre: "Deduction Mystery" },
-      { name: "Into the Breach", genre: "Tactical Strategy" },
-      { name: "Baba Is You", genre: "Logic Puzzle" },
-      { name: "XCOM 2", genre: "Turn-Based Tactics" },
-      { name: "Outer Wilds", genre: "Exploration Mystery" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 27 },
-      { label: "Systems Focus", value: 80 },
-      { label: "Challenge Seeking", value: 75 },
-      { label: "Competitive Dominance", value: 38 },
-      { label: "Play Pace", value: 8 },
-    ],
-    shadow: "Pure action games with no strategic depth bore you quickly. You can over-think cooperative games, turning casual sessions into planning sessions that exhaust your teammates. Occasionally your need to 'solve' everything removes spontaneity and joy from the experience.",
-    personality: "You think in structures. Before engaging with a problem, you want to understand the rules completely — not to follow them, but to know the full space of available moves. You build frameworks, create spreadsheets no one asked for, and typically see two or three implications ahead of the room. People read this as cool detachment. You're actually fully engaged — just processing at a different altitude than most.",
-    affinity: ["The Owl", "The Frog", "The Bat"],
-    clashes: ["The Magpie", "The Dolphin"],
-  },
-  gecko: {
-    emoji: "🦎",
-    name: "The Gecko",
-    tagline: '"I\'ve done this boss 70 times. I\'m not frustrated. I\'m learning."',
-    rarity: "6% of players",
-    desc: "The Gecko is defined by one thing above all: mastery. Not progression, not narrative, not social — pure, uncut mechanical mastery. You want games that demand everything from you, that punish sloppiness and reward precision. You're the player who learned every frame of a boss pattern, who practices movement tech in empty rooms, who could write an essay on the feel of a dodge roll. The harder the game, the more you love it.",
-    tell: "They practice in an empty room — no enemies, no objectives — for 20 minutes before attempting the boss again.",
-    traits: ["Mastery-obsessed", "High pain tolerance", "Precision-first", "Patience of stone", "Anti-hand-holding"],
-    onlyYouWould: [
-      "Turn off music and reduce resolution specifically to minimize input lag in a single-player game",
-      "Feel bored by a game after 3 attempts if it never demanded your full concentration",
-      "Describe a boss as 'fair' with genuine conviction after dying to it 60 times",
-    ],
-    games: [
-      { name: "Sekiro: Shadows Die Twice", genre: "Action / Precision" },
-      { name: "Hollow Knight", genre: "Precision Platformer" },
-      { name: "Hades II", genre: "Action Roguelike" },
-      { name: "Cuphead", genre: "Run & Gun" },
-      { name: "Elden Ring (DLC bosses)", genre: "Soulslike" },
-      { name: "Dead Cells", genre: "Roguelike Metroidvania" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 15 },
-      { label: "Systems Focus", value: 58 },
-      { label: "Challenge Seeking", value: 97 },
-      { label: "Competitive Dominance", value: 62 },
-      { label: "Play Pace", value: 38 },
-    ],
-    shadow: "You have near-zero tolerance for games that feel 'too easy' and will often dismiss beloved games as shallow. You can come across as gatekeeping or elitist about difficulty. Casual gaming sessions with family or less-experienced players can feel torturous.",
-    personality: "Your mastery orientation extends well beyond games. Whatever you care about, you practice it deliberately, hold yourself to standards others find excessive, and find 'good enough' genuinely unsatisfying. You're the person still refining something after everyone else has moved on — not from perfectionism exactly, but from a clean internal sense that you haven't reached what you know is achievable.",
-    affinity: ["The Frog", "The Falcon", "The Bat"],
-    clashes: ["The Magpie", "The Dolphin"],
-  },
-  bear: {
-    emoji: "🐻",
-    name: "The Bear",
-    tagline: '"I built an entire village today. Nobody died. It was perfect."',
-    rarity: "16% of players",
-    desc: "The Bear doesn't game to prove anything. You play to be cozy, to sink into a gentle world that asks nothing of you but presence. Farming sims, city builders, life games, creative sandboxes — you have a deep need for the meditative loop: plant, grow, harvest, repeat. Games are your rest state. The most stressful thing you'll tolerate is a light time-pressure mechanic, and even that feels like a lot. Your game library is a museum of tranquility.",
-    tell: "They're on hour four decorating their in-game home with furniture that no other player will ever see.",
-    traits: ["Cozy-first philosophy", "Creative sandbox lover", "Completionist (gently)", "Long-haul player", "Anti-competitive"],
-    onlyYouWould: [
-      "Restart a cozy game from scratch just to relive the calming early hours",
-      "Turn down a multiplayer invitation because your in-game farm genuinely needs tending",
-      "Have a dedicated gaming playlist, perfectly curated to match the mood of your current farming sim",
-    ],
-    games: [
-      { name: "Stardew Valley", genre: "Farming Sim" },
-      { name: "Animal Crossing: NH", genre: "Life Sim" },
-      { name: "Minecraft (Creative)", genre: "Sandbox" },
-      { name: "Cities: Skylines 2", genre: "City Builder" },
-      { name: "Spiritfarer", genre: "Cozy Indie" },
-      { name: "Coral Island", genre: "Farming RPG" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 52 },
-      { label: "Systems Focus", value: 35 },
-      { label: "Challenge Seeking", value: 5 },
-      { label: "Competitive Dominance", value: 25 },
-      { label: "Play Pace", value: 22 },
-    ],
-    shadow: "You can mistake comfort for depth, returning to the same cozy loops for years while avoiding experiences that might genuinely challenge or change you. Progress in your games is often measured in aesthetic satisfaction rather than growth, and the line between relaxation and avoidance can blur.",
-    personality: "You understand the value of psychological safety and create it for others naturally — warm environments, consistent routines, space where nothing needs to be proven. You're the person others relax around without knowing why. The risk is that 'comfortable' can become a place you never leave, and meaningful growth tends to require exactly the friction you've learned to minimize.",
-    affinity: ["The Dolphin", "The Owl", "The Fox"],
-    clashes: ["The Falcon", "The Gecko"],
-  },
-  bat: {
-    emoji: "🦇",
-    name: "The Bat",
-    tagline: '"I don\'t follow the critical path. There is no critical path."',
-    rarity: "7% of players",
-    desc: "The Bat is a free-form explorer — you navigate by echolocation, bouncing off the dark walls of game worlds to find what no one else noticed. You're not doing quests; you're surveying territory. You climb the mountain just to see what's behind it. You read every environmental clue. You ignore the main story until you've exhausted every inch of the map. Open worlds weren't made for you — you were made for them.",
-    tell: "They've completed 30% of the main story after 60 hours of play, and they consider this to be good progress.",
-    traits: ["Compulsive map revealer", "Off-path wanderer", "Discoverer of secrets", "Environment reader", "Anti-rush"],
-    onlyYouWould: [
-      "Climb a mountain in-game with no objective, purely to see what the view looks like from the top",
-      "Feel mild but real anxiety in games with invisible walls or loading corridors disguised as caves",
-      "Intentionally get lost in a new area just to experience the satisfaction of finding your way back",
-    ],
-    games: [
-      { name: "The Elder Scrolls V: Skyrim", genre: "Open World RPG" },
-      { name: "Red Dead Redemption 2", genre: "Open World" },
-      { name: "Outer Wilds", genre: "Exploration Mystery" },
-      { name: "Breath of the Wild", genre: "Open World Action" },
-      { name: "No Man's Sky", genre: "Space Exploration" },
-      { name: "Subnautica", genre: "Survival Exploration" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 22 },
-      { label: "Systems Focus", value: 28 },
-      { label: "Challenge Seeking", value: 42 },
-      { label: "Competitive Dominance", value: 5 },
-      { label: "Play Pace", value: 30 },
-    ],
-    shadow: "You can get lost — literally and figuratively — and never finish games. Your backlog is enormous. You sometimes never see endings because the journey was enough. Tightly structured linear games feel like corridors and make you anxious. You may spend 80 hours 'exploring' and finish 20% of the story.",
-    personality: "You're built for beginnings. Ideas, new directions, unexpected connections between fields — you generate these naturally and with genuine enthusiasm. The challenge isn't starting things; it's that around the time real work begins, the next interesting thing appears. You have more unfinished projects and half-read books than almost anyone you know, alongside an unusually broad range of topics you know a little about.",
-    affinity: ["The Owl", "The Fox", "The Bear"],
-    clashes: ["The Falcon", "The Dragon"],
-  },
-  beaver: {
-    emoji: "🦫",
-    name: "The Beaver",
-    tagline: '"The pipeline isn\'t optimal. I\'m rebuilding it."',
-    rarity: "8% of players",
-    desc: "The Beaver doesn't play games — they engineer them. Not in the development sense, but in the live sense: redesigning systems, optimizing throughput, restructuring factories and cities from scratch because the layout could be cleaner. You are drawn to games with interlocking mechanics and emergent complexity. Minecraft's redstone, Factorio's production lines, Cities Skylines' traffic grids — these aren't games to the Beaver, they're design problems. The fun isn't in winning. It's in the moment a system clicks into place and runs itself.",
-    tell: "They've restarted the same Factorio run four times. The first three 'worked.' That wasn't good enough.",
-    traits: ["Systems architect", "Optimization-driven", "Methodical planner", "Emergent complexity seeker", "Anti-competitive builder"],
-    onlyYouWould: [
-      "Tear down a working factory in Factorio because the bus layout isn't scalable",
-      "Spend three hours watching a fully-automated machine do nothing, completely satisfied",
-      "Refuse to progress the main objective until the infrastructure is 'ready'",
-    ],
-    games: [
-      { name: "Factorio", genre: "Factory Automation" },
-      { name: "Minecraft (Technical)", genre: "Sandbox Engineering" },
-      { name: "Cities Skylines 2", genre: "City Builder" },
-      { name: "Satisfactory", genre: "3D Factory" },
-      { name: "Dwarf Fortress", genre: "Simulation" },
-      { name: "Dyson Sphere Program", genre: "Sci-fi Factory" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 25 },
-      { label: "Systems Focus", value: 72 },
-      { label: "Challenge Seeking", value: 42 },
-      { label: "Competitive Dominance", value: 18 },
-      { label: "Play Pace", value: 10 },
-    ],
-    shadow: "You can spend 40 hours on infrastructure you'll never use. Progress stalls while the system gets perfect. You optimize for scenarios that will never occur and replay endlessly because 'this time it'll be right.' Games with fixed or linear systems frustrate you — you need design space. And when someone else's 'good enough' solution works fine, it quietly drives you insane.",
-    personality: "You think in systems — not as an applied technique, but as your native cognitive mode. You instinctively model flows, identify bottlenecks, and feel a persistent itch when a process is inefficient that doesn't ease until you've redesigned it. Others call this overthinking; you recognize it as pattern recognition. The risk: optimizing the system can become its own reward, pulling your focus away from the actual goal the system was meant to serve.",
-    affinity: ["The Fox", "The Dragon", "The Bear"],
-    clashes: ["The Falcon", "The Magpie"],
-  },
-  magpie: {
-    emoji: "🐦",
-    name: "The Magpie",
-    tagline: '"Three minutes in a waiting room is a perfectly good gaming session."',
-    rarity: "15% of players",
-    desc: "The Magpie doesn't need a gaming rig, a headset, or three hours blocked on the calendar. You play wherever you are — in bed, on the bus, during ads, between meetings. Games are a companion to daily life, not an escape from it. You're drawn to things that reward quickly, feel good to tap, and don't punish you for stopping mid-session. You might not call yourself 'a gamer' — but you've racked up more hours than most people who do, one stolen moment at a time.",
-    tell: "They've put 200+ hours into mobile games they would never once describe as their hobby.",
-    traits: ["Session-first mindset", "Quick-reward seeker", "Plays everywhere", "Casual but consistent", "Low-friction explorer"],
-    onlyYouWould: [
-      "Play the same 3-minute game loop 40 times across a single day, scattered through commutes and breaks",
-      "Abandon a game the moment it asks for more than 5 minutes of uninterrupted, undivided attention",
-      "Have a genuinely impressive streak on a daily puzzle game that started 'just to kill 2 minutes'",
-    ],
-    games: [
-      { name: "Candy Crush / Match-3", genre: "Mobile Puzzle" },
-      { name: "Wordle / NYT Games", genre: "Daily Puzzle" },
-      { name: "Pokémon GO", genre: "Augmented Reality" },
-      { name: "Clash Royale", genre: "Mobile Strategy" },
-      { name: "Monument Valley", genre: "Puzzle Adventure" },
-      { name: "Balatro / Vampire Survivors", genre: "Approachable Roguelike" },
-    ],
-    spectrums: [
-      { label: "Social Drive", value: 55 },
-      { label: "Systems Focus", value: 35 },
-      { label: "Challenge Seeking", value: 8 },
-      { label: "Competitive Dominance", value: 38 },
-      { label: "Play Pace", value: 88 },
-    ],
-    shadow: "You rarely go deep enough to reach a game's most rewarding content. You've started dozens of games and finished few. Your gaming is reactive rather than intentional — you play because it's there. Games engineered for compulsive micro-engagement have found a willing partner in your habits, and the line between casual fun and an invisible time-sink can blur before you notice.",
-    personality: "You live in small, efficient units of attention. You're broadly informed across more domains simultaneously than most people — news cycles, trending conversations, scattered interests — because your attention moves fast and captures well. The challenge is depth: the same speed that keeps you widely current makes it hard to reach the kind of mastery that only comes from staying with something for a very long time.",
-    affinity: ["The Bear", "The Dolphin", "The Bat"],
-    clashes: ["The Owl", "The Gecko"],
-  },
-};
-
-// ═══════════════════════════════════════════════════════
-// QUESTIONS — forced-choice scenarios, 4 options each
-// choices[0..3] each carry axis deltas; user picks exactly one
-// ═══════════════════════════════════════════════════════
-const QUESTIONS = [
-  // Q1 — Competition: loss reaction
-  {
-    text: "A close ranked match just ended in a loss. What do you do?",
-    text_ru: "Напряжённый рейтинговый матч только что завершился поражением. Что ты делаешь?",
-    choices: [
-      { label: "Re-queue immediately — the only cure for a bad game is the next one", label_ru: "Встаю в очередь немедленно — единственное лекарство от плохой игры это следующая", axes: { dominance: 0.8, challenge: 0.5, pace: 0.5 }, archetypes: { falcon: 3, gecko: 2 } },
-      { label: "Review the key moments — understand the loss before playing again", label_ru: "Пересматриваю ключевые моменты — прежде чем играть снова, нужно понять поражение", axes: { systems: 0.7, dominance: 0.3, pace: -0.4 }, archetypes: { fox: 3, falcon: 1 } },
-      { label: "Close the game. It's done; no point dwelling", label_ru: "Закрываю игру. Всё кончено; незачем зацикливаться", axes: { dominance: -0.5, challenge: -0.3 }, archetypes: { bear: 2, bat: 1 } },
-      { label: "Message my squad — debrief together before deciding", label_ru: "Пишу команде — сначала разбираем вместе, потом решаем", axes: { social: 0.7, dominance: 0.2 }, archetypes: { wolf: 3, dolphin: 2 } },
-    ]
-  },
-  // Q2 — First contact: starting a game cold
-  {
-    text: "You start a new game cold — no tutorial, no walkthrough, no prior knowledge. Your first instinct:",
-    text_ru: "Ты запускаешь новую игру с нуля — без туториала, без гайдов, без предварительного знания. Твой первый инстинкт:",
-    choices: [
-      { label: "Jump straight in — context arrives through playing, not reading", label_ru: "Сразу погружаюсь — контекст приходит в процессе игры, не через чтение", axes: { dominance: -0.3, pace: 0.5 }, archetypes: { bat: 3, bear: 1, magpie: 1 } },
-      { label: "Spend a few minutes in settings and menus before touching the game", label_ru: "Сначала несколько минут в настройках и меню, прежде чем трогать саму игру", axes: { systems: 0.6, pace: -0.4 }, archetypes: { fox: 2, gecko: 2, beaver: 2 } },
-      { label: "Find a quick beginner's guide — no need to reinvent the wheel", label_ru: "Нахожу быстрый гайд для новичков — незачем изобретать велосипед", axes: { systems: 0.4, pace: 0.1 }, archetypes: { fox: 2, frog: 2 } },
-      { label: "Ask someone who's played it what to expect", label_ru: "Спрашиваю кого-нибудь, кто играл, чего ожидать", axes: { social: 0.7 }, archetypes: { wolf: 2, dolphin: 2 } },
-    ]
-  },
-  // Q3 — Narrative: NPC eavesdrop
-  {
-    text: "You're walking through a new town in an RPG. Two NPCs in the corner are having a private conversation you can overhear.",
-    text_ru: "Ты идёшь через новый город в RPG. В углу двое NPC ведут приватный разговор, который можно подслушать.",
-    choices: [
-      { label: "Stop completely — every word, in case it's lore", label_ru: "Останавливаюсь полностью — каждое слово, вдруг это лор", axes: { systems: -0.6, pace: -0.6 }, archetypes: { owl: 3 } },
-      { label: "Keep moving — there's a quest marker calling", label_ru: "Иду дальше — меня ждёт маркер квеста", axes: { dominance: 0.3, pace: 0.5 }, archetypes: { falcon: 2, magpie: 1 } },
-      { label: "Reposition my character to check for hidden dialogue options", label_ru: "Перемещаю персонажа — проверяю, нет ли скрытых диалоговых опций", axes: { systems: 0.5, pace: -0.2 }, archetypes: { frog: 3, fox: 2 } },
-      { label: "Take a screenshot in case it's relevant, then continue", label_ru: "Делаю скриншот на всякий случай и продолжаю", axes: { systems: 0.2, pace: 0.2 }, archetypes: { fox: 2, bat: 1 } },
-    ]
-  },
-  // Q4 — Exploration: unmarked cave
-  {
-    text: "Open world. There's an unmarked cave on the hillside with no quest marker.",
-    text_ru: "Открытый мир. На склоне холма — непомеченная пещера без маркера квеста.",
-    choices: [
-      { label: "Immediately veer off — unmarked things are always the best things", label_ru: "Сразу сворачиваю туда — непомеченное всегда самое интересное", axes: { dominance: -0.6, pace: 0.4 }, archetypes: { bat: 3 } },
-      { label: "Note it mentally and finish the current objective first", label_ru: "Запоминаю и сначала заканчиваю текущее задание", axes: { dominance: 0.2, pace: -0.2 }, archetypes: { fox: 2, falcon: 1 } },
-      { label: "Look it up before deciding if it's worth the time", label_ru: "Гуглю прежде, чем решить, стоит ли тратить время", axes: { systems: 0.5, pace: -0.2 }, archetypes: { fox: 3 } },
-      { label: "Ignore it — unmarked usually means empty", label_ru: "Игнорирую — непомеченное обычно пусто", axes: { dominance: 0.4, pace: 0.4 }, archetypes: { falcon: 2, magpie: 1 } },
-    ]
-  },
-  // Q5 — Social: Friday night
-  {
-    text: "Friday night, gaming is on the menu. What's your most likely move?",
-    text_ru: "Пятничный вечер, впереди игры. Что ты, скорее всего, сделаешь?",
-    choices: [
-      { label: "Solo queue ranked — full focus, no coordination overhead", label_ru: "Рейтинговые игры соло — полная концентрация, никакой координации", axes: { dominance: 0.6, social: -0.5, pace: -0.2 }, archetypes: { falcon: 3 } },
-      { label: "Message the group chat — see who's online", label_ru: "Пишу в групповой чат — смотрю, кто онлайн", axes: { social: 0.8, dominance: -0.2 }, archetypes: { wolf: 3, dolphin: 2 } },
-      { label: "Boot a single-player game I've been sitting on", label_ru: "Запускаю одиночную игру, до которой давно не доходили руки", axes: { social: -0.3, challenge: 0.2, pace: -0.3 }, archetypes: { bear: 2, bat: 2, owl: 1 } },
-      { label: "Check a few things on mobile while watching something", label_ru: "Заглядываю в мобильную игру, пока смотрю что-нибудь фоном", axes: { pace: 0.6, social: -0.3, challenge: -0.5 }, archetypes: { magpie: 3 } },
-    ]
-  },
-  // Q6 ★ MIRROR of Q5 — Social: crew unavailable
-  {
-    text: "Same Friday — but your entire gaming crew is unavailable tonight.",
-    text_ru: "Та же пятница — но все, с кем ты обычно играешь, сегодня недоступны.",
-    choices: [
-      { label: "Solo queue anyway — the game exists independently of who I play with", label_ru: "Всё равно иду в соло-очередь — игра существует независимо от того, с кем играть", axes: { social: -0.2, dominance: 0.4 }, archetypes: { falcon: 3, gecko: 2 } },
-      { label: "Feel noticeably less motivated to game at all", label_ru: "Заметно меньше желания играть вообще", axes: { social: 0.8, dominance: -0.4 }, archetypes: { wolf: 3, dolphin: 2 } },
-      { label: "Find a different game that doesn't need company", label_ru: "Нахожу другую игру, которая не требует компании", axes: { social: -0.4, pace: 0.2 }, archetypes: { bear: 2, bat: 2 } },
-      { label: "Boot the game and look for randoms in matchmaking", label_ru: "Захожу в игру и ищу случайных игроков в матчмейкинге", axes: { social: 0.5 }, archetypes: { dolphin: 3, magpie: 1 } },
-    ]
-  },
-  // Q7 — Systems: post-tutorial drift
-  {
-    text: "Three hours in. The tutorial just ended. Where do you naturally go?",
-    text_ru: "Прошло три часа. Туториал только что закончился. Куда ты идёшь дальше?",
-    choices: [
-      { label: "Theorycrafting my first real build before investing further", label_ru: "Начинаю теоркрафтить первый серьёзный билд, прежде чем вкладываться дальше", axes: { systems: 0.8, pace: -0.6 }, archetypes: { fox: 3, beaver: 3 } },
-      { label: "Wander the game's space — understand what's actually in it", label_ru: "Исследую пространство игры — хочу понять, что в ней вообще есть", axes: { systems: -0.3, dominance: -0.5, pace: 0.3 }, archetypes: { bat: 3 } },
-      { label: "Probe the mechanics for anything unintended", label_ru: "Прощупываю механики — ищу что-нибудь непредусмотренное", axes: { systems: 0.7, dominance: 0.2, pace: 0.4 }, archetypes: { frog: 3 } },
-      { label: "Get into the story properly — mechanics will come naturally", label_ru: "Погружаюсь в сюжет — механики придут сами", axes: { systems: -0.5, pace: -0.2 }, archetypes: { owl: 3, bear: 2 } },
-    ]
-  },
-  // Q8 — Speedrun: unintended solution
-  {
-    text: "You notice a puzzle can be solved in under 30 seconds by doing something the developers clearly didn't intend.",
-    text_ru: "Ты замечаешь, что головоломку можно решить меньше чем за 30 секунд способом, который разработчики явно не предусматривали.",
-    choices: [
-      { label: "Use it and feel quietly proud — better than solving it 'correctly'", label_ru: "Использую и тихо горжусь — лучше, чем решить «правильно»", axes: { systems: 0.7, challenge: 0.3 }, archetypes: { frog: 3 } },
-      { label: "Test it out of curiosity, then solve it the intended way", label_ru: "Проверяю из любопытства, потом решаю как задумано", axes: { systems: 0.4, pace: -0.2 }, archetypes: { frog: 2, fox: 2 } },
-      { label: "Avoid it — want the design as the developers intended", label_ru: "Не использую — хочу пройти так, как задумали разработчики", axes: { systems: -0.6 }, archetypes: { owl: 3, bear: 1 } },
-      { label: "Amusing, but it doesn't change how I play", label_ru: "Забавно, но на мой стиль игры это не влияет", axes: { systems: 0.1 }, archetypes: { bat: 1 } },
-    ]
-  },
-  // Q9 — Difficulty: wall hit
-  {
-    text: "The game has hit a wall — a section that clearly requires a significant skill step-up.",
-    text_ru: "В игре встретилась стена — раздел, который явно требует серьёзного прыжка в мастерстве.",
-    choices: [
-      { label: "This is where it actually starts — I engage harder", label_ru: "Вот теперь игра по-настоящему начинается — включаюсь в полную силу", axes: { challenge: 0.9, dominance: 0.3 }, archetypes: { gecko: 3, falcon: 2 } },
-      { label: "Research optimal strategies before trying again", label_ru: "Изучаю оптимальные стратегии, прежде чем пробовать снова", axes: { systems: 0.7, challenge: 0.4 }, archetypes: { fox: 3, beaver: 2 } },
-      { label: "Power through at current difficulty — I'll get there eventually", label_ru: "Пробиваюсь на текущей сложности — рано или поздно получится", axes: { challenge: 0.6, pace: 0.2 }, archetypes: { gecko: 2, falcon: 1 } },
-      { label: "Lower the difficulty — the friction isn't why I'm here", label_ru: "Снижаю сложность — я здесь не ради трения", axes: { challenge: -0.6, dominance: -0.4 }, archetypes: { bear: 3 } },
-    ]
-  },
-  // Q10 ★ MIRROR of Q9 — Difficulty: 50 deaths
-  {
-    text: "You've died to the same optional boss 50 times. It's a challenge run — not required for the story. You…",
-    text_ru: "Ты умер от одного и того же необязательного босса 50 раз. Это испытательный прогон — не обязательный для сюжета. Ты…",
-    choices: [
-      { label: "Keep going without question — the 51st might be the one", label_ru: "Продолжаю без вопросов — может, 51-я попытка станет той самой", axes: { challenge: 0.9, dominance: 0.6 }, archetypes: { gecko: 3 } },
-      { label: "Come back after a mental reset", label_ru: "Возвращаюсь после того, как голова отдохнёт", axes: { challenge: 0.4, dominance: 0.2, pace: -0.3 }, archetypes: { fox: 2, bat: 1 } },
-      { label: "Look up a guide — 50 deaths earns the help", label_ru: "Смотрю гайд — 50 смертей заслуживают подсказки", axes: { systems: 0.4, challenge: 0.2 }, archetypes: { fox: 3 } },
-      { label: "Skip it — optional means optional", label_ru: "Пропускаю — необязательное значит необязательное", axes: { challenge: -0.6, dominance: -0.5 }, archetypes: { bear: 3, bat: 1 } },
-    ]
-  },
-  // Q11 — Progression: seasonal event
-  {
-    text: "A seasonal event just dropped with 200 limited cosmetics. You…",
-    text_ru: "Только что вышел сезонный ивент с 200 лимитированными косметическими предметами. Ты…",
-    choices: [
-      { label: "Calculate the most efficient daily collection path", label_ru: "Рассчитываю самый эффективный ежедневный путь для сбора всего", axes: { systems: 0.8, dominance: 0.4, pace: -0.5 }, archetypes: { beaver: 3, dragon: 2 } },
-      { label: "Grab what looks interesting, ignore the rest", label_ru: "Беру что выглядит интересно, остальное игнорирую", axes: { dominance: -0.2, pace: 0.3 }, archetypes: { bat: 2, magpie: 2 } },
-      { label: "Chase every item — missing something feels wrong", label_ru: "Гоняюсь за каждым предметом — пропустить что-то ощущается неправильным", axes: { dominance: 0.3, systems: 0.4, pace: 0.2 }, archetypes: { dragon: 3 } },
-      { label: "Continue what I was already doing — events don't change my agenda", label_ru: "Продолжаю делать то, что делал — ивенты не меняют мой план", axes: { dominance: 0.3, challenge: 0.2, pace: -0.2 }, archetypes: { falcon: 2, gecko: 2 } },
-    ]
-  },
-  // Q12 ★ MIRROR of Q11 — Progression: gear reset patch
-  {
-    text: "A major patch just reset the gear treadmill you'd been grinding for 200 hours. Honestly…",
-    text_ru: "Крупный патч только что обнулил прокачку снаряжения, которую ты гриндил 200 часов. Честно говоря…",
-    choices: [
-      { label: "Annoyed — that time was real, even if it's a game", label_ru: "Раздражён — это время было реальным, даже если это игра", axes: { dominance: 0.4, systems: 0.5 }, archetypes: { dragon: 3 } },
-      { label: "Genuinely fine — I knew the system was always temporary", label_ru: "Искренне нормально — я знал, что система всегда была временной", axes: { challenge: 0.2, dominance: -0.2 }, archetypes: { fox: 2, gecko: 1 } },
-      { label: "Actually relieved — it was getting repetitive; a fresh start is welcome", label_ru: "Даже рад — всё становилось однообразным; свежий старт кстати", axes: { dominance: -0.3, challenge: -0.2 }, archetypes: { bat: 2, bear: 1 } },
-      { label: "Probably log off and possibly not return for a while", label_ru: "Скорее всего выйду и, возможно, не вернусь какое-то время", axes: { dominance: -0.4, pace: 0.2 }, archetypes: { dragon: 2 } },
-    ]
-  },
-  // Q13 — Aesthetic: decoration session
-  {
-    text: "You've spent 2 hours customizing your in-game base with no gameplay purpose.",
-    text_ru: "Ты провёл 2 часа за кастомизацией базы в игре без какой-либо игровой цели.",
-    choices: [
-      { label: "This IS the gameplay — the aesthetic layer is the whole point", label_ru: "Это И ЕСТЬ геймплей — эстетическая составляющая и есть суть", axes: { dominance: -0.4, systems: -0.3 }, archetypes: { bear: 3 } },
-      { label: "I'd only do this if the visuals provide a functional advantage", label_ru: "Я бы делал это только если визуал даёт функциональное преимущество", axes: { systems: 0.6, dominance: 0.2 }, archetypes: { beaver: 3, fox: 2 } },
-      { label: "I'd feel vaguely guilty about not progressing", label_ru: "Я бы ощущал лёгкую вину за то, что не прогрессирую", axes: { dominance: 0.4, systems: 0.3, challenge: 0.2 }, archetypes: { falcon: 2, dragon: 2 } },
-      { label: "Even more fun if friends can see it — I'd show them immediately", label_ru: "Ещё веселее, если друзья могут это увидеть — сразу бы показал", axes: { social: 0.8, dominance: -0.2 }, archetypes: { dolphin: 3, wolf: 2 } },
-    ]
-  },
-  // Q14 — Session style: decompression
-  {
-    text: "Rough week. Two free hours. You genuinely want to decompress. You…",
-    text_ru: "Тяжёлая неделя. Два свободных часа. Ты искренне хочешь расслабиться. Ты…",
-    choices: [
-      { label: "Load something cozy and low-stakes — not a night for challenges", label_ru: "Запускаю что-нибудь уютное и необременительное — сегодня не для испытаний", axes: { challenge: -0.7, dominance: -0.4 }, archetypes: { bear: 3 } },
-      { label: "Find the hardest thing available — cathartic difficulty IS the decompression", label_ru: "Нахожу что-нибудь максимально сложное — катарсическая сложность И ЕСТЬ расслабление", axes: { challenge: 0.7, dominance: 0.4 }, archetypes: { gecko: 3, falcon: 2 } },
-      { label: "Queue with friends — the game doesn't matter, the company does", label_ru: "Захожу с друзьями — игра не важна, важна компания", axes: { social: 0.8, challenge: -0.2 }, archetypes: { dolphin: 3, wolf: 3 } },
-      { label: "Bounce between a few games until something catches", label_ru: "Переключаюсь между несколькими играми, пока что-нибудь не зацепит", axes: { pace: 0.7, challenge: -0.3 }, archetypes: { magpie: 3 } },
-    ]
-  },
-  // Q15 — Lore: dense world-building
-  {
-    text: "You're starting a game known for extremely dense lore and world-building.",
-    text_ru: "Ты начинаешь игру, известную крайне насыщенным лором и проработанным миром.",
-    choices: [
-      { label: "Read every piece of environmental detail before advancing", label_ru: "Читаю каждую деталь окружения, прежде чем двигаться дальше", axes: { systems: -0.6, pace: -0.8 }, archetypes: { owl: 3 } },
-      { label: "Follow the story naturally, wiki things if confused", label_ru: "Следую сюжету, заглядываю в вики при необходимости", axes: { systems: 0.2, pace: 0.2 }, archetypes: { bear: 2, bat: 1 } },
-      { label: "Skip the lore — I'm here for the mechanics", label_ru: "Пропускаю лор — я здесь ради механик", axes: { systems: 0.5, pace: 0.5 }, archetypes: { frog: 3, falcon: 2 } },
-      { label: "Watch a lore summary video first to make the ramp feel shorter", label_ru: "Сначала смотрю видео с кратким изложением лора, чтобы вход был легче", axes: { systems: -0.2, pace: 0.2 }, archetypes: { fox: 2 } },
-    ]
-  },
-  // Q16 — Narrative vs systems
-  {
-    text: "A game's narrative is mediocre, but its mechanical systems are genuinely interesting.",
-    text_ru: "Нарратив игры посредственный, но механические системы по-настоящему интересны.",
-    choices: [
-      { label: "The story failing is a dealbreaker — I need to care about what's happening", label_ru: "Слабый сюжет — для меня стоп-фактор. Мне нужно переживать за происходящее", axes: { systems: -0.7 }, archetypes: { owl: 3 } },
-      { label: "Mechanics are the real game; narrative is decoration", label_ru: "Механики — это и есть настоящая игра; нарратив — декорация", axes: { systems: 0.7 }, archetypes: { frog: 3, falcon: 2 } },
-      { label: "A weak story dims the enjoyment but doesn't break it", label_ru: "Слабый сюжет снижает удовольствие, но не ломает его", axes: { systems: 0.2 }, archetypes: { bear: 2 } },
-      { label: "Depends entirely on what I came for in this specific game", label_ru: "Полностью зависит от того, чего я ожидал от этой конкретной игры", axes: { systems: 0.1 }, archetypes: { fox: 2 } },
-    ]
-  },
-  // Q17 — Speedrun mindset
-  {
-    text: "You just found out the game you're currently playing has a speedrun category.",
-    text_ru: "Ты только что узнал, что игра, в которую ты сейчас играешь, имеет категорию спидрана.",
-    choices: [
-      { label: "Watch a run out of genuine fascination — how did they find those lines?", label_ru: "Смотрю запись из искреннего любопытства — как они нашли эти маршруты?", axes: { systems: 0.6, challenge: 0.2 }, archetypes: { frog: 2, fox: 2 } },
-      { label: "Feel an urge to try some of the skips myself", label_ru: "Чувствую желание самому попробовать некоторые пропуски", axes: { systems: 0.7, challenge: 0.4, pace: 0.4 }, archetypes: { frog: 3, gecko: 1 } },
-      { label: "Not interested — I'm playing the game, not optimizing it", label_ru: "Не интересует — я играю в игру, а не оптимизирую её", axes: { systems: -0.5, pace: -0.3 }, archetypes: { owl: 2, bear: 2 } },
-      { label: "Appreciate that it exists without it changing how I play", label_ru: "Ценю, что это есть, но это не меняет моего стиля игры", axes: { systems: 0.1 }, archetypes: { bat: 1 } },
-    ]
-  },
-  // Q18 — Social: coordinator role
-  {
-    text: "A multiplayer session needs organizing — someone has to pick the game, schedule the time, and hold it together.",
-    text_ru: "Мультиплеерную сессию нужно организовать — кто-то должен выбрать игру, назначить время и всё скоординировать.",
-    choices: [
-      { label: "Step in naturally — I already know everyone's schedule and preferences", label_ru: "Берусь сам — я уже знаю расписание и предпочтения всех", axes: { social: 0.8, dominance: 0.3 }, archetypes: { wolf: 3 } },
-      { label: "Let someone else lead; show up enthusiastically", label_ru: "Пусть кто-то другой возьмёт на себя — я приду с энтузиазмом", axes: { social: 0.5, dominance: -0.3 }, archetypes: { dolphin: 3 } },
-      { label: "Organize it mainly so it actually happens; not fussy about details", label_ru: "Организую просто чтобы это состоялось — детали не принципиальны", axes: { social: 0.6, dominance: 0.1 }, archetypes: { wolf: 2, dolphin: 1 } },
-      { label: "Prefer no coordination overhead — just start, whoever joins joins", label_ru: "Предпочитаю без всякой координации — просто начинаю, кто придёт, тот придёт", axes: { social: -0.4, dominance: 0.2 }, archetypes: { falcon: 2, gecko: 1 } },
-    ]
-  },
-  // Q19 — Social: struggling teammate (positive framing)
-  {
-    text: "A teammate in a team game is clearly struggling and dragging the group down.",
-    text_ru: "Один из тиммейтов в командной игре явно не справляется и тянет группу вниз.",
-    choices: [
-      { label: "Reorganize team roles and strategy on the fly to compensate", label_ru: "Перестраиваем роли и стратегию команды на ходу, чтобы компенсировать", axes: { social: 0.7, dominance: 0.3 }, archetypes: { wolf: 3 } },
-      { label: "Quietly carry harder without mentioning it", label_ru: "Тихо тащу сильнее, ничего не говоря", axes: { dominance: 0.6, social: 0.1 }, archetypes: { falcon: 3 } },
-      { label: "Send them a private message checking in — sometimes people are just having a rough time", label_ru: "Пишу им личное сообщение — иногда у людей просто тяжёлый день", axes: { social: 0.8 }, archetypes: { dolphin: 3, bear: 1 } },
-      { label: "Feel genuine frustration but contain it", label_ru: "Ощущаю настоящее раздражение, но сдерживаю его", axes: { dominance: 0.4, social: -0.2 }, archetypes: { falcon: 2 } },
-    ]
-  },
-  // Q20 ★ MIRROR of Q19 — Social: struggling teammate in ranked
-  {
-    text: "Same teammate, same session — but it's ranked and costing you meaningful rating.",
-    text_ru: "Тот же тиммейт, та же сессия — но это рейтинговый режим, и это стоит тебе реального рейтинга.",
-    choices: [
-      { label: "Continue supporting — team dynamic matters more than my rating", label_ru: "Продолжаю поддерживать — командная динамика важнее моего рейтинга", axes: { social: 0.8, dominance: -0.4 }, archetypes: { wolf: 3, dolphin: 2 } },
-      { label: "Start playing more individually to minimize the drag", label_ru: "Начинаю играть более индивидуально, чтобы минимизировать потери", axes: { dominance: 0.7, social: -0.5 }, archetypes: { falcon: 3 } },
-      { label: "Suggest a break and privately reconsider re-queuing with them", label_ru: "Предлагаю перерыв и про себя задумываюсь, стоит ли снова ставить с ними в очередь", axes: { dominance: 0.3, social: 0.2 }, archetypes: { fox: 2 } },
-      { label: "Leave after the current match, without drama", label_ru: "Ухожу после текущего матча, без лишних слов", axes: { dominance: 0.2, social: -0.3 }, archetypes: { falcon: 2, gecko: 1 } },
-    ]
-  },
-  // Q21 — Completion: after credits
-  {
-    text: "The credits have rolled on a single-player game you loved. You…",
-    text_ru: "В одиночной игре, которая тебе понравилась, пошли титры. Ты…",
-    choices: [
-      { label: "Keep playing — side quests, achievements, lore I missed", label_ru: "Продолжаю играть — побочные квесты, достижения, лор, который пропустил", axes: { systems: -0.3, dominance: 0.3, pace: -0.4 }, archetypes: { dragon: 3, bat: 2 } },
-      { label: "Immediately think about what's next", label_ru: "Сразу думаю о том, что дальше", axes: { pace: 0.5, dominance: 0.2 }, archetypes: { magpie: 3, bat: 1 } },
-      { label: "Sit with it a while — a good ending deserves space", label_ru: "Посижу с этим — хорошая концовка заслуживает паузы", axes: { pace: -0.5, systems: -0.4 }, archetypes: { owl: 3, bear: 3 } },
-      { label: "Start a new game+ or alternate route immediately", label_ru: "Сразу начинаю новую игру+ или альтернативное прохождение", axes: { challenge: 0.4, dominance: 0.2, systems: 0.3 }, archetypes: { gecko: 2, frog: 2 } },
-    ]
-  },
-  // Q22 — Attention: mid-session pull
-  {
-    text: "Mid-session, a completely different game is calling your attention.",
-    text_ru: "В середине сессии тебя начинает тянуть к совершенно другой игре.",
-    choices: [
-      { label: "Finish the current session first — no point half-doing both", label_ru: "Сначала заканчиваю текущую сессию — нет смысла делать оба дела наполовину", axes: { dominance: 0.2, pace: -0.5, challenge: 0.2 }, archetypes: { gecko: 2, falcon: 2 } },
-      { label: "Switch immediately — probably won't go back to the first one tonight", label_ru: "Переключаюсь сразу — скорее всего, сегодня уже не вернусь к первой", axes: { pace: 0.7, dominance: -0.2 }, archetypes: { magpie: 3 } },
-      { label: "Finish the current objective, then consider switching", label_ru: "Заканчиваю текущую задачу, потом думаю о переключении", axes: { pace: 0.1 }, archetypes: { fox: 1 } },
-      { label: "Resist the pull — staying in one thing is how you actually get anywhere", label_ru: "Сдерживаю порыв — оставаться в одном деле это и есть единственный способ чего-то достичь", axes: { pace: -0.4, challenge: 0.2 }, archetypes: { gecko: 2, falcon: 1, beaver: 1 } },
-    ]
-  },
-  // Q23 — Patience: 10-hour onboarding
-  {
-    text: "A game you're interested in is known for a 10-hour onboarding before it gets truly great.",
-    text_ru: "Игра, которая тебе интересна, известна тем, что по-настоящему раскрывается только после 10 часов онбординга.",
-    choices: [
-      { label: "Fine — depth is worth the ramp", label_ru: "Нормально — глубина стоит этих усилий", axes: { systems: 0.5, challenge: 0.4, pace: -0.5 }, archetypes: { gecko: 2, owl: 2, fox: 1 } },
-      { label: "Give it 2–3 hours and assess honestly", label_ru: "Дам ей 2–3 часа и честно оценю", axes: { pace: 0.2 }, archetypes: { fox: 2 } },
-      { label: "Probably not for me — life is short and first impressions matter", label_ru: "Скорее всего не для меня — жизнь коротка, и первое впечатление важно", axes: { pace: 0.5, challenge: -0.3 }, archetypes: { magpie: 2 } },
-      { label: "Read up on it first to make the ramp feel shorter", label_ru: "Сначала почитаю про неё, чтобы вход казался короче", axes: { systems: 0.5, pace: 0.1 }, archetypes: { fox: 3, owl: 1 } },
-    ]
-  },
-  // Q24 — Realisation: misunderstood core mechanic
-  {
-    text: "Ten hours in, you realise you've been misunderstanding a core mechanic the whole time.",
-    text_ru: "Через 10 часов ты понимаешь, что всё это время неправильно понимал одну из ключевых механик игры.",
-    choices: [
-      { label: "Start fresh — the 10 hours built the knowledge; do it properly now", label_ru: "Начинаю заново — эти 10 часов дали знание; теперь сделаю правильно", axes: { challenge: 0.7, systems: 0.4, pace: -0.5 }, archetypes: { gecko: 3, beaver: 2 } },
-      { label: "Correct course from here — resetting wastes real progress", label_ru: "Корректирую курс отсюда — сбрасывать реальный прогресс нет смысла", axes: { dominance: 0.4, systems: 0.3 }, archetypes: { falcon: 2, fox: 2 } },
-      { label: "Keep going — it's probably not as critical as it feels", label_ru: "Продолжаю как есть — скорее всего это не так критично, как кажется", axes: { challenge: -0.4, pace: 0.3 }, archetypes: { bear: 2, bat: 2, magpie: 1 } },
-      { label: "Check whether the misunderstanding actually matters before deciding", label_ru: "Проверяю, действительно ли это непонимание что-то меняет, прежде чем решать", axes: { systems: 0.6, pace: -0.1 }, archetypes: { fox: 3, frog: 1 } },
-    ]
-  },
-  // Q25 — Exploration: 2 hours off the main path
-  {
-    text: "You realize you've spent 2 hours in an open world without touching the main story.",
-    text_ru: "Ты осознаёшь, что провёл 2 часа в открытом мире, не продвинувшись по основному сюжету.",
-    choices: [
-      { label: "Successful session — the map was the point", label_ru: "Успешная сессия — карта и была целью", axes: { dominance: -0.5, pace: -0.3 }, archetypes: { bat: 3 } },
-      { label: "Feel a mild pull to get back on track", label_ru: "Ощущаю лёгкое желание вернуться к основному пути", axes: { dominance: 0.3 }, archetypes: { dragon: 1, falcon: 1 } },
-      { label: "This wouldn't happen — I typically follow quest markers", label_ru: "Такого бы не произошло — я обычно следую маркерам квестов", axes: { dominance: 0.5, pace: 0.3 }, archetypes: { falcon: 2, dragon: 1 } },
-      { label: "Check whether I missed anything important before moving on", label_ru: "Проверяю, не пропустил ли что-то важное, прежде чем двигаться дальше", axes: { systems: 0.4, dominance: 0.1 }, archetypes: { owl: 2, fox: 2 } },
-    ]
-  },
-  // Q26 — Social: mediocre game with friend
-  {
-    text: "A friend wants to play a game you find genuinely mediocre.",
-    text_ru: "Друг хочет сыграть в игру, которую ты считаешь откровенно посредственной.",
-    choices: [
-      { label: "Play anyway — the game is secondary to the time together", label_ru: "Играю в любом случае — игра вторична, главное время вместе", axes: { social: 0.8, challenge: -0.3 }, archetypes: { dolphin: 3, wolf: 2 } },
-      { label: "Suggest something better; keep suggesting until they agree", label_ru: "Предлагаю что-нибудь лучше; продолжаю предлагать, пока не согласится", axes: { dominance: 0.4, social: 0.2 }, archetypes: { wolf: 2, falcon: 2 } },
-      { label: "Play once, then pitch alternatives next time", label_ru: "Играю один раз, в следующий раз предложу альтернативу", axes: { social: 0.5, dominance: 0.2 }, archetypes: { fox: 2, wolf: 1 } },
-      { label: "Decline — I'd rather play something good alone", label_ru: "Отказываюсь — лучше сыграю в хорошую игру один", axes: { social: -0.5, challenge: 0.3 }, archetypes: { gecko: 2, falcon: 2 } },
-    ]
-  },
-  // Q27 — Systems: approach won't scale
-  {
-    text: "Deep into a game, you realise your current approach is going to cause real problems later.",
-    text_ru: "Глубоко в игре ты понимаешь, что твой текущий подход создаст реальные проблемы позже.",
-    choices: [
-      { label: "Stop and fix the foundation now — problems only compound", label_ru: "Останавливаюсь и исправляю фундамент сейчас — проблемы только накапливаются", axes: { systems: 0.8, pace: -0.6, dominance: 0.2 }, archetypes: { beaver: 3, gecko: 2 } },
-      { label: "Keep going and handle problems when they actually arrive", label_ru: "Продолжаю и разбираюсь с проблемами когда они появятся", axes: { systems: -0.3, pace: 0.4 }, archetypes: { bat: 2, bear: 2, magpie: 1 } },
-      { label: "Finish the current goal, then do a planned redesign", label_ru: "Заканчиваю текущую цель, потом делаю запланированный редизайн", axes: { systems: 0.5, dominance: 0.2, pace: -0.2 }, archetypes: { beaver: 2, fox: 2 } },
-      { label: "The imperfection doesn't bother me as long as it keeps working", label_ru: "Несовершенство меня не беспокоит, пока всё продолжает работать", axes: { systems: -0.5 }, archetypes: { bear: 2, bat: 1 } },
-    ]
-  },
-  // Q28 — Co-op toggle
-  {
-    text: "A game you love just got co-op support added.",
-    text_ru: "В игру, которую ты любишь, только что добавили кооперативный режим.",
-    choices: [
-      { label: "Who can I convince to play this with me?", label_ru: "Кого я могу уговорить сыграть со мной?", axes: { social: 0.8 }, archetypes: { wolf: 3, dolphin: 3 } },
-      { label: "The solo experience was already complete — might try co-op eventually", label_ru: "Соло-опыт уже был полным — может, попробую кооп когда-нибудь", axes: { social: -0.2, challenge: 0.1 }, archetypes: { owl: 2, gecko: 1 } },
-      { label: "Interesting — co-op might unlock completely different strategies", label_ru: "Интересно — кооп может открыть совсем другие стратегии", axes: { social: 0.3, systems: 0.4 }, archetypes: { fox: 2, wolf: 1 } },
-      { label: "Changes nothing about how I'll play it", label_ru: "Это ничего не меняет в том, как я буду в это играть", axes: { social: -0.4 }, archetypes: { falcon: 2, gecko: 2 } },
-    ]
-  },
-  // Q29 — Mobile: idle moment
-  {
-    text: "You have 5 idle minutes — waiting room, elevator, short break.",
-    text_ru: "У тебя есть 5 свободных минут — очередь, лифт, короткий перерыв.",
-    choices: [
-      { label: "Phone out, game open immediately", label_ru: "Сразу достаю телефон и открываю игру", axes: { pace: 0.8, challenge: -0.4 }, archetypes: { magpie: 3, dragon: 1 } },
-      { label: "Check messages or social feeds instead", label_ru: "Лучше проверяю сообщения или ленту", axes: { pace: 0.3 }, archetypes: { magpie: 1 } },
-      { label: "Sit with the moment — phones don't need to fill every pause", label_ru: "Просто нахожусь в моменте — телефон не обязан заполнять каждую паузу", axes: { challenge: 0.2, pace: -0.5 }, archetypes: { owl: 2, gecko: 1 } },
-      { label: "If I already had a mobile game running, I check in; otherwise not worth starting", label_ru: "Если мобильная игра уже была открыта — зайду; иначе не стоит начинать", axes: { pace: 0.3 }, archetypes: { fox: 1 } },
-    ]
-  },
-  // Q30 — Mastery vs breadth
-  {
-    text: "Game A has near-infinite depth across 3 mechanics. Game B has 50 mechanics but each is shallow.",
-    text_ru: "Игра A имеет почти бесконечную глубину в 3 механиках. Игра B имеет 50 механик, но каждая поверхностна.",
-    choices: [
-      { label: "Game A — mastering depth is the actual game", label_ru: "Игра A — освоение глубины и есть настоящая игра", axes: { challenge: 0.7, systems: 0.4, dominance: 0.3 }, archetypes: { gecko: 3, owl: 2 } },
-      { label: "Game B — variety keeps engagement high", label_ru: "Игра B — разнообразие поддерживает вовлечённость", axes: { pace: 0.5, challenge: -0.3 }, archetypes: { magpie: 3, dragon: 2 } },
-      { label: "Depends on my mood — sometimes depth, sometimes breadth", label_ru: "Зависит от настроения — иногда глубина, иногда ширина", axes: { challenge: 0.2 }, archetypes: { bat: 2 } },
-      { label: "Game A, but only if the 3 mechanics are genuinely interesting", label_ru: "Игра A, но только если эти 3 механики по-настоящему интересны", axes: { challenge: 0.5, systems: 0.5 }, archetypes: { fox: 3, gecko: 2 } },
-    ]
-  },
-  // Q31 ★ ADVERSARIAL — Mood: losses and real life
-  {
-    text: "Honestly — not about gameplay. Does losing at games affect your real mood outside the session?",
-    text_ru: "Честно — не о геймплее. Влияют ли проигрыши в играх на твоё реальное настроение вне сессии?",
-    choices: [
-      { label: "Yes — not for long, but a bad session can colour the next hour", label_ru: "Да — ненадолго, но плохая сессия может окрасить следующий час", axes: { dominance: 0.5, challenge: 0.3 }, archetypes: { falcon: 3, gecko: 2 } },
-      { label: "Big competitive losses hit differently; casual losses don't", label_ru: "Крупные поражения в соревновательном режиме бьют иначе; казуальные — нет", axes: { dominance: 0.4, challenge: 0.2 }, archetypes: { falcon: 2, gecko: 1 } },
-      { label: "Rarely — the game and my mood stay pretty well separated", label_ru: "Редко — игра и моё настроение довольно хорошо разделены", axes: { dominance: -0.2, challenge: -0.1 }, archetypes: { bear: 2, bat: 1 } },
-      { label: "No — the game and real life stay completely separate for me", label_ru: "Нет — игра и реальная жизнь остаются полностью отделёнными для меня", axes: { dominance: -0.5, challenge: -0.2 }, archetypes: { owl: 2, bear: 2, bat: 1 } },
-    ]
-  },
-  // Q32 — Sharing wins
-  {
-    text: "You just got a genuinely impressive result — a high rank, a clear personal best, a tricky achievement.",
-    text_ru: "Ты только что достиг действительно впечатляющего результата — высокий ранг, личный рекорд, сложное достижение.",
-    choices: [
-      { label: "Screenshot it and share — want others to see", label_ru: "Делаю скриншот и делюсь — хочу, чтобы другие увидели", axes: { social: 0.5, dominance: 0.5 }, archetypes: { wolf: 2, dolphin: 2, dragon: 1 } },
-      { label: "Note it privately — the accomplishment is mine, not the audience's", label_ru: "Отмечаю для себя — это моё достижение, а не для публики", axes: { social: -0.4, dominance: 0.4 }, archetypes: { gecko: 3, falcon: 2 } },
-      { label: "Tell one specific person who'd actually appreciate the context", label_ru: "Рассказываю одному конкретному человеку, который оценит контекст", axes: { social: 0.4, dominance: 0.3 }, archetypes: { fox: 2, wolf: 1 } },
-      { label: "Feel satisfied, move on — the next objective is already calling", label_ru: "Чувствую удовлетворение и иду дальше — уже зовёт следующая цель", axes: { dominance: 0.5, pace: 0.2 }, archetypes: { falcon: 3, dragon: 2 } },
-    ]
-  },
-  // Q33 — Emotional: major story death
-  {
-    text: "A game's story just killed a character you've spent 40 hours with.",
-    text_ru: "Игра только что убила персонажа, с которым ты провёл 40 часов.",
-    choices: [
-      { label: "Genuinely moved — I sit with it for a moment before continuing", label_ru: "По-настоящему тронут — сижу с этим моментом, прежде чем продолжить", axes: { systems: -0.5, pace: -0.5 }, archetypes: { owl: 3, bear: 3 } },
-      { label: "Acknowledge it narratively but it doesn't break my flow", label_ru: "Принимаю нарративно, но это не нарушает моего ритма", axes: { systems: 0.2, pace: 0.2 }, archetypes: { bat: 1 } },
-      { label: "Already thinking about how the game mechanics will shift from here", label_ru: "Уже думаю, как изменятся механики игры дальше", axes: { systems: 0.5, pace: 0.2 }, archetypes: { frog: 3, fox: 2 } },
-      { label: "Kind of wish they'd warned me — not what I came for", label_ru: "Жаль, что не предупредили — я не за этим сюда пришёл", axes: { systems: 0.3, pace: 0.5 }, archetypes: { magpie: 1 } },
-    ]
-  },
-  // Q34 — Loop awareness: 60-hour repetitive game
-  {
-    text: "You've put 60 hours into a game a friend just called 'kind of repetitive.' You think...",
-    text_ru: "Ты провёл в игре 60 часов, и друг только что назвал её «немного однообразной». Твоя реакция...",
-    choices: [
-      { label: "They're right, but the loop is satisfying — repetition is exactly the point", label_ru: "Они правы, но петля приятна — однообразие и есть суть", axes: { systems: 0.4, challenge: -0.2, pace: -0.3 }, archetypes: { dragon: 3 } },
-      { label: "I hadn't really noticed — I'm too absorbed in optimising the system", label_ru: "Я особо не замечал — слишком поглощён оптимизацией системы", axes: { systems: 0.7, pace: -0.5 }, archetypes: { beaver: 3 } },
-      { label: "I stopped worrying about that ages ago — I'm just seeing where the world goes", label_ru: "Я перестал беспокоиться об этом давно — просто смотрю, куда ведёт мир", axes: { dominance: -0.4, pace: 0.2 }, archetypes: { bat: 2, owl: 1 } },
-      { label: "Honestly, same — I should probably move on but something keeps pulling me back", label_ru: "Честно говоря, то же самое — пора бы двигаться дальше, но что-то продолжает тянуть обратно", axes: { pace: 0.4, dominance: -0.2 }, archetypes: { magpie: 2, dragon: 2 } },
-    ]
-  },
-  // Q35 — Social energy: post-session
-  {
-    text: "After a 3-hour solo gaming session, you feel…",
-    text_ru: "После 3-часовой соло-сессии ты чувствуешь…",
-    choices: [
-      { label: "Restored — alone time with a good game is exactly what I needed", label_ru: "Восстановленным — время наедине с хорошей игрой именно то, что нужно", axes: { social: -0.5 }, archetypes: { bear: 3, owl: 2, gecko: 1 } },
-      { label: "Ready to connect — solo was fine but now I want to share the experience", label_ru: "Готовым к общению — соло было хорошо, но теперь хочу поделиться пережитым", axes: { social: 0.5 }, archetypes: { dolphin: 3, wolf: 2 } },
-      { label: "Depends entirely on what game and what the session was like", label_ru: "Полностью зависит от игры и того, как прошла сессия", axes: { social: 0.1 }, archetypes: { bat: 2 } },
-      { label: "The same as before — gaming doesn't particularly affect my social appetite", label_ru: "Так же, как до неё — игры особо не влияют на мою тягу к общению", axes: { social: -0.3 }, archetypes: { falcon: 2 } },
-    ]
-  },
-  // Q36 — Completionism: final grind
-  {
-    text: "You're 80% through a completionist checklist. The remaining 20% requires 40 more hours of grinding.",
-    text_ru: "Ты прошёл 80% чеклиста завершенца. Оставшиеся 20% требуют ещё 40 часов гринда.",
-    choices: [
-      { label: "100% is the point — start the grind", label_ru: "100% это и есть цель — начинаю гриндить", axes: { dominance: 0.5, systems: 0.4, pace: -0.4 }, archetypes: { dragon: 3, gecko: 2 } },
-      { label: "80% is more than enough — the game has been experienced", label_ru: "80% более чем достаточно — игра пройдена", axes: { dominance: -0.2, pace: 0.2 }, archetypes: { bat: 2, bear: 1 } },
-      { label: "Depends whether the grind itself is enjoyable or purely mechanical", label_ru: "Зависит от того, приносит ли гринд сам по себе удовольствие или он чисто механический", axes: { challenge: 0.3, systems: 0.2 }, archetypes: { gecko: 2, fox: 1 } },
-      { label: "Check first if there's any unique reward — then decide", label_ru: "Сначала проверяю, есть ли уникальная награда — потом решаю", axes: { systems: 0.5, dominance: 0.3 }, archetypes: { fox: 3, dragon: 1 } },
-    ]
-  },
-];
 
 // ═══════════════════════════════════════════════════════
 // STATE
@@ -2518,15 +1451,15 @@ function renderQuestion() {
   const isRu = currentLang === 'ru';
   document.getElementById('q-text').textContent = isRu ? q.text_ru : q.text;
 
-  const letters = ['A', 'B', 'C', 'D'];
+  const orLabel = isRu ? 'или' : 'or';
   const container = document.getElementById('options-container');
   container.innerHTML = `<div class="choice-options">
-    ${q.choices.map((c, i) => `
-      <button class="choice-opt${answers[currentQ] === i ? ' selected' : ''}" onclick="selectAnswer(${i})">
-        <span class="choice-letter">${letters[i]}</span>
-        <span>${isRu ? c.label_ru : c.label}</span>
+      <button class="choice-opt${answers[currentQ] === 0 ? ' selected' : ''}" onclick="selectAnswer(0)">
+        <span>${isRu ? q.choices[0].label_ru : q.choices[0].label}</span>
       </button>
-    `).join('')}
+      <button class="choice-opt${answers[currentQ] === 1 ? ' selected' : ''}" onclick="selectAnswer(1)">
+        <span>${isRu ? q.choices[1].label_ru : q.choices[1].label}</span>
+      </button>
   </div>`;
 
   document.getElementById('btn-prev').disabled = currentQ === 0;
@@ -2555,199 +1488,13 @@ function prevQuestion() {
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// LATENT FACTOR MODEL — 5 empirically-derived axes
-// social:    0=solo       ↔ 1=social
-// systems:   0=narrative  ↔ 1=systems-first
-// challenge: 0=comfort    ↔ 1=challenge-seeking
-// dominance: 0=explore    ↔ 1=dominate
-// pace:      0=methodical ↔ 1=impulsive
-// ═══════════════════════════════════════════════════════
-const AXES = ['social', 'systems', 'challenge', 'dominance', 'pace'];
-
-const AXIS_CONFIG = [
-  { key: 'social',    en: { name: 'Social Drive',        low: 'Solo',       high: 'Social'     }, ru: { name: 'Социальность',          low: 'Одиночка',     high: 'Социальный'   } },
-  { key: 'systems',   en: { name: 'Systems Focus',       low: 'Narrative',  high: 'Systems'    }, ru: { name: 'Системное мышление',    low: 'Нарратив',     high: 'Системы'      } },
-  { key: 'challenge', en: { name: 'Challenge Drive',     low: 'Comfort',    high: 'Challenge'  }, ru: { name: 'Тяга к сложности',      low: 'Комфорт',      high: 'Сложность'    } },
-  { key: 'dominance', en: { name: 'Competitive Stance',  low: 'Explorer',   high: 'Dominator'  }, ru: { name: 'Соревновательность',    low: 'Исследователь', high: 'Доминант'    } },
-  { key: 'pace',      en: { name: 'Play Pace',           low: 'Methodical', high: 'Impulsive'  }, ru: { name: 'Темп игры',             low: 'Методичный',   high: 'Импульсивный' } },
-];
-
-const ARCHETYPE_VECTORS = {
-  falcon:  { social: 0.35, systems: 0.80, challenge: 0.88, dominance: 0.97, pace: 0.30 },
-  wolf:    { social: 0.95, systems: 0.50, challenge: 0.70, dominance: 0.72, pace: 0.62 },
-  owl:     { social: 0.30, systems: 0.05, challenge: 0.50, dominance: 0.15, pace: 0.18 },
-  frog:    { social: 0.22, systems: 0.95, challenge: 0.85, dominance: 0.48, pace: 0.68 },
-  dragon:  { social: 0.40, systems: 0.80, challenge: 0.58, dominance: 0.82, pace: 0.20 },
-  dolphin: { social: 0.97, systems: 0.45, challenge: 0.28, dominance: 0.30, pace: 0.72 },
-  fox:     { social: 0.27, systems: 0.80, challenge: 0.75, dominance: 0.38, pace: 0.08 },
-  gecko:   { social: 0.15, systems: 0.58, challenge: 0.97, dominance: 0.62, pace: 0.38 },
-  bear:    { social: 0.52, systems: 0.35, challenge: 0.05, dominance: 0.25, pace: 0.22 },
-  bat:     { social: 0.22, systems: 0.28, challenge: 0.42, dominance: 0.05, pace: 0.30 },
-  magpie:  { social: 0.55, systems: 0.35, challenge: 0.08, dominance: 0.38, pace: 0.88 },
-  beaver:  { social: 0.25, systems: 0.72, challenge: 0.42, dominance: 0.18, pace: 0.10 },
-};
-
-// ═══════════════════════════════════════════════════════
-// AXIS_STATS — per-axis mean and std of archetype positions (for Mahalanobis scoring)
-// ═══════════════════════════════════════════════════════
-const AXIS_STATS = (() => {
-  const stats = {};
-  AXES.forEach(ax => {
-    const vals = Object.values(ARCHETYPE_VECTORS).map(v => v[ax]);
-    const mean = vals.reduce((s, v) => s + v, 0) / vals.length;
-    const std = Math.sqrt(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / vals.length);
-    stats[ax] = { mean, std: Math.max(std, 0.01) };
-  });
-  return stats;
-})();
-
-// ═══════════════════════════════════════════════════════
-// PERSONALITY BANDS — Big Five-mapped descriptions per axis score range
-// Three bands per axis: low (0–0.33), mid (0.33–0.67), high (0.67–1.0)
-// ═══════════════════════════════════════════════════════
-const PERSONALITY_BANDS = {
-  social: {
-    en: [
-      { max: 0.33, reading: "Introverted",
-        text: "Your social energy is directed primarily inward. You are most productive and satisfied when working independently, and extended social interaction tends to drain rather than energize you. Your relationships tend to be few and deep rather than wide and shallow — in groups you observe before participating, and you need meaningful solitary time to recover. This is not shyness; it is how your energy system works. In Big Five terms this maps closely to the introversion end of the Extraversion scale." },
-      { max: 0.67, reading: "Ambivert",
-        text: "You sit in the ambivert range — genuinely capable of social engagement without depending on it for energy. You work effectively alone and with others, adapting between modes without significant cost. Your connection needs are moderate: you enjoy collaboration when it adds value but don't require it to feel purposeful. You come across as engaged but not overwhelming, and selectively outgoing rather than indiscriminately social. Most people find you easy to work with across a range of contexts." },
-      { max: 1.00, reading: "Extraverted",
-        text: "Your energy is strongly interpersonal. You think better out loud, are energized by other people's presence, and tend to feel flat or under-motivated without social contact. You likely maintain a wide network and find shared experiences significantly more rewarding than solo ones. In Big Five terms this maps to high Extraversion: you are naturally expressive, group-oriented, and gain energy from interaction. The tradeoff is a lower tolerance for solitude and a risk of over-extending socially at the cost of reflection." },
-    ],
-    ru: [
-      { max: 0.33, reading: "Интроверт",
-        text: "Твоя социальная энергия направлена преимущественно вовнутрь. Ты наиболее продуктивен и удовлетворён, когда работаешь независимо, а продолжительное социальное взаимодействие истощает, а не заряжает тебя. Твои отношения, как правило, немногочисленны, но глубоки — в группах ты обычно наблюдаешь, прежде чем участвовать, и нуждаешься в значимом одиночестве для восстановления. Это не застенчивость; так устроена твоя энергетическая система. По Большой Пятёрке это соответствует выраженной интроверсии в шкале Экстраверсии." },
-      { max: 0.67, reading: "Амбиверт",
-        text: "Ты находишься в зоне амбиверсии — способен к искреннему социальному участию, не завися от него как от источника энергии. Ты одинаково эффективно работаешь в одиночку и в команде, без особых потерь переключаясь между режимами. Потребность в общении умеренная: ты ценишь совместные переживания, когда они добавляют ценность, но не нуждаешься в них для ощущения цели. Окружающие воспринимают тебя как вовлечённого, но не подавляющего — избирательно общительного, а не бесконтрольно." },
-      { max: 1.00, reading: "Экстраверт",
-        text: "Твоя энергия сильно межличностна. Ты лучше думаешь вслух, заряжаешься от присутствия других людей и чувствуешь опустошённость без социального контакта. Ты, скорее всего, поддерживаешь широкую сеть контактов и находишь совместные переживания значительно более наполненными, чем сольные. По Большой Пятёрке это высокая Экстраверсия: ты естественно выразителен, ориентирован на группу и черпаешь энергию из взаимодействия. Оборотная сторона — более низкая устойчивость к одиночеству и риск социального перенапряжения." },
-    ],
-  },
-  systems: {
-    en: [
-      { max: 0.33, reading: "Narrative-oriented",
-        text: "Your cognitive style is primarily experiential and narrative. You engage with the world through meaning, story, and emotional resonance rather than abstraction or rule structures. In Big Five terms this corresponds to high Openness to Aesthetics and Experience alongside moderate Openness to Ideas — you are drawn to depth of feeling and immersive worlds over elegant mechanisms. You reason most naturally through examples, cases, and personal connection rather than frameworks or first principles." },
-      { max: 0.67, reading: "Balanced",
-        text: "You move fluidly between narrative engagement and systematic thinking. You can be absorbed in a story's emotional arc just as readily as in optimizing a mechanical system — context determines which mode activates. This reflects broad Openness in Big Five terms: you appreciate both the experiential and the analytical, rarely sacrificing one entirely for the other. You're likely perceived as both creative and analytical depending on the situation, and you adapt your thinking style to what the problem requires." },
-      { max: 1.00, reading: "Systems-oriented",
-        text: "Your thinking is fundamentally systematic. You naturally abstract, model, and seek underlying rules in whatever you engage with. In Big Five terms this reflects high Openness to Ideas: you are drawn to the architecture behind things rather than their surface form, and you find pure narrative or aesthetic experience most satisfying when it conceals structural depth. You are at your best when you can dissect how something works, and you tend to find 'just experiencing' something without understanding it subtly unsatisfying." },
-    ],
-    ru: [
-      { max: 0.33, reading: "Нарративный тип",
-        text: "Твой когнитивный стиль преимущественно экспериенциальный и нарративный. Ты вовлекаешься в мир через смысл, историю и эмоциональный резонанс, а не через абстракции или структуры правил. По Большой Пятёрке это соответствует высокой Открытости к Эстетике и Опыту при умеренной Открытости к Идеям — тебя привлекает глубина переживания и иммерсивные миры, а не элегантные механизмы. Ты рассуждаешь наиболее естественно через примеры, случаи и личную связь, а не через схемы или первопринципы." },
-      { max: 0.67, reading: "Сбалансированный",
-        text: "Ты свободно переключаешься между нарративным вовлечением и системным мышлением. Ты можешь быть поглощён эмоциональной дугой истории так же легко, как и оптимизацией механической системы — контекст определяет, какой режим активируется. Это отражает широкую Открытость по Большой Пятёрке: ты ценишь как экспериенциальное, так и аналитическое, и редко полностью жертвуешь одним ради другого. Окружающие воспринимают тебя как творческого или аналитического — в зависимости от ситуации." },
-      { max: 1.00, reading: "Системный тип",
-        text: "Твоё мышление фундаментально системно. Ты естественно абстрагируешь, моделируешь и ищешь базовые правила во всём, с чем сталкиваешься. По Большой Пятёрке это высокая Открытость к Идеям: тебя привлекает архитектура вещей, а не их поверхностная форма, и чистые нарративные или эстетические переживания удовлетворяют тебя наиболее полно, когда за ними скрывается структурная глубина. Ты в своей лучшей форме, когда можешь разобрать, как что-то работает — просто «переживать» что-то, не понимая этого, тебе тихо недостаточно." },
-    ],
-  },
-  challenge: {
-    en: [
-      { max: 0.33, reading: "Comfort-seeking",
-        text: "You have a strongly comfort-oriented approach to voluntary activity. You engage to recover, restore, and enjoy — not to accumulate difficulty or push limits. In Big Five Conscientiousness terms this reflects low Achievement Striving: you are not intrinsically motivated by difficulty, and you have a healthy relationship with 'good enough.' Your capacity for genuine rest and low-friction enjoyment is a real asset. The risk is that comfort zones can quietly become permanent, and meaningful growth typically requires the friction you've learned to minimize." },
-      { max: 0.67, reading: "Balanced",
-        text: "You have a balanced achievement orientation. You are capable of sustained effort and deliberate challenge when the context warrants it, but you don't seek difficulty for its own sake. This maps to moderate Conscientiousness in Big Five terms: disciplined when it matters, comfortable when it doesn't. You are selective about where you invest hard work, which typically means your effort is well-targeted rather than spread thin. You avoid both the exhaustion of constant striving and the stagnation of perpetual ease." },
-      { max: 1.00, reading: "Challenge-seeking",
-        text: "You have a strongly challenge-seeking orientation. Difficulty is not something you tolerate — it's something you require. Activities that don't push your current ceiling feel hollow or pointless. In Big Five terms this reflects high Achievement Striving within Conscientiousness, combined with low Neuroticism around failure: you are energized by the gap between your current ability and your potential, and you interpret resistance as a signal that the activity is worth your time. The risk is applying this standard everywhere, including domains where ease is appropriate." },
-    ],
-    ru: [
-      { max: 0.33, reading: "Ориентация на комфорт",
-        text: "У тебя выраженная комфорто-ориентированная установка в отношении добровольной деятельности. Ты вовлекаешься ради восстановления, отдыха и удовольствия — не ради накопления трудностей или преодоления своих пределов. По шкале Добросовестности Большой Пятёрки это низкое Стремление к Достижениям: ты не мотивирован сложностью ради неё самой, и у тебя здоровые отношения с понятием «достаточно хорошо». Твоя способность к подлинному отдыху — настоящее преимущество. Риск в том, что зоны комфорта могут незаметно стать постоянными, а реальный рост обычно требует именно того трения, которое ты научился минимизировать." },
-      { max: 0.67, reading: "Сбалансированный",
-        text: "У тебя сбалансированная ориентация на достижения. Ты способен на устойчивые усилия и намеренный вызов, когда контекст этого требует, но не ищешь сложности ради неё самой. Это соответствует умеренной Добросовестности по Большой Пятёрке: дисциплинированный там, где это важно, расслабленный там, где нет. Ты избирателен в том, куда вкладываешь серьёзные усилия, что обычно означает точно направленные инвестиции. Ты избегаешь как истощения от постоянного стремления, так и застоя от вечного покоя." },
-      { max: 1.00, reading: "Ориентация на вызов",
-        text: "У тебя выраженная ориентация на вызов. Сложность — это не то, что ты терпишь, это то, что тебе необходимо. Занятия, не толкающие к потолку твоих возможностей, кажутся пустыми. По Большой Пятёрке это высокое Стремление к Достижениям в рамках Добросовестности в сочетании с низким Нейротизмом в отношении неудачи: тебя заряжает разрыв между текущими способностями и потенциалом, и ты воспринимаешь сопротивление как сигнал, что занятие стоит твоего времени. Риск — применять этот стандарт везде, включая области, где лёгкость уместна." },
-    ],
-  },
-  dominance: {
-    en: [
-      { max: 0.33, reading: "Exploratory",
-        text: "You have a strongly non-competitive, exploratory orientation. In Big Five terms this maps to high Agreeableness combined with high Openness: you are more interested in discovery, cooperation, and shared experience than in winning, ranking, or asserting control. In group dynamics you naturally support rather than lead, and you tend to find competitive framing actively less interesting than collaborative or open-ended alternatives. You are likely experienced by others as easy to work with, genuinely curious, and free of ego around outcomes." },
-      { max: 0.67, reading: "Selective",
-        text: "You have a selective relationship with competition. You can engage competitively in domains you care about while remaining largely indifferent elsewhere. This corresponds to moderate Agreeableness in Big Five terms — cooperative by default, assertive when invested. You're neither a habitual competitor who needs to win everything nor someone who avoids all competitive contexts; rather, you engage when the stakes feel personally meaningful. You can lead when needed but don't require the lead role to feel satisfied." },
-      { max: 1.00, reading: "Competitive",
-        text: "You are strongly competitive and dominance-oriented. Winning — against opponents, systems, or your own previous performance — is a significant part of what makes activities meaningful. In Big Five terms this maps to low Agreeableness and high Assertiveness: you are direct, results-driven, and tend to impose structure on situations rather than adapt to them. You are likely perceived as confident and decisive in groups. The tradeoff: people with less competitive orientations may experience you as demanding or dismissive of process-over-outcome thinking." },
-    ],
-    ru: [
-      { max: 0.33, reading: "Исследователь",
-        text: "У тебя выраженная некомпетентная, исследовательская ориентация. По Большой Пятёрке это соответствует высокой Доброжелательности в сочетании с высокой Открытостью: тебя больше интересуют открытие, сотрудничество и общий опыт, чем победа, ранжирование или утверждение контроля. В групповой динамике ты естественно поддерживаешь, а не руководишь, и склонен находить конкурентное обрамление активно менее интересным, чем совместные альтернативы. Окружающие, вероятно, воспринимают тебя как лёгкого в работе, искренне любопытного и свободного от эго в отношении результатов." },
-      { max: 0.67, reading: "Избирательный",
-        text: "У тебя избирательные отношения с конкуренцией. Ты можешь конкурентно вовлекаться в значимых для тебя областях, оставаясь в целом безразличным в других. Это соответствует умеренной Доброжелательности по Большой Пятёрке — по умолчанию кооперативный, но напористый там, где вложен. Ты ни привычный конкурент, которому нужно побеждать везде, ни тот, кто избегает всех конкурентных контекстов. Ты можешь взять на себя ведущую роль, когда это необходимо, но не нуждаешься в ней для удовлетворения." },
-      { max: 1.00, reading: "Конкурентный",
-        text: "Ты сильно конкурентен и ориентирован на доминирование. Победа — над соперниками, системами или собственными прошлыми результатами — значительная часть того, что придаёт деятельности смысл. По Большой Пятёрке это низкая Доброжелательность и высокая Напористость: ты прямой, ориентированный на результат и склонен навязывать структуру ситуациям, а не адаптироваться к ним. Окружающие, вероятно, воспринимают тебя как уверенного и решительного. Оборотная сторона: люди с менее конкурентной ориентацией могут ощущать тебя требовательным или пренебрежительным к мышлению «процесс важнее результата»." },
-    ],
-  },
-  pace: {
-    en: [
-      { max: 0.33, reading: "Deliberate",
-        text: "You are strongly deliberate and methodical. You plan before acting, sustain focus longer than average, and find satisfaction in slow-building complexity rather than rapid novelty. In Big Five Conscientiousness terms, this reflects high Deliberateness and Orderliness: you are resistant to distraction, skeptical of reactive decisions, and most effective when you can work through something thoroughly. Others may experience you as careful or slow-moving; you experience impulsive people as careless. You tend to produce better work through iteration than through speed." },
-      { max: 0.67, reading: "Adaptive",
-        text: "Your pace is flexible and context-dependent. You can plan and execute methodically when required and shift to faster, more reactive engagement when the situation calls for it. You don't have a strong natural bias toward either deliberateness or spontaneity, which makes you broadly adaptable. In Big Five terms this reflects moderate Conscientiousness on the deliberateness dimension — neither compulsively thorough nor habitually impulsive. You tend to calibrate depth of investment to the actual stakes rather than applying uniform thoroughness to everything." },
-      { max: 1.00, reading: "Impulsive",
-        text: "You have a fast, reactive, and stimulus-driven engagement style. You decide quickly, switch contexts readily, and are energized by novelty and immediacy over depth and duration. In Big Five terms this reflects low Conscientiousness on deliberateness alongside elements of Extraversion's excitement-seeking. Your strength is rapid adaptation and broad scanning across many inputs; the cost is difficulty sustaining attention past the initial engagement window, and a tendency for decision-making to outrun its own analysis. You are at your best in fast-moving, high-variety environments." },
-    ],
-    ru: [
-      { max: 0.33, reading: "Методичный",
-        text: "Ты сильно обдуманный и методичный. Ты планируешь, прежде чем действовать, поддерживаешь фокус дольше среднего и находишь удовлетворение в медленно нарастающей сложности, а не в быстрой новизне. По шкале Добросовестности Большой Пятёрки это высокая Обдуманность и Упорядоченность: ты устойчив к отвлечениям, скептичен к реактивным решениям и наиболее эффективен, когда можешь основательно разобраться в чём-либо. Окружающие могут воспринимать тебя как осторожного или медлительного; ты воспринимаешь импульсивных людей как небрежных. Ты обычно производишь лучшую работу через итерации, чем через скорость." },
-      { max: 0.67, reading: "Адаптивный",
-        text: "Твой темп гибок и зависит от контекста. Ты можешь планировать и выполнять методично, когда требуется, и переключаться на более быстрое, реактивное вовлечение по ситуации. У тебя нет сильного природного предпочтения ни обдуманности, ни спонтанности, что делает тебя широко адаптируемым. По Большой Пятёрке это умеренная Добросовестность по измерению обдуманности — ни компульсивно основательный, ни привычно импульсивный. Ты склонен калибровать глубину вложений по реальным ставкам, а не применять одинаковую тщательность ко всему." },
-      { max: 1.00, reading: "Импульсивный",
-        text: "У тебя быстрый, реактивный и стимул-управляемый стиль вовлечения. Ты принимаешь решения быстро, легко переключаешь контексты и заряжаешься от новизны и немедленности, а не от глубины и длительности. По Большой Пятёрке это низкая Добросовестность по обдуманности в сочетании с элементами поиска возбуждения из Экстраверсии. Твоя сила — быстрая адаптация и широкое сканирование множества входящих сигналов; стоимость — трудность поддержания внимания за начальным окном вовлечения и тенденция к принятию решений, опережающих их анализ. Ты в своей лучшей форме в быстро меняющихся средах с высоким разнообразием." },
-    ],
-  },
-};
 
 // ═══════════════════════════════════════════════════════
 // SCORING
 // ═══════════════════════════════════════════════════════
 function computeResult() {
-  // Accumulate raw axis scores from user choices
-  const raw = Object.fromEntries(AXES.map(a => [a, 0]));
-  answers.forEach((ansIdx, qIdx) => {
-    if (ansIdx === null) return;
-    Object.entries(QUESTIONS[qIdx].choices[ansIdx].axes).forEach(([ax, val]) => {
-      raw[ax] += val;
-    });
-  });
-
-  // Compute theoretical min/max per axis from answered questions
-  const lo = Object.fromEntries(AXES.map(a => [a, 0]));
-  const hi = Object.fromEntries(AXES.map(a => [a, 0]));
-  answers.forEach((ansIdx, qIdx) => {
-    if (ansIdx === null) return;
-    const q = QUESTIONS[qIdx];
-    AXES.forEach(ax => {
-      const vals = q.choices.map(c => c.axes[ax] ?? 0);
-      lo[ax] += Math.min(...vals);
-      hi[ax] += Math.max(...vals);
-    });
-  });
-
-  // Normalize each axis to [0, 1]
-  const norm = {};
-  AXES.forEach(ax => {
-    const range = hi[ax] - lo[ax];
-    norm[ax] = range === 0 ? 0.5 : Math.max(0, Math.min(1, (raw[ax] - lo[ax]) / range));
-  });
-
-  // Mahalanobis-style similarity: standardize each axis by archetype distribution,
-  // then compute RMS distance in z-score space. Convert to similarity for display.
-  const sorted = Object.entries(ARCHETYPE_VECTORS)
-    .map(([key, archVec]) => {
-      const sumSq = AXES.reduce((acc, ax) => {
-        const { mean, std } = AXIS_STATS[ax];
-        const userZ = (norm[ax] - mean) / std;
-        const archZ = (archVec[ax] - mean) / std;
-        return acc + (userZ - archZ) ** 2;
-      }, 0);
-      const similarity = 1 / (1 + Math.sqrt(sumSq / AXES.length));
-      return [key, similarity];
-    })
-    .sort((a, b) => b[1] - a[1]);
-
-  showResult(sorted[0][0], sorted, norm);
+  const { winner, sorted, norm } = scoreQuiz(answers);
+  showResult(winner, sorted, norm);
 }
 
 function renderAxisBars(axisValues, archVec, isRu) {
